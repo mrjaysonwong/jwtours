@@ -18,7 +18,7 @@ export default function SignIn() {
   return (
     <>
       <Head>
-        <title>Sign In - MyApp</title>
+        <title>Sign In - JWTours</title>
       </Head>
 
       <MainContainer>

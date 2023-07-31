@@ -1,9 +1,9 @@
-import NextAuth from 'next-auth';
+import NextAuth, { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import GitHubProvider from 'next-auth/providers/github';
 import FacebookProvider from 'next-auth/providers/facebook';
 
-export default NextAuth({
+export const authOptions = (NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     GoogleProvider({
@@ -20,7 +20,9 @@ export default NextAuth({
     }),
   ],
   pages: {
-    signIn: '/signin'
+    signIn: '/signin',
   },
   secret: process.env.NEXTAUTH_SECRET,
 });
+
+export default NextAuth(authOptions);

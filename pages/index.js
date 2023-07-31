@@ -1,13 +1,24 @@
+import Head from 'next/head';
 import { signIn, signOut } from 'next-auth/react';
 import { Button, Typography, Box } from '@mui/material';
-import { getToken } from 'next-auth/jwt';
+import { getServerSession } from 'next-auth';
+import { authOptions } from './api/auth/[...nextauth]';
+import { useSession } from 'next-auth/react';
 import { MainContainer } from '@components/Layout/Styles/globals';
 
-export default function Home({ user }) {
+export default function Home() {
+  const { data: session } = useSession();
+
+  const user = session?.user;
+
   return (
-  
+    <>
+      <Head>
+        <title>JWTours</title>
+      </Head>
+
       <MainContainer>
-        {user ? (
+        {session ? (
           <>
             <Typography variant="body1">Fullname: {user.name}</Typography>
 
@@ -32,16 +43,14 @@ export default function Home({ user }) {
           </>
         )}
       </MainContainer>
-
+    </>
   );
 }
 
 export async function getServerSideProps(ctx) {
-  const token = await getToken(ctx);
-
   return {
     props: {
-      user: token,
+      session: await getServerSession(ctx.req, ctx.res, authOptions),
     },
   };
 }
