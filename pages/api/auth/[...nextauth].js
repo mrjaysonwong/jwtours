@@ -20,7 +20,7 @@ export const authOptions = (NextAuthOptions = {
     }),
   ],
   pages: {
-    signIn: '/signin',
+    signIn: '/auth/signin',
   },
   secret: process.env.NEXTAUTH_SECRET,
 });

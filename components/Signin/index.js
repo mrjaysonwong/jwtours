@@ -11,7 +11,6 @@ import {
   Tooltip,
 } from '@mui/material';
 import { MainContainer } from '@components/Layout/Styles/globals';
-
 import { FormContent, ProviderContainer, CredentialsContainer } from './styled';
 
 export default function SignIn() {

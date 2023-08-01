@@ -1,14 +1,14 @@
 import Head from 'next/head';
 import { signIn, signOut } from 'next-auth/react';
-import { Button, Typography, Box } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth]';
 import { useSession } from 'next-auth/react';
 import { MainContainer } from '@components/Layout/Styles/globals';
 
 export default function Home() {
-  const { data: session } = useSession();
-
+  const { data: session, status } = useSession();
+  const isAuthenticated = status === 'authenticated';
   const user = session?.user;
 
   return (
@@ -18,7 +18,7 @@ export default function Home() {
       </Head>
 
       <MainContainer>
-        {session ? (
+        {isAuthenticated ? (
           <>
             <Typography variant="body1">Fullname: {user.name}</Typography>
 
@@ -47,10 +47,12 @@ export default function Home() {
   );
 }
 
-export async function getServerSideProps(ctx) {
+export async function getServerSideProps({ req, res }) {
+  const session = await getServerSession(req, res, authOptions);
+
   return {
     props: {
-      session: await getServerSession(ctx.req, ctx.res, authOptions),
+      session,
     },
   };
 }
