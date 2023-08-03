@@ -14,22 +14,23 @@ export default function SignInPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      const timeoutId = setTimeout(() => {
-        router.back();
-      }, 1000);
+      // const timeoutId = setTimeout(() => {
+      //   router.back();
+      // }, 1000);
 
-      // Clean up function
-      return () => clearTimeout(timeoutId);
+      // // Clean up function
+      // return () => clearTimeout(timeoutId);
+      router.back();
     }
   }, [isAuthenticated, router]);
 
-  if (isAuthenticated) {
-    return (
-      <Box sx={{ width: '100%' }}>
-        <LinearProgress aria-describedby="Loading bar" aria-busy="true" />
-      </Box>
-    );
-  }
+  // if (isAuthenticated) {
+  //   return (
+  //     <Box sx={{ width: '100%' }}>
+  //       <LinearProgress aria-describedby="Loading bar" aria-busy="true" />
+  //     </Box>
+  //   );
+  // }
 
   return <SignIn />;
 }
