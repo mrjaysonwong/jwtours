@@ -14,6 +14,16 @@ import { MainContainer } from '@components/Layout/Styles/globals';
 import { FormContent, ProviderContainer, CredentialsContainer } from './styled';
 
 export default function SignIn() {
+  const handleGoogleSignIn = () => {
+    signIn('google', { callbackUrl: document.referrer });
+  };
+  const handleGithubSignIn = () => {
+    signIn('github', { callbackUrl: document.referrer });
+  };
+  const handleFacebookSignIn = () => {
+    signIn('facebook', { callbackUrl: document.referrer });
+  };
+
   return (
     <>
       <Head>
@@ -43,7 +53,7 @@ export default function SignIn() {
             <ProviderContainer>
               <Button
                 variant="contained"
-                onClick={() => signIn('google', { callbackUrl: '/' })}
+                onClick={handleGoogleSignIn}
                 sx={{
                   bgcolor: 'var(--light)',
                   color: '#000',
@@ -61,7 +71,7 @@ export default function SignIn() {
               </Button>
               <Button
                 variant="contained"
-                onClick={() => signIn('github', { callbackUrl: '/' })}
+                onClick={handleGithubSignIn}
                 sx={{
                   bgcolor: 'var(--pastel-dark)',
                   color: '#fff',
@@ -80,7 +90,7 @@ export default function SignIn() {
               </Button>
               <Button
                 variant="contained"
-                onClick={() => signIn('facebook', { callbackUrl: '/' })}
+                onClick={handleFacebookSignIn}
                 sx={{
                   bgcolor: 'var(--pastel-blue)',
                   color: '#fff',

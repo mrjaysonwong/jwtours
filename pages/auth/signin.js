@@ -1,36 +1,32 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@pages/api/auth/[...nextauth]';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import SignIn from '@components/Signin';
-import { useEffect } from 'react';
 import { Box, LinearProgress } from '@mui/material';
+import SignIn from '@components/Signin';
 
 export default function SignInPage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const isAuthenticated = status === 'authenticated';
+
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // If there is an active session, add a small delay using setTimeout
-    if (session) {
+    if (isAuthenticated) {
       const timeoutId = setTimeout(() => {
-        router.push('/');
-      }, 1000); // Adjust the delay time (in milliseconds) as needed
+        router.back();
+      }, 1000);
 
-      // Clear the timeout when the component unmounts to avoid any potential memory leaks
+      // Clean up function
       return () => clearTimeout(timeoutId);
-    } else {
-      setLoading(false); // Set loading to false if there is no active session
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isAuthenticated, router]);
 
-  if (session) {
+  if (isAuthenticated) {
     return (
       <Box sx={{ width: '100%' }}>
-        <LinearProgress />
+        <LinearProgress aria-describedby="Loading bar" aria-busy="true" />
       </Box>
     );
   }

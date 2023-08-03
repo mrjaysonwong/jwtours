@@ -1,15 +1,18 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import { signIn, signOut } from 'next-auth/react';
 import { Button, Typography } from '@mui/material';
-import { getServerSession } from 'next-auth';
-import { authOptions } from './api/auth/[...nextauth]';
+// import { getServerSession } from 'next-auth';
+// import { getSession } from 'next-auth/react';
+// import { authOptions } from './api/auth/[...nextauth]';
+import { getToken } from 'next-auth/jwt';
 import { useSession } from 'next-auth/react';
 import { MainContainer } from '@components/Layout/Styles/globals';
 
-export default function Home() {
-  const { data: session, status } = useSession();
-  const isAuthenticated = status === 'authenticated';
-  const user = session?.user;
+export default function Home({ session }) {
+  // const { data: session } = useSession();
+  // const user = session?.user;
+  const user = session;
 
   return (
     <>
@@ -18,7 +21,7 @@ export default function Home() {
       </Head>
 
       <MainContainer>
-        {isAuthenticated ? (
+        {session ? (
           <>
             <Typography variant="body1">Fullname: {user.name}</Typography>
 
@@ -31,6 +34,11 @@ export default function Home() {
             >
               Sign out
             </Button>
+            <Button>
+              <Link href="/protected">
+                <a>Protected Page</a>
+              </Link>
+            </Button>
           </>
         ) : (
           <>
@@ -40,6 +48,11 @@ export default function Home() {
               Sign in
             </Button>
             <br />
+            <Button>
+              <Link href="/protected">
+                <a>Protected Page</a>
+              </Link>
+            </Button>
           </>
         )}
       </MainContainer>
@@ -48,7 +61,7 @@ export default function Home() {
 }
 
 export async function getServerSideProps({ req, res }) {
-  const session = await getServerSession(req, res, authOptions);
+  const session = await getToken({ req });
 
   return {
     props: {

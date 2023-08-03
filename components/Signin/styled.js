@@ -1,7 +1,6 @@
 import { Box } from '@mui/material';
 import { styled } from '@mui/system';
 
-
 export const FormContent = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
