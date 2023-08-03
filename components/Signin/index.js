@@ -1,29 +1,13 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { signIn } from 'next-auth/react';
-import {
-  Button,
-  Box,
-  Typography,
-  TextField,
-  Divider,
-  Tooltip,
-} from '@mui/material';
+import { Box, Typography, Divider, Tooltip } from '@mui/material';
 import { MainContainer } from '@components/Layout/Styles/globals';
 import { FormContent, ProviderContainer, CredentialsContainer } from './styled';
+import Provider from './Provider';
+import Credentials from './Credentials';
 
 export default function SignIn() {
-  const handleGoogleSignIn = () => {
-    signIn('google', { callbackUrl: document.referrer });
-  };
-  const handleGithubSignIn = () => {
-    signIn('github', { callbackUrl: document.referrer });
-  };
-  const handleFacebookSignIn = () => {
-    signIn('facebook', { callbackUrl: document.referrer });
-  };
-
   return (
     <>
       <Head>
@@ -50,82 +34,21 @@ export default function SignIn() {
                 </div>
               </Tooltip>
             </Box>
-            <ProviderContainer>
-              <Button
-                variant="contained"
-                onClick={handleGoogleSignIn}
-                sx={{
-                  bgcolor: 'var(--light)',
-                  color: '#000',
-                  ':hover': { bgcolor: 'var(--light)' },
-                }}
-              >
-                <Image
-                  src={'/assets/providers/google.svg'}
-                  width={30}
-                  height={30}
-                  priority
-                  alt="Google logo"
-                />
-                <Typography variant="body2">Sign in with Google</Typography>
-              </Button>
-              <Button
-                variant="contained"
-                onClick={handleGithubSignIn}
-                sx={{
-                  bgcolor: 'var(--pastel-dark)',
-                  color: '#fff',
-                  ':hover': { bgcolor: 'var(--pastel-dark)' },
-                }}
-              >
-                <Image
-                  src={'/assets/providers/github.svg'}
-                  width={30}
-                  height={30}
-                  priority
-                  alt="GitHub logo"
-                />
 
-                <Typography variant="body2">Sign in with GitHub</Typography>
-              </Button>
-              <Button
-                variant="contained"
-                onClick={handleFacebookSignIn}
-                sx={{
-                  bgcolor: 'var(--pastel-blue)',
-                  color: '#fff',
-                  ':hover': { bgcolor: 'var(--pastel-blue)' },
-                }}
-              >
-                <Image
-                  src={'/assets/providers/facebook.svg'}
-                  width={30}
-                  height={30}
-                  priority
-                  alt="Facebook logo"
-                />
-                <Typography variant="body2">Sign in with Facebook</Typography>
-              </Button>
+            <ProviderContainer>
+              <Provider />
             </ProviderContainer>
 
             <Divider sx={{ m: 1 }}>OR</Divider>
 
             <CredentialsContainer>
-              <TextField label="Email" variant="outlined" />
-              <TextField label="Password" variant="outlined" />
-              <Button variant="contained">Sign in</Button>
-              <Divider sx={{ mt: 2 }} />
-              <Typography variant="body2" sx={{ textAlign: 'right', mt: 1 }}>
-                <Link href="/">
-                  <a>Forgot password?</a>
-                </Link>
-              </Typography>
+              <Credentials />
             </CredentialsContainer>
           </FormContent>
         </form>
         <Box sx={{ display: 'flex' }}>
           <Typography variant="body1">Don&apos;t have an account?</Typography>
-          <Link href="/">
+          <Link href="/auth/signup">
             <a>
               <Typography variant="body1" sx={{ ml: 1 }}>
                 Sign up

@@ -1,11 +1,11 @@
-import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth]';
-import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { signIn } from 'next-auth/react';
-import { Button, Box, LinearProgress } from '@mui/material';
+import { Button } from '@mui/material';
 import { MainContainer } from '@components/Layout/Styles/globals';
+import LoadingBar from '@components/Layout/Loaders/LinearProgress';
+import Dashboard from '@components/Protected/Dashboard';
 
 export default function Protected() {
   const { data: session, status } = useSession();
@@ -16,21 +16,18 @@ export default function Protected() {
     <>
       {isAuthenticated ? (
         <MainContainer>
-          <h1>Protected Page</h1>
-          <p>You can view this page because you are signed in.</p>
-          <Link href="/">
-            <Button variant="outlined">Back to Home page</Button>
-          </Link>
+          <Dashboard />
         </MainContainer>
       ) : isLoading ? (
-        <Box sx={{ width: '100%' }}>
-          <LinearProgress aria-describedby="Loading bar" aria-busy="true" />
-        </Box>
+        <LoadingBar />
       ) : (
         <MainContainer>
           <p>Access Denied</p>
           <p>
-            You need to <a onClick={() => signIn()}>Sign in</a>
+            You need to
+            <Button variant="text" onClick={() => signIn()}>
+              Sign In
+            </Button>
           </p>
         </MainContainer>
       )}

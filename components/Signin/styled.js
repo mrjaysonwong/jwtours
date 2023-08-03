@@ -29,7 +29,4 @@ export const ProviderContainer = styled(Box)({
 export const CredentialsContainer = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
-  'div:not(:last-child)': {
-    marginBottom: '1rem',
-  },
 });
