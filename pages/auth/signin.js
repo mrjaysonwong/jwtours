@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@pages/api/auth/[...nextauth]';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import SignIn from '@components/Login';
+import SignIn from '@components/SignIn';
 
 export default function SignInPage() {
   const { data: session, status } = useSession();
