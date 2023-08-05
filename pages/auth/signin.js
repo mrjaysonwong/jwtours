@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@pages/api/auth/[...nextauth]';
+// import { getServerSession } from 'next-auth';
+// import { authOptions } from '@pages/api/auth/[...nextauth]';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import SignIn from '@components/SignIn';
@@ -13,19 +13,23 @@ export default function SignInPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.back();
+      router.push('/');
     }
   }, [isAuthenticated, router]);
+
+  if (isAuthenticated || status === 'loading') {
+    return null;
+  }
 
   return <SignIn />;
 }
 
-export async function getServerSideProps({ req, res }) {
-  const session = await getServerSession(req, res, authOptions);
+// export async function getServerSideProps({ req, res }) {
+//   const session = await getServerSession(req, res, authOptions);
 
-  return {
-    props: {
-      session,
-    },
-  };
-}
+//   return {
+//     props: {
+//       session,
+//     },
+//   };
+// }

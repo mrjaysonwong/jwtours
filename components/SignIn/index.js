@@ -3,7 +3,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Box, Typography, Divider, Tooltip } from '@mui/material';
 import { MainContainer } from '@components/Layout/Styles/globals';
-import { FormContent, ProviderContainer, CredentialsContainer } from './styled';
+import { ProviderContainer, CredentialsContainer } from './styled';
+import { FormContent } from '@components/Layout/Styles/globals';
 import Provider from './Provider';
 import Credentials from './Credentials';
 
@@ -51,7 +52,7 @@ export default function SignIn() {
           <Link href="/auth/signup">
             <a>
               <Typography variant="body1" sx={{ ml: 1 }}>
-                Sign up
+                Sign Up
               </Typography>
             </a>
           </Link>
