@@ -36,6 +36,7 @@ export default function Provider() {
           priority
           alt="Google logo"
         />
+
         <Typography variant="body2">Sign in with Google</Typography>
       </Button>
       <Button

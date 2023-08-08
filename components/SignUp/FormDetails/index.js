@@ -9,6 +9,7 @@ import {
   IconButton,
   Stack,
 } from '@mui/material';
+import { StyledButton } from '@components/Layout/Styles/globals';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
@@ -66,9 +67,7 @@ export default function FormDetails() {
           }}
         />
       </Stack>
-      <Button variant="contained" sx={{ my: 2 }}>
-        Sign Up
-      </Button>
+      <StyledButton sx={{ my: 2 }}>Sign Up</StyledButton>
       <Divider />
       <Typography variant="body2" sx={{ textAlign: 'right', my: 1 }}>
         Already have an account? <a onClick={() => signIn()}>Sign In</a>

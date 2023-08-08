@@ -8,6 +8,7 @@ import {
   InputAdornment,
   IconButton,
 } from '@mui/material';
+import { StyledButton } from '@components/Layout/Styles/globals';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
@@ -38,9 +39,9 @@ export default function Credentials() {
         }}
         sx={{ mt: 2 }}
       />
-      <Button variant="contained" sx={{ my: 2 }}>
+      <StyledButton sx={{ my: 2 }}>
         Sign in
-      </Button>
+      </StyledButton>
       <Divider />
       <Typography variant="body2" sx={{ textAlign: 'right', my: 1 }}>
         <Link href="/">
