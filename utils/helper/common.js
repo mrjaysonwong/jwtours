@@ -1,7 +1,8 @@
-export function getUrl(previousUrl) {
-  const pathname = new URL(previousUrl).pathname;
+export function getUrl(previousUrl, prevPath) {
+  const pathname =
+    previousUrl === undefined ? prevPath : new URL(previousUrl).pathname;
 
-  const redirectUrl = pathname === '/auth/signup' ? '/' : previousUrl;
+  const redirectUrl = pathname === pathname ? previousUrl : '/';
 
   return redirectUrl;
 }

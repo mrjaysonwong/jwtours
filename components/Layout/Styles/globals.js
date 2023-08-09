@@ -8,7 +8,7 @@ export const MainContainer = styled(Box)({
   justifyContent: 'center',
   minHeight: '100vh',
   a: {
-    color: 'var(--link)',
+    color: 'var(--link-color)',
     cursor: 'pointer',
   },
 });
@@ -34,7 +34,6 @@ export const StyledButton = styled(Button)({
   transition: '0.5s',
   backgroundSize: '200% auto',
   color: 'white',
-  display: 'block',
 
   '&:hover': {
     backgroundPosition: 'right center',

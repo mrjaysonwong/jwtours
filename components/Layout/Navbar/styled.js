@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { styled } from '@mui/system';
 
 export const NavContent = styled(Box)({
@@ -8,17 +8,20 @@ export const NavContent = styled(Box)({
   ' .btn-signin, .btn-signout': {
     marginRight: '0.5rem',
   },
+  ' .btn-signin': {
+    backgroundColor: 'var(--pastel-gray)',
+  },
 });
 
 export const LinksWrapper = styled(Box)({
-  minWidth: '70%',
+  width: '70%',
+  margin: '0 1rem',
   display: 'flex',
-  '& ul': {
+  overflowX: 'auto',
+  whiteSpace: 'nowrap',
+  ul: {
     display: 'flex',
-  },
-  '& ul > li': {
     listStyle: 'none',
-    margin: '0 1rem',
   },
 });
 

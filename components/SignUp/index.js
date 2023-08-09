@@ -5,6 +5,7 @@ import { Box, Typography, Divider, Tooltip } from '@mui/material';
 import { MainContainer } from '@components/Layout/Styles/globals';
 import { FormContent } from '@components/Layout/Styles/globals';
 import FormDetails from './FormDetails';
+import Footer from '@components/Layout/Footer';
 
 export default function SignUp() {
   return (
@@ -38,6 +39,7 @@ export default function SignUp() {
           </FormContent>
         </form>
       </MainContainer>
+      <Footer />
     </>
   );
 }

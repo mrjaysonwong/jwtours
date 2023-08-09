@@ -6,6 +6,7 @@ export default function Custom500() {
   return (
     <MainContainer>
       <Typography variant="h4">500 - Server-side error occurred</Typography>
+      <br />
       <Link href="/">
         <Button variant="outlined">Back to Home page</Button>
       </Link>

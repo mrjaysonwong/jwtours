@@ -6,6 +6,7 @@ export default function Custom404() {
   return (
     <MainContainer>
       <Typography variant="h4">404 - Page Not Found</Typography>
+      <br />
       <Link href="/">
         <Button variant="outlined">Back to Home page</Button>
       </Link>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { signIn } from 'next-auth/react';
+import Link from 'next/link';
 import {
   Button,
   Typography,
@@ -70,7 +70,10 @@ export default function FormDetails() {
       <StyledButton sx={{ my: 2 }}>Sign Up</StyledButton>
       <Divider />
       <Typography variant="body2" sx={{ textAlign: 'right', my: 1 }}>
-        Already have an account? <a onClick={() => signIn()}>Sign In</a>
+        Already have an account?{' '}
+        <Link href="/auth/signin">
+          <a>Sign In</a>
+        </Link>
       </Typography>
     </>
   );

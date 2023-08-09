@@ -5,6 +5,9 @@ const nextConfig = {
   compiler: {
     emotion: true,
   },
-}
+  images: {
+    domains: ['res.cloudinary.com', 'lh3.googleusercontent.com'],
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

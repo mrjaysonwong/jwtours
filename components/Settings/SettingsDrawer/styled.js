@@ -17,11 +17,11 @@ export const StyledBox = styled(Box)({
 export const StyledIconButton = styled(IconButton)({
   position: 'fixed',
   borderRadius: '50% 50% 10% 50%',
-  backgroundColor: '#4942E4',
+  backgroundColor: 'rgb(73, 66, 228)',
   top: '10rem',
   right: '1rem',
   ':hover': {
-    backgroundColor: '#241dad',
+    backgroundColor: 'rgb(36, 29, 173)',
   },
 });
 

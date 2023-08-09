@@ -7,6 +7,7 @@ import { ProviderContainer, CredentialsContainer } from './styled';
 import { FormContent } from '@components/Layout/Styles/globals';
 import Provider from './Provider';
 import Credentials from './Credentials';
+import Footer from '@components/Layout/Footer';
 
 export default function SignIn() {
   return (
@@ -58,6 +59,7 @@ export default function SignIn() {
           </Link>
         </Box>
       </MainContainer>
+      <Footer />
     </>
   );
 }

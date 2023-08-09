@@ -1,29 +1,22 @@
 import Head from 'next/head';
-import { signIn, signOut } from 'next-auth/react';
-import { Button, Typography } from '@mui/material';
 import { getServerSession } from 'next-auth';
-import { authOptions } from './api/auth/[...nextauth]';
+import { authOptions } from '@pages/api/auth/[...nextauth]';
+import { Typography } from '@mui/material';
 import { MainContainer } from '@components/Layout/Styles/globals';
 import Navbar from '@components/Layout/Navbar';
 import Footer from '@components/Layout/Footer';
 
-export default function Home({ session }) {
+export default function UserAgreement({ session }) {
   const user = session?.user;
-
   return (
     <>
       <Head>
-        <title>JWTours</title>
+        <title>User Agreement - JWTours</title>
       </Head>
 
       <Navbar user={user} />
       <MainContainer>
-        <Typography>Lorem ipsum</Typography>
-        {session ? (
-          <Button onClick={() => signOut()}>Sign Out</Button>
-        ) : (
-          <Button onClick={() => signIn()}>Sign In</Button>
-        )}
+        <Typography variant="h6">User Agreement</Typography>
       </MainContainer>
       <Footer />
     </>

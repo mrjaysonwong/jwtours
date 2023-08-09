@@ -1,8 +1,9 @@
+import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth]';
 import { useSession } from 'next-auth/react';
 import { signIn } from 'next-auth/react';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { MainContainer } from '@components/Layout/Styles/globals';
 import LoadingBar from '@components/Layout/Loaders/LinearProgress';
 import Dashboard from '@components/Protected/Dashboard';
@@ -22,13 +23,14 @@ export default function Protected() {
         <LoadingBar />
       ) : (
         <MainContainer>
-          <p>Access Denied</p>
-          <p>
-            You need to
-            <Button variant="text" onClick={() => signIn()}>
-              Sign In
-            </Button>
-          </p>
+          <Typography variant="body1">Access Denied</Typography>
+          <br />
+          <Typography variant="body1">
+            You need to <a onClick={() => signIn()}>Sign In</a> or Go to{' '}
+            <Link href="/">
+              <a>Home page</a>
+            </Link>
+          </Typography>
         </MainContainer>
       )}
     </>

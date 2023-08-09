@@ -5,10 +5,23 @@
 :root {
   --light: rgb(238, 242, 246);
   --dark: rgb(30, 35, 37);
-  --link: rgb(0, 116, 204);
+  --link-color: rgb(0, 116, 204);
+  --scrollbar-color: rgb(137, 137, 137);
+  --background-color: linear-gradient(
+    to left,
+    rgb(53, 44, 224, 0.9),
+    rgb(4, 16, 90, 0.9)
+  );
+  --background-color2: linear-gradient(
+    to left,
+    rgba(191, 178, 243),
+    rgba(150, 202, 247)
+  );
   --pastel-blue: rgb(59, 85, 147);
   --pastel-dark: rgb(24, 26, 29);
   --pastel-purple: rgb(111, 97, 192);
+  --pastel-gray: rgb(183, 193, 202);
+  --color: rgb(36, 29, 173);
 }
 
 html,
@@ -47,7 +60,7 @@ a {
 /* Works on Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
   width: 8px;
-  height: 8px;
+  height: 4px;
 }
 
 *::-webkit-scrollbar-track {
@@ -55,7 +68,12 @@ a {
   border-radius: 20px;
 }
 
-*::-webkit-scrollbar-thumb {
-  background-color: var(--color-scrollbar);
+*::-webkit-scrollbar-thumb:vertical {
+  background-color: var(--scrollbar-color);
   border-radius: 20px;
+}
+
+*::-webkit-scrollbar-thumb:horizontal {
+  background-color: var(--scrollbar-color);
+  border-radius: 10px;
 }
