@@ -39,7 +39,7 @@ export default function Credentials() {
         }}
         sx={{ mt: 2 }}
       />
-      <StyledButton sx={{ my: 2 }}>
+      <StyledButton sx={{ py: 1, my: 2 }}>
         Sign in
       </StyledButton>
       <Divider />

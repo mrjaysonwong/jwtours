@@ -4,19 +4,111 @@ export const NavRoutes = [
     path: '/',
   },
   {
-    pathName: 'About Us',
-    path: '/about',
+    pathName: 'Destinations',
+    path: '/destinations',
   },
   {
-    pathName: 'Services',
-    path: '/services',
+    pathName: 'Activites',
+    path: '/activities',
+  },
+  {
+    pathName: 'Trip Types',
+    path: '/trip-types',
+  },
+  {
+    pathName: 'Travel Guides',
+    path: '/travel-guides',
+  },
+  {
+    pathName: 'About',
+    path: '/about',
   },
   {
     pathName: 'Protected',
     path: '/protected',
   },
   {
-    pathName: 'Contact Us',
+    pathName: 'Contact',
     path: '/contact',
   },
+  // {
+  //   pathName: 'Contact Us',
+  //   path: '/contact',
+  // },
+  // {
+  //   pathName: 'Contact Us',
+  //   path: '/contact',
+  // },
+  // {
+  //   pathName: 'Contact Us',
+  //   path: '/contact',
+  // },
+  // {
+  //   pathName: 'Contact Us',
+  //   path: '/contact',
+  // },
+  // {
+  //   pathName: 'Contact Us',
+  //   path: '/contact',
+  // },
+  // {
+  //   pathName: 'Contact Us',
+  //   path: '/contact',
+  // },
+  // {
+  //   pathName: 'Contact Us',
+  //   path: '/contact',
+  // },
+  // {
+  //   pathName: 'Contact Us',
+  //   path: '/contact',
+  // },
+  // {
+  //   pathName: 'Contact Us',
+  //   path: '/contact',
+  // },
+  // {
+  //   pathName: 'Contact Us',
+  //   path: '/contact',
+  // },
+  // {
+  //   pathName: 'Contact Us',
+  //   path: '/contact',
+  // },
+  // {
+  //   pathName: 'Contact Us',
+  //   path: '/contact',
+  // },
+  // {
+  //   pathName: 'Contact Us',
+  //   path: '/contact',
+  // },
+  // {
+  //   pathName: 'Contact Us',
+  //   path: '/contact',
+  // },
+  // {
+  //   pathName: 'Contact Us',
+  //   path: '/contact',
+  // },
+  // {
+  //   pathName: 'Contact Us',
+  //   path: '/contact',
+  // },
+  // {
+  //   pathName: 'Contact Us',
+  //   path: '/contact',
+  // },
+  // {
+  //   pathName: 'Contact Us',
+  //   path: '/contact',
+  // },
+  // {
+  //   pathName: 'Contact Us',
+  //   path: '/contact',
+  // },
+  // {
+  //   pathName: 'Contact Us',
+  //   path: '/contact',
+  // },
 ];

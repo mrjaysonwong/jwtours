@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material';
+import { Box, Button, List } from '@mui/material';
 import { styled } from '@mui/system';
 
 export const MainContainer = styled(Box)({
@@ -34,6 +34,11 @@ export const StyledButton = styled(Button)({
   transition: '0.5s',
   backgroundSize: '200% auto',
   color: 'white',
+  padding: 0,
+  margin: 0,
+  a: {
+    width: '100%',
+  },
 
   '&:hover': {
     backgroundPosition: 'right center',
@@ -41,3 +46,10 @@ export const StyledButton = styled(Button)({
     textDecoration: 'none',
   },
 });
+
+export const StyledDrawerList = styled(List)(({ theme }) => ({
+  width: 250,
+  height: '100%',
+  backgroundColor:
+    theme.palette.mode === 'light' ? 'var(--light)' : 'var(--dark3)',
+}));

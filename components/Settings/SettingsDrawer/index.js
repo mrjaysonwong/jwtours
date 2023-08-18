@@ -1,55 +1,50 @@
-import { useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { Box, Drawer } from '@mui/material';
+import { Drawer, Box } from '@mui/material';
 import SettingsIcon from '../SettingsIcon';
 import CardOne from './Cards/CardOne';
 import CardTwo from './Cards/CardTwo';
 import { Tooltip } from '@mui/material';
 import {
   StyledIconButton,
-  StyledDrawerList,
   StyledCard,
 } from '@components/Settings/SettingsDrawer/styled';
+import { StyledDrawerList } from '@components/Layout/Styles/globals';
+import { useDrawerStore } from 'stores/drawerStore';
 
 export default function SettingsDrawer() {
   const { data: session, status } = useSession();
-  const [state, setState] = useState({
-    right: false,
-  });
+  const isLoading = status === 'loading';
 
-  const toggleDrawer = (anchor, open) => () => {
-    setState({ ...state, [anchor]: open });
-  };
+  const { state, toggleDrawer } = useDrawerStore();
 
-  const list = (anchor) => (
-    <Box sx={{ width: 250 }} onClick={toggleDrawer(anchor, true)}>
-      <StyledDrawerList>
-        <StyledCard>
-          <CardOne />
-        </StyledCard>
-        <StyledCard>
-          <CardTwo />
-        </StyledCard>
-      </StyledDrawerList>
-    </Box>
+  const list = () => (
+    <StyledDrawerList sx={{ p: 2 }}>
+      <StyledCard>
+        <CardOne />
+      </StyledCard>
+      <StyledCard>
+        <CardTwo />
+      </StyledCard>
+    </StyledDrawerList>
   );
 
   return (
     <>
-      {status !== 'loading' && (
+      {!isLoading && (
         <Tooltip title="Live Customize" placement="bottom" arrow>
-          <StyledIconButton onClick={toggleDrawer('right', true)}>
+          <StyledIconButton onClick={() => toggleDrawer('right', true)}>
             <SettingsIcon />
           </StyledIconButton>
         </Tooltip>
       )}
 
       <Drawer
-        anchor={'right'}
+        variant="temporary"
+        anchor="right"
         open={state['right']}
-        onClose={toggleDrawer('right', false)}
+        onClose={() => toggleDrawer('right', false)}
       >
-        {list('right')}
+        {list()}
       </Drawer>
     </>
   );

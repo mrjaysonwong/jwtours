@@ -4,24 +4,36 @@
 
 :root {
   --light: rgb(238, 242, 246);
-  --dark: rgb(30, 35, 37);
+  --dark: rgb(30, 30, 30);
+  --dark2: rgb(34, 40, 49);
+  --dark3: rgb(50, 50, 50);
+  --bg-dark: rgba(66, 61, 61, 0.5);
+  --bg-light: rgba(161, 153, 153, 0.5);
   --link-color: rgb(0, 116, 204);
   --scrollbar-color: rgb(137, 137, 137);
-  --background-color: linear-gradient(
+  --bg-color: linear-gradient(
     to left,
     rgb(53, 44, 224, 0.9),
     rgb(4, 16, 90, 0.9)
   );
-  --background-color2: linear-gradient(
+  --bg-color2: linear-gradient(
     to left,
     rgba(191, 178, 243),
     rgba(150, 202, 247)
+  );
+  --bg-color3: linear-gradient(
+    135.9deg,
+    rgb(109, 25, 252) 16.4%,
+    rgb(125, 31, 165) 56.1%
   );
   --pastel-blue: rgb(59, 85, 147);
   --pastel-dark: rgb(24, 26, 29);
   --pastel-purple: rgb(111, 97, 192);
   --pastel-gray: rgb(183, 193, 202);
-  --color: rgb(36, 29, 173);
+  --active-link-color: rgb(190, 44, 146);
+  --active-link-color2: rgb(235, 94, 0);
+  --color: #6e85b7;
+  --colo2: #6e85b7;
 }
 
 html,

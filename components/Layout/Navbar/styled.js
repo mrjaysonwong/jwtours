@@ -1,30 +1,41 @@
 import { Box, Button } from '@mui/material';
 import { styled } from '@mui/system';
 
-export const NavContent = styled(Box)({
-  width: '100%',
-  display: 'flex',
-  alignItems: 'center',
-  ' .btn-signin, .btn-signout': {
-    marginRight: '0.5rem',
-  },
-  ' .btn-signin': {
-    backgroundColor: 'var(--pastel-gray)',
-  },
-});
-
-export const LinksWrapper = styled(Box)({
+export const NavWrapper = styled(Box)({
   width: '70%',
+  overflow: 'auto',
   margin: '0 1rem',
-  display: 'flex',
-  overflowX: 'auto',
-  whiteSpace: 'nowrap',
+  ' .active': {
+    color: 'var(--active-link-color)',
+    p: {
+      fontWeight: 500,
+    },
+  },
+
   ul: {
+    width: '100%',
     display: 'flex',
+    padding: 0,
+    margin: 0,
     listStyle: 'none',
+    cursor: 'pointer',
+  },
+  li: {
+    whiteSpace: 'nowrap',
+    textAlign: 'center',
+    flexGrow: 1,
+    padding: '0.5rem 1rem',
+    margin: '0.5rem 0',
+    ':hover': {
+      background: 'var(--bg-color3)',
+      color: '#fff',
+      borderRadius: '40px',
+    },
   },
 });
 
-export const ButtonWrapper = styled(Box)({
-  marginLeft: 'auto',
+export const LogoWrapper = styled(Box)({
+  a: {
+    display: 'flex',
+  },
 });

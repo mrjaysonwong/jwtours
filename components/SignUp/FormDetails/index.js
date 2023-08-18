@@ -67,7 +67,7 @@ export default function FormDetails() {
           }}
         />
       </Stack>
-      <StyledButton sx={{ my: 2 }}>Sign Up</StyledButton>
+      <StyledButton sx={{ py: 1, my: 2 }}>Sign Up</StyledButton>
       <Divider />
       <Typography variant="body2" sx={{ textAlign: 'right', my: 1 }}>
         Already have an account?{' '}
