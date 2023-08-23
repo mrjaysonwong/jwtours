@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Typography, IconButton, Drawer, Toolbar } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import MenuIcon from '@mui/icons-material/Menu';
 import { NavRoutes } from '@src/routes/navRoutes';
 import { SideMenuWrapper } from './styled';
 import { StyledDrawerList } from '../Styles/globals';
@@ -31,7 +31,7 @@ export default function SideMenuBar({ isLightTheme }) {
     <StyledDrawerList sx={{ p: 0, overflow: 'auto' }}>
       <Toolbar
         sx={{
-          background: isLightTheme ? 'var(--color)' : 'var(--dark)',
+          background: isLightTheme ? 'var(--bg-color4)' : 'var(--dark)',
         }}
       >
         <IconButton
@@ -42,7 +42,7 @@ export default function SideMenuBar({ isLightTheme }) {
           onClick={() => toggleDrawer(anchor, false)}
           sx={{ color: '#fff', mr: 2 }}
         >
-          <CloseIcon />
+          <MenuIcon />
         </IconButton>
 
         <Logo />

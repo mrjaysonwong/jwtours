@@ -7,7 +7,7 @@ export const useDrawerStore = create((set) => ({
     right: false,
     right2: false,
   },
-  anchor: null,
+
   toggleDrawer: (anchor, open) => {
     set((state) => ({ state: { ...state, [anchor]: open } }));
   },

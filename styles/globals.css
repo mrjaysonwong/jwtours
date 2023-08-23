@@ -26,13 +26,15 @@
     rgb(109, 25, 252) 16.4%,
     rgb(125, 31, 165) 56.1%
   );
+  --bg-color4: rgb(110, 133, 183);
   --pastel-blue: rgb(59, 85, 147);
   --pastel-dark: rgb(24, 26, 29);
   --pastel-purple: rgb(111, 97, 192);
   --pastel-gray: rgb(183, 193, 202);
   --active-link-color: rgb(190, 44, 146);
+  --hover-text-color: rgb(169, 67, 138);
   --active-link-color2: rgb(235, 94, 0);
-  --color: #6e85b7;
+  --color: rgb(190, 44, 146);
   --colo2: #6e85b7;
 }
 

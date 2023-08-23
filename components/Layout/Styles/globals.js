@@ -36,9 +36,6 @@ export const StyledButton = styled(Button)({
   color: 'white',
   padding: 0,
   margin: 0,
-  a: {
-    width: '100%',
-  },
 
   '&:hover': {
     backgroundPosition: 'right center',

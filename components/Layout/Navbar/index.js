@@ -19,6 +19,7 @@ import { NavRoutes } from '@src/routes/navRoutes';
 import SideMenuBar from '../SideMenuBar';
 import ProfileMenuBar from '../ProfileMenuBar';
 import { useDrawerStore } from 'stores/drawerStore';
+import { useMenuStore } from 'stores/menuStore';
 
 export const ProfileContext = createContext();
 
@@ -48,16 +49,7 @@ export default function Navbar(props) {
   const mobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const { toggleDrawer } = useDrawerStore();
-
-  const [anchorEl, setAnchorEl] = useState(null);
-
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const { handleMenu } = useMenuStore();
 
   const navLinks = NavRoutes.map((route) => {
     return (
@@ -80,7 +72,7 @@ export default function Navbar(props) {
         position="fixed"
         elevation={1}
         sx={{
-          background: isLightTheme ? 'var(--color)' : '',
+          background: isLightTheme ? 'var(--bg-color4)' : '',
         }}
       >
         <Toolbar>
@@ -133,7 +125,7 @@ export default function Navbar(props) {
 
       <SideMenuBar isLightTheme={isLightTheme} />
 
-      <ProfileContext.Provider value={{ user, anchorEl, handleClose, mobile }}>
+      <ProfileContext.Provider value={{ user, mobile }}>
         <ProfileMenuBar />
       </ProfileContext.Provider>
     </>

@@ -1,54 +1,27 @@
 import { useContext } from 'react';
-import { signIn, signOut } from 'next-auth/react';
 import { Drawer } from '@mui/material';
-import { CustomList, CustomMenu } from './styled';
+import CustomDrawerList from './CustomDrawerList';
+import CustomMenu from './CustomMenu';
 import { useDrawerStore } from 'stores/drawerStore';
-import { ProfileContext } from '../Navbar';
+import { ProfileContext } from '@components/Layout/Navbar';
 
 export default function ProfileMenuBar() {
   const { state, toggleDrawer } = useDrawerStore();
-  const { user, anchorEl, handleClose, mobile } = useContext(ProfileContext);
+  const { mobile } = useContext(ProfileContext);
 
   return (
     <>
-      {user ? (
-        mobile ? (
-          <Drawer
-            variant="temporary"
-            anchor="right"
-            open={state['right2']}
-            onClose={() => toggleDrawer('right2', false)}
-          >
-            <CustomList
-              user={user}
-              toggleDrawer={toggleDrawer}
-              signOut={signOut}
-            />
-          </Drawer>
-        ) : (
-          <CustomMenu
-            user={user}
-            anchorEl={anchorEl}
-            handleClose={handleClose}
-            signOut={signOut}
-          />
-        )
-      ) : mobile ? (
+      {mobile ? (
         <Drawer
           variant="temporary"
           anchor="right"
           open={state['right2']}
           onClose={() => toggleDrawer('right2', false)}
         >
-          <CustomList toggleDrawer={toggleDrawer} signIn={signIn} />
+          <CustomDrawerList />
         </Drawer>
       ) : (
-        <CustomMenu
-          user={user}
-          anchorEl={anchorEl}
-          handleClose={handleClose}
-          signIn={signIn}
-        />
+        <CustomMenu />
       )}
     </>
   );
