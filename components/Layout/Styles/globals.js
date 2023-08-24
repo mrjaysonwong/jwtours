@@ -13,7 +13,7 @@ export const MainContainer = styled(Box)({
   },
 });
 
-export const FormContent = styled(Box)(({ theme }) => ({
+export const StyledBox = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   padding: '1rem',
@@ -23,7 +23,7 @@ export const FormContent = styled(Box)(({ theme }) => ({
     theme.palette.mode === 'light'
       ? 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px'
       : undefined,
-  backgroundColor: theme.palette.mode === 'dark' ? 'var(--dark)' : '#fff',
+  backgroundColor: theme.palette.mode === 'dark' ? 'var(--dark3)' : '#fff',
 }));
 
 export const StyledButton = styled(Button)({

@@ -1,14 +1,14 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Typography, IconButton, Drawer, Toolbar } from '@mui/material';
+import { Typography, IconButton, Drawer } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { NavRoutes } from '@src/routes/navRoutes';
-import { SideMenuWrapper } from './styled';
-import { StyledDrawerList } from '../Styles/globals';
+import { StyledToolbar, SideMenuWrapper } from './styled';
+import { StyledDrawerList } from '@components/Layout/Styles/globals';
 import { Logo } from '../Navbar';
 import { useDrawerStore } from 'stores/drawerStore';
 
-export default function SideMenuBar({ isLightTheme }) {
+export default function SideMenuBar() {
   const { state, toggleDrawer } = useDrawerStore();
   const router = useRouter();
 
@@ -29,11 +29,7 @@ export default function SideMenuBar({ isLightTheme }) {
 
   const list = (anchor) => (
     <StyledDrawerList sx={{ p: 0, overflow: 'auto' }}>
-      <Toolbar
-        sx={{
-          background: isLightTheme ? 'var(--bg-color4)' : 'var(--dark)',
-        }}
-      >
+      <StyledToolbar>
         <IconButton
           size="large"
           edge="start"
@@ -46,7 +42,7 @@ export default function SideMenuBar({ isLightTheme }) {
         </IconButton>
 
         <Logo />
-      </Toolbar>
+      </StyledToolbar>
 
       <SideMenuWrapper>
         <nav>
@@ -62,6 +58,7 @@ export default function SideMenuBar({ isLightTheme }) {
       anchor="left"
       open={state['left']}
       onClose={() => toggleDrawer('left', false)}
+      sx={{ position: 'relative' }}
     >
       {list('left')}
     </Drawer>

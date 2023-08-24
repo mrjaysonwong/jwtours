@@ -1,11 +1,22 @@
-import { Box } from '@mui/material';
+import { Box, Toolbar } from '@mui/material';
 import { styled } from '@mui/system';
 
+export const StyledToolbar = styled(Toolbar)(({ theme }) => ({
+  background:
+    theme.palette.mode === 'light' ? 'var(--bg-color4)' : 'var(--dark)',
+  position: 'fixed',
+  width: 250,
+}));
+
 export const SideMenuWrapper = styled(Box)(({ theme }) => ({
+  marginTop: '4rem',
   display: 'flex',
   flexDirection: 'column',
   '.active': {
-    color: 'var(--active-link-color)',
+    color:
+      theme.palette.mode === 'dark'
+        ? 'var(--active-link-color2)'
+        : 'var(--active-link-color)',
     background:
       theme.palette.mode === 'dark' ? 'var(--bg-dark)' : 'var(--bg-light)',
     borderRadius: '40px 999em 999em 40px',

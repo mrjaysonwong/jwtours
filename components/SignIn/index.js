@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Box, Typography, Divider, Tooltip } from '@mui/material';
 import { MainContainer } from '@components/Layout/Styles/globals';
 import { ProviderContainer, CredentialsContainer } from './styled';
-import { FormContent } from '@components/Layout/Styles/globals';
+import { StyledBox } from '@components/Layout/Styles/globals';
 import Provider from './Provider';
 import Credentials from './Credentials';
 import Footer from '@components/Layout/Footer';
@@ -17,26 +17,24 @@ export default function SignIn() {
       </Head>
 
       <MainContainer>
-        <form>
-          <FormContent>
-            <Box sx={{ textAlign: 'center', mb: 2 }}>
-              <Tooltip title="App Logo" arrow placement="top">
-                <div>
-                  <Link href="/">
-                    <a>
-                      <Image
-                        src={'/assets/logo.png'}
-                        width={70}
-                        height={40}
-                        priority
-                        alt="logo"
-                      />
-                    </a>
-                  </Link>
-                </div>
-              </Tooltip>
-            </Box>
+        <Tooltip title="App Logo" arrow placement="left">
+          <div>
+            <Link href="/">
+              <a>
+                <Image
+                  src={'/assets/logo.png'}
+                  width={70}
+                  height={40}
+                  priority
+                  alt="logo"
+                />
+              </a>
+            </Link>
+          </div>
+        </Tooltip>
 
+        <form>
+          <StyledBox>
             <ProviderContainer>
               <Provider />
             </ProviderContainer>
@@ -46,7 +44,7 @@ export default function SignIn() {
             <CredentialsContainer>
               <Credentials />
             </CredentialsContainer>
-          </FormContent>
+          </StyledBox>
         </form>
         <Box sx={{ display: 'flex' }}>
           <Typography variant="body1">Don&apos;t have an account?</Typography>

@@ -6,7 +6,7 @@
   --light: rgb(238, 242, 246);
   --dark: rgb(30, 30, 30);
   --dark2: rgb(34, 40, 49);
-  --dark3: rgb(50, 50, 50);
+  --dark3: rgba(58, 58, 58, 0.4);
   --bg-dark: rgba(66, 61, 61, 0.5);
   --bg-light: rgba(161, 153, 153, 0.5);
   --link-color: rgb(0, 116, 204);
@@ -32,8 +32,8 @@
   --pastel-purple: rgb(111, 97, 192);
   --pastel-gray: rgb(183, 193, 202);
   --active-link-color: rgb(190, 44, 146);
+  --active-link-color2: rgb(223, 72, 225);
   --hover-text-color: rgb(169, 67, 138);
-  --active-link-color2: rgb(235, 94, 0);
   --color: rgb(190, 44, 146);
   --colo2: #6e85b7;
 }

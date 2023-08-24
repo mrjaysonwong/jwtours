@@ -1,6 +1,5 @@
 import Head from 'next/head';
-import { signIn, signOut } from 'next-auth/react';
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth]';
 import { MainContainer } from '@components/Layout/Styles/globals';
@@ -19,11 +18,6 @@ export default function Home({ session }) {
       <Navbar user={user} />
       <MainContainer>
         <Typography>Lorem ipsum</Typography>
-        {session ? (
-          <Button onClick={() => signOut()}>Sign Out</Button>
-        ) : (
-          <Button onClick={() => signIn()}>Sign In</Button>
-        )}
       </MainContainer>
       <Footer />
     </>
