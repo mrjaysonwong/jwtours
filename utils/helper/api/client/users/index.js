@@ -10,7 +10,7 @@ export const createUser = async (values) => {
       body: JSON.stringify(values),
     };
 
-    let response = await fetch(`${API_ENDPOINT}/api/auth/signup`, options);
+    let response = await fetch(`api/auth/signup`, options);
 
     // Unprocessable Content
     if (response.status === 422) {
