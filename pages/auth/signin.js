@@ -5,17 +5,17 @@ import SignIn from '@components/SignIn';
 
 export default function SignInPage() {
   const { data: session, status } = useSession();
-  const isAuthenticated = status === 'authenticated';
+  const authenticated = status === 'authenticated';
 
   const router = useRouter();
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (authenticated) {
       router.push('/');
     }
-  }, [isAuthenticated, router]);
+  }, [authenticated, router]);
 
-  if (isAuthenticated || status === 'loading') {
+  if (authenticated || status === 'loading') {
     return null;
   }
 

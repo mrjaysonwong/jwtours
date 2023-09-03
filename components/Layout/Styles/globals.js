@@ -19,11 +19,18 @@ export const StyledBox = styled(Box)(({ theme }) => ({
   padding: '1rem',
   margin: '1rem',
   borderRadius: '0.5rem',
+  maxWidth: 450,
   boxShadow:
     theme.palette.mode === 'light'
       ? 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px'
       : undefined,
   backgroundColor: theme.palette.mode === 'dark' ? 'var(--dark3)' : '#fff',
+
+  '.error': {
+    padding: 0,
+    margin: 0,
+    marginTop: '0.5rem',
+  },
 }));
 
 export const StyledButton = styled(Button)({

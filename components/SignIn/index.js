@@ -16,7 +16,7 @@ export default function SignIn() {
         <title>Sign In - JWTours</title>
       </Head>
 
-      <MainContainer>
+      <MainContainer sx={{ mt: 2 }}>
         <Tooltip title="App Logo" arrow placement="left">
           <div>
             <Link href="/">
@@ -33,8 +33,12 @@ export default function SignIn() {
           </div>
         </Tooltip>
 
-        <form>
+        <form autoComplete="off">
           <StyledBox>
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              Sign in to JWTours
+            </Typography>
+
             <ProviderContainer>
               <Provider />
             </ProviderContainer>

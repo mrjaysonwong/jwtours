@@ -5,17 +5,18 @@ import SignUp from '@components/SignUp';
 
 export default function SignUpPage() {
   const { data: session, status } = useSession();
-  const isAuthenticated = status === 'authenticated';
+  const authenticated = status === 'authenticated';
 
   const router = useRouter();
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (authenticated) {
       router.push('/');
     }
-  }, [isAuthenticated, router]);
+  }, [authenticated, router]);
 
-  if (isAuthenticated || status === 'loading') {
+  // to avoid flashing signup form if manually type signup form url
+  if (authenticated || status === 'loading') {
     return null;
   }
 

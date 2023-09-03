@@ -18,7 +18,7 @@ export const handleClick = (
 ) => {
   switch (action) {
     case 'signup':
-      router.push('auth/signup');
+      router.push('/auth/signup');
       break;
     case 'signin':
       signIn();

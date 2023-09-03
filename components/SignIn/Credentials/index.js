@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { signinSchema } from '@utils/yup/credentialsSchema';
 import {
   Button,
   Typography,
@@ -19,12 +22,35 @@ export default function Credentials() {
     setShowPassword((show) => !show);
   };
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
+  } = useForm({
+    resolver: yupResolver(signinSchema),
+  });
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+
   return (
     <>
-      <TextField label="Email" variant="outlined" />
       <TextField
-        id="password"
-        className="password"
+        name="email"
+        label="Email"
+        variant="outlined"
+        error={Boolean(errors.email)}
+        {...register('email')}
+      />
+
+      {errors.email && (
+        <Typography variant="body2" color="error" className="error">
+          {errors.email?.message}
+        </Typography>
+      )}
+
+      <TextField
         name="password"
         label="Password"
         type={showPassword ? 'text' : 'password'}
@@ -37,9 +63,18 @@ export default function Credentials() {
             </InputAdornment>
           ),
         }}
+        error={Boolean(errors.password)}
+        {...register('password')}
         sx={{ mt: 2 }}
       />
-      <StyledButton sx={{ py: 1, my: 2 }}>
+
+      {errors.password && (
+        <Typography variant="body2" color="error" className="error">
+          {errors.password?.message}
+        </Typography>
+      )}
+
+      <StyledButton sx={{ py: 1, my: 2 }} onClick={handleSubmit(onSubmit)}>
         Sign in
       </StyledButton>
       <Divider />

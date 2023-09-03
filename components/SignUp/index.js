@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Tooltip } from '@mui/material';
+import { Tooltip, Typography } from '@mui/material';
 import { MainContainer } from '@components/Layout/Styles/globals';
 import { StyledBox } from '@components/Layout/Styles/globals';
 import FormDetails from './FormDetails';
@@ -14,7 +14,7 @@ export default function SignUp() {
         <title>Sign Up - JWTours</title>
       </Head>
 
-      <MainContainer>
+      <MainContainer sx={{ mt: 2 }}>
         <Tooltip title="App Logo" arrow placement="left">
           <div>
             <Link href="/">
@@ -31,11 +31,18 @@ export default function SignUp() {
           </div>
         </Tooltip>
 
-        <form>
+        <form autoComplete="off">
           <StyledBox>
             <FormDetails />
           </StyledBox>
         </form>
+
+        <Typography variant="body1">
+          Already have an account?{' '}
+          <Link href="/auth/signin">
+            <a>Sign In</a>
+          </Link>
+        </Typography>
       </MainContainer>
       <Footer />
     </>
