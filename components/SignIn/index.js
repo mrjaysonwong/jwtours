@@ -35,10 +35,6 @@ export default function SignIn() {
 
         <form autoComplete="off">
           <StyledBox>
-            <Typography variant="h6" sx={{ mb: 2 }}>
-              Sign in to JWTours
-            </Typography>
-
             <ProviderContainer>
               <Provider />
             </ProviderContainer>

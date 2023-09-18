@@ -1,5 +1,6 @@
 import { signIn, signOut } from 'next-auth/react';
 
+
 export const getUrl = (previousUrl, prevPath) => {
   const pathname =
     previousUrl === undefined ? prevPath : new URL(previousUrl).pathname;

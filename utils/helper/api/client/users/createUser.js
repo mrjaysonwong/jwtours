@@ -8,16 +8,16 @@ export const createUser = async (values) => {
       body: JSON.stringify(values),
     };
 
-    let response = await fetch(`/api/auth/signup`, options);
+    const res = await fetch(`/api/auth/signup`, options);
 
     // Unprocessable Content
-    if (response.status === 422) {
+    if (res.status === 422) {
       throw new Error('Email Already Exists.');
-    } else if (!response.ok) {
+    } else if (!res.ok) {
       throw new Error('An error occurred. Please Try again.');
     }
 
-    let data = await response.json();
+    const data = await res.json();
     return data;
   } catch (error) {
     throw new Error(error.message);

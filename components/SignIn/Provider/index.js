@@ -38,7 +38,7 @@ export default function Provider() {
           alt="Google logo"
         />
 
-        <Typography variant="body2">Sign in with Google</Typography>
+        <Typography variant="body2">Sign-In with Google</Typography>
       </Button>
       <Button
         variant="contained"
@@ -57,7 +57,7 @@ export default function Provider() {
           alt="GitHub logo"
         />
 
-        <Typography variant="body2">Sign in with GitHub</Typography>
+        <Typography variant="body2">Sign-In with GitHub</Typography>
       </Button>
       <Button
         variant="contained"
@@ -75,7 +75,7 @@ export default function Provider() {
           priority
           alt="Facebook logo"
         />
-        <Typography variant="body2">Sign in with Facebook</Typography>
+        <Typography variant="body2">Sign-In with Facebook</Typography>
       </Button>
     </>
   );

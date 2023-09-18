@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { signinSchema } from '@utils/yup/credentialsSchema';
+import { signIn } from 'next-auth/react';
 import {
   Button,
   Typography,
@@ -14,9 +16,17 @@ import {
 import { StyledButton } from '@components/Layout/Styles/globals';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { ErrorBox } from '@components/SignUp/styled';
+import ErrorIcon from '@mui/icons-material/Error';
 
 export default function Credentials() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+
+  const [apiError, setApiError] = useState({
+    show: false,
+    message: '',
+  });
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
@@ -25,17 +35,40 @@ export default function Credentials() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(signinSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (val) => {
+    try {
+      const res = await signIn('credentials', {
+        redirect: false,
+        email: val.email,
+        password: val.password,
+      });
+
+      if (res.ok) {
+        setApiError({ show: false });
+      }
+
+      throw new Error(`${res.error}`);
+    } catch (error) {
+      setApiError({ show: true, message: error.message });
+    }
   };
 
   return (
     <>
+      {apiError.show && (
+        <ErrorBox>
+          <Typography variant="body2" color="error">
+            <ErrorIcon />
+            {apiError.message}
+          </Typography>
+        </ErrorBox>
+      )}
+
       <TextField
         name="email"
         label="Email"
@@ -74,7 +107,11 @@ export default function Credentials() {
         </Typography>
       )}
 
-      <StyledButton sx={{ py: 1, my: 2 }} onClick={handleSubmit(onSubmit)}>
+      <StyledButton
+        disabled={isSubmitting}
+        sx={{ py: 1, my: 2 }}
+        onClick={handleSubmit(onSubmit)}
+      >
         Sign in
       </StyledButton>
       <Divider />

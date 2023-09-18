@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, forwardRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
@@ -11,13 +11,19 @@ import {
   InputAdornment,
   IconButton,
   Stack,
+  Alert as MuiAlert,
+  Snackbar,
 } from '@mui/material';
 import { StyledButton } from '@components/Layout/Styles/globals';
 import { ErrorBox } from '../styled';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import ErrorIcon from '@mui/icons-material/Error';
-import { createUser } from '@utils/helper/api/client/users';
+import { createUser } from '@utils/helper/api/client/users/createUser';
+
+const Alert = forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function FormDetails() {
   const router = useRouter();
@@ -30,6 +36,8 @@ export default function FormDetails() {
     message: '',
   });
 
+  const [open, setOpen] = useState(false);
+
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
   };
@@ -40,7 +48,7 @@ export default function FormDetails() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(signupSchema),
   });
@@ -49,7 +57,11 @@ export default function FormDetails() {
     try {
       const data = await createUser(values);
       if (data) {
+        setOpen(true);
         setApiError({ show: false });
+        setTimeout(() => {
+          router.push('/auth/signin');
+        }, 2000);
       }
     } catch (error) {
       console.error(error.message);
@@ -61,11 +73,25 @@ export default function FormDetails() {
     }
   };
 
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   return (
     <>
-      <Typography variant="h6" sx={{ mb: 2 }}>
-        Create your JWTours account
-      </Typography>
+      {!apiError.show && (
+        <Stack>
+          <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="success">
+              Your registration has been successfully completed.
+            </Alert>
+          </Snackbar>
+        </Stack>
+      )}
 
       {apiError.show && (
         <ErrorBox>

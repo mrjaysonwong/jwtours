@@ -8,10 +8,19 @@ const userSchema = new Schema(
       type: String,
       default: uuidv4,
     },
-    firstName: String,
-    lastName: String,
-    email: String,
-    password: String,
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    password: { type: String },
     phone: {
       areaCode: {
         type: String,
@@ -33,7 +42,7 @@ const userSchema = new Schema(
     role: {
       type: String,
       enum: ['user', 'guide', 'admin'],
-      default: 'admin',
+      default: 'user',
     },
     image: {
       type: String,

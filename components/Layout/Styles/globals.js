@@ -20,6 +20,7 @@ export const StyledBox = styled(Box)(({ theme }) => ({
   margin: '1rem',
   borderRadius: '0.5rem',
   maxWidth: 450,
+  // borderTop: '3px solid rgba(128, 128, 128, 0.5)',
   boxShadow:
     theme.palette.mode === 'light'
       ? 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px'
