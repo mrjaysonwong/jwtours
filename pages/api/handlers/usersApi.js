@@ -62,12 +62,12 @@ export async function createUser(req, res) {
     newUser.emailToken = token;
     await newUser.save();
 
-    const link = `${process.env.BASE_URL}/auth/user/email/${token}`;
+    const link = `${process.env.NEXTAUTH_URL}/auth/user/email/${token}`;
 
     const message = `<div>Click on the link below to verify your email, if the link is not working then please paste into the browser.</div></br>
     <div>link:${link}</div>`;
 
-    await sendEmail({
+    sendEmail({
       to: newUser.email,
       subject: 'Verify Email',
       text: message,

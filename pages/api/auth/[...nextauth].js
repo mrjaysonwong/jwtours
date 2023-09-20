@@ -1,6 +1,5 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
-import { MongoDBAdapter } from '@auth/mongodb-adapter';
-import clientPromise from 'lib/database/mongodb';
+
 import GoogleProvider from 'next-auth/providers/google';
 import GitHubProvider from 'next-auth/providers/github';
 import FacebookProvider from 'next-auth/providers/facebook';
@@ -13,7 +12,7 @@ import {
 } from '../handlers/signinApi';
 
 export const authOptions = (NextAuthOptions = {
-  adapters: MongoDBAdapter(clientPromise),
+
   // Configure one or more authentication providers
   providers: [
     GoogleProvider({
