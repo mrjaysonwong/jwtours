@@ -1,4 +1,4 @@
-import connectMongo from 'database/connection';
+import connectMongo from 'lib/database/connection';
 import { getAllUsers } from '../handlers/usersApi';
 
 export default async function handler(req, res) {
@@ -6,7 +6,7 @@ export default async function handler(req, res) {
     await connectMongo();
 
     // type of request
-    const { method, query } = req;
+    const { method} = req;
 
     switch (method) {
       case 'GET':

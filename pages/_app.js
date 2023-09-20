@@ -2,7 +2,6 @@ import { createContext } from 'react';
 import Head from 'next/head';
 import { SessionProvider } from 'next-auth/react';
 import { CacheProvider } from '@emotion/react';
-import { getSession } from 'next-auth/react';
 import createEmotionCache from 'src/theme/createEmotionCache';
 import MuiThemeProvider from '@src/theme/MuiThemeProvider';
 import parseCookies from 'utils/parser/parseCookies';
@@ -18,8 +17,8 @@ function MyApp(props) {
     themeSetting,
     fontSetting,
     emotionCache = clientSideEmotionCache,
-session,
-pageProps
+    session,
+    pageProps,
   } = props;
 
   const contextValue = {
@@ -54,6 +53,7 @@ MyApp.getInitialProps = async ({ ctx }) => {
 
   if (ctx.req && ctx.req.headers.cookie) {
     const cookies = parseCookies(ctx);
+
     themeSetting = cookies.themePreference;
     fontSetting = cookies.fontPreference;
   }

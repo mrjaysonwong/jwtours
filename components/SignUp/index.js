@@ -14,7 +14,7 @@ export default function SignUp() {
         <title>Sign Up - JWTours</title>
       </Head>
 
-      <MainContainer sx={{ mt: 2 }}>
+      <MainContainer sx={{ pt: 2 }}>
         <Tooltip title="App Logo" arrow placement="left">
           <div>
             <Link href="/">

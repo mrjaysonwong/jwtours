@@ -1,4 +1,4 @@
-import connectMongo from 'database/connection';
+import connectMongo from 'lib/database/connection';
 import { createUser } from '../handlers/usersApi';
 
 // POST: /api/auth/signup

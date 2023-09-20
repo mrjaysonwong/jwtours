@@ -8,6 +8,8 @@ export async function handleCredentialSignIn(credentials, req) {
 
     if (!user) {
       throw new Error('Invalid email or password.');
+    } else if (user.isVerified !== 'yes') {
+      throw new Error('Verify Email First.');
     } else if (user.authProvider !== '') {
       throw new Error(`Please use the ${user.authProvider} sign-in method.`);
     }
@@ -40,8 +42,10 @@ export async function handleProviderSignIn(user, account) {
       firstName: firstName,
       lastName: lastName ?? '',
       email: user.email,
+      password: '',
       image: user.image,
       authProvider: account.provider,
+      isVerified: 'yes',
     };
 
     // check for existing user
@@ -67,8 +71,10 @@ export async function handleProviderSignIn(user, account) {
         firstName: newUser.firstName,
         lastName: newUser.lastName,
         email: newUser.email,
+        password: newUser.password,
         image: newUser.image,
         authProvider: newUser.authProvider,
+        isVerified: newUser.isVerified,
       });
     }
   }

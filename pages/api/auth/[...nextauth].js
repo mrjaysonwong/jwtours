@@ -1,9 +1,11 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
+import { MongoDBAdapter } from '@auth/mongodb-adapter';
+import clientPromise from 'lib/database/mongodb';
 import GoogleProvider from 'next-auth/providers/google';
 import GitHubProvider from 'next-auth/providers/github';
 import FacebookProvider from 'next-auth/providers/facebook';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import connectMongo from 'database/connection';
+import connectMongo from 'lib/database/connection';
 import User from '@model/userModel';
 import {
   handleCredentialSignIn,
@@ -11,6 +13,7 @@ import {
 } from '../handlers/signinApi';
 
 export const authOptions = (NextAuthOptions = {
+  adapters: MongoDBAdapter(clientPromise),
   // Configure one or more authentication providers
   providers: [
     GoogleProvider({
@@ -41,6 +44,7 @@ export const authOptions = (NextAuthOptions = {
       },
     }),
   ],
+
   callbacks: {
     signIn: async ({ user, account, profile, email, credentials }) => {
       try {
@@ -60,7 +64,7 @@ export const authOptions = (NextAuthOptions = {
         token.user = user;
       }
 
-      console.log('jwt', token);
+      // console.log('jwt', token);
 
       return token;
     },
@@ -78,7 +82,7 @@ export const authOptions = (NextAuthOptions = {
         session.user.id = userExists.id;
         session.user.name = token.user.name;
         session.user.role = userExists.role;
-        console.log('session', session);
+        // console.log('session', session);
 
         return session;
       } catch (error) {

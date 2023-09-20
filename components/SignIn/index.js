@@ -16,7 +16,7 @@ export default function SignIn() {
         <title>Sign In - JWTours</title>
       </Head>
 
-      <MainContainer sx={{ mt: 2 }}>
+      <MainContainer sx={{ pt: 2 }}>
         <Tooltip title="App Logo" arrow placement="left">
           <div>
             <Link href="/">

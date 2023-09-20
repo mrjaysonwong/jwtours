@@ -1,9 +1,10 @@
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]';
 import User from '@model/userModel';
+import jwt from 'jsonwebtoken';
 import { hash } from 'bcryptjs';
+import { sendEmail } from '@utils/helper/sendMail';
 
-// GET: /api/users
 export async function getAllUsers(req, res) {
   try {
     const session = await getServerSession(req, res, authOptions);
@@ -34,12 +35,12 @@ export async function createUser(req, res) {
   const { firstName, lastName, email, password } = req.body;
 
   // check for existing user
-  const userExists = await User.findOne({ email });
+  const user = await User.findOne({ email });
 
-  if (userExists) {
+  if (user) {
     return res.status(422).json({
       success: false,
-      error: 'Email Already Exists',
+      error: 'User Already Exists',
     });
   }
 
@@ -52,14 +53,39 @@ export async function createUser(req, res) {
       password: await hash(password, 12),
     });
 
-    return res.status(201).json({
-      success: true,
-      message: ' Your registration has been successfully completed.',
-      user: newUser,
+    const token = jwt.sign({ _id: newUser._id }, process.env.JWT_SECRET, {
+      expiresIn: '30d',
     });
+    console.log('newUser', newUser._id);
+    console.log('TOKEN CREATED', token);
+
+    newUser.emailToken = token;
+    await newUser.save();
+
+    const link = `${process.env.BASE_URL}/auth/user/email/${token}`;
+
+    const message = `<div>Click on the link below to verify your email, if the link is not working then please paste into the browser.</div></br>
+    <div>link:${link}</div>`;
+
+    await sendEmail({
+      to: newUser.email,
+      subject: 'Verify Email',
+      text: message,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: `Email sent to ${newUser.email}, please check your email`,
+    });
+
+    // return res.status(201).json({
+    //   success: true,
+    //   message: 'Your registration has been successfully completed.',
+    //   user: newUser,
+    // });
   } catch (error) {
     console.error('User creation failed:', error);
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: 'User creation failed.',
       error: error,

@@ -59,9 +59,9 @@ export default function FormDetails() {
       if (data) {
         setOpen(true);
         setApiError({ show: false });
-        setTimeout(() => {
-          router.push('/auth/signin');
-        }, 2000);
+        // setTimeout(() => {
+        //   router.push('/auth/signin');
+        // }, 2000);
       }
     } catch (error) {
       console.error(error.message);
@@ -86,8 +86,11 @@ export default function FormDetails() {
       {!apiError.show && (
         <Stack>
           <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity="success">
+            {/* <Alert onClose={handleClose} severity="success">
               Your registration has been successfully completed.
+            </Alert> */}
+            <Alert onClose={handleClose} severity="success">
+              Verify your email first.
             </Alert>
           </Snackbar>
         </Stack>
