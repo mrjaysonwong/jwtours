@@ -56,8 +56,8 @@ export async function createUser(req, res) {
     const token = jwt.sign({ _id: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: '30d',
     });
-    console.log('newUser', newUser._id);
-    console.log('TOKEN CREATED', token);
+    // console.log('newUser', newUser._id);
+    // console.log('TOKEN CREATED', token);
 
     newUser.emailToken = token;
     await newUser.save();
@@ -67,7 +67,7 @@ export async function createUser(req, res) {
     const message = `<div>Click on the link below to verify your email, if the link is not working then please paste into the browser.</div></br>
     <div>link:${link}</div>`;
 
-    sendEmail({
+    await sendEmail({
       to: newUser.email,
       subject: 'Verify Email',
       text: message,

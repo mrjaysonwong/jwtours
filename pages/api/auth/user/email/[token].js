@@ -19,7 +19,7 @@ export default async function handler(req, res) {
 
       req.user = decoded;
 
-      console.log('req.user', req.user);
+      // console.log('req.user', req.user);
       await User.findByIdAndUpdate(req.user._id, {
         isVerified: 'yes',
         emailToken: null,

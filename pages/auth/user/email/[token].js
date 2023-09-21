@@ -6,14 +6,24 @@ import { Typography } from '@mui/material';
 export default function EmailVerification() {
   const router = useRouter();
 
+  const { token } = router.query;
+
+  // console.log('client token test', token)
+
+  // useEffect(() => {
+
+  //   // console.log('router isReady?',router.isReady)
+
+  //   if (router.isReady) {
+  //     const { token } = router.query;
+  //     sendToken(token);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
   useEffect(() => {
+    sendToken(token);
 
-    console.log('router isReady?',router.isReady)
-
-    if (router.isReady) {
-      const { token } = router.query;
-      sendToken(token);
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -30,17 +40,15 @@ export default function EmailVerification() {
 
       if (res.ok) {
         const data = await res.json();
-        console.log(data.message);
+
         setTimeout(() => {
-          router.replace('/auth/signin')
+          router.replace('/auth/signin');
         }, 3000);
       }
     } catch (error) {
       console.error(error.message);
     }
   };
-
-
 
   return (
     <MainContainer>
