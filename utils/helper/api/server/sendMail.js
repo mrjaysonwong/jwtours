@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-export const sendEmail = (options) => {
+export const sendEmail = async (options) => {
   const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_SERVER,
     port: process.env.EMAIL_SERVER_PORT,
@@ -17,12 +17,10 @@ export const sendEmail = (options) => {
     html: options.text,
   };
 
-  transporter.sendMail(mailOptions, function (err, info) {
-    if (err) {
-      console.error('Transporter error', err);
-    } else {
-      console.log('Email sent', info);
-      console.log('transporter info', info);
-    }
-  });
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Transporter info', info);
+  } catch (error) {
+    console.error('Transporter error', error);
+  }
 };

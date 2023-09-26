@@ -29,24 +29,24 @@ export async function getAllUsers(req, res) {
 }
 
 export async function createUser(req, res) {
-  if (!req.body) {
-    return res.status(400).json({ success: false, error: 'Empty form data' });
-  }
-
-  const { firstName, lastName, email, password } = req.body;
-
-  // check for existing user
-  const user = await User.findOne({ email });
-
-  if (user) {
-    return res.status(422).json({
-      error: {
-        message: 'Email Already Exists.',
-      },
-    });
-  }
-
   try {
+    if (!req.body) {
+      return res.status(400).json({ success: false, error: 'Empty form data' });
+    }
+
+    const { firstName, lastName, email, password } = req.body;
+
+    // check for existing user
+    const user = await User.findOne({ email });
+
+    if (user) {
+      return res.status(422).json({
+        error: {
+          message: 'Email Already Exists.',
+        },
+      });
+    }
+
     const hashedPassword = await hash(password, 12);
 
     // create and hash password
@@ -57,6 +57,7 @@ export async function createUser(req, res) {
       password: hashedPassword,
     });
 
+    // Create an email verification token
     const token = jwt.sign({ _id: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: '5m',
     });
@@ -74,7 +75,7 @@ export async function createUser(req, res) {
       text: message,
     });
 
-    return res.status(200).json({
+    return res.status(201).json({
       success: {
         message: `Verification link sent to ${newUser.email}`,
       },
