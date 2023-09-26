@@ -1,19 +1,15 @@
-import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import { signIn } from 'next-auth/react';
 import { Tooltip, Typography } from '@mui/material';
 import { MainContainer } from '@components/Layout/Styles/globals';
 import { StyledBox } from '@components/Layout/Styles/globals';
-import FormDetails from './FormDetails';
+import SignUpForm from './SignUpForm';
 import Footer from '@components/Layout/Footer';
 
 export default function SignUp() {
   return (
     <>
-      <Head>
-        <title>Sign Up - JWTours</title>
-      </Head>
-
       <MainContainer sx={{ pt: 2 }}>
         <Tooltip title="App Logo" arrow placement="left">
           <div>
@@ -33,15 +29,12 @@ export default function SignUp() {
 
         <form autoComplete="off">
           <StyledBox>
-            <FormDetails />
+            <SignUpForm />
           </StyledBox>
         </form>
 
         <Typography variant="body1">
-          Already have an account?{' '}
-          <Link href="/auth/signin">
-            <a>Sign In</a>
-          </Link>
+          Already have an account? <a onClick={() => signIn()}>Sign In</a>
         </Typography>
       </MainContainer>
       <Footer />

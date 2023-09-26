@@ -1,6 +1,5 @@
 import { useState, forwardRef } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { signupSchema } from '@utils/yup/credentialsSchema';
@@ -19,36 +18,74 @@ import { ErrorBox } from '../styled';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import ErrorIcon from '@mui/icons-material/Error';
+import CircularIndeterminate from '@components/Layout/Loaders/CircularProgress';
 import { createUser } from '@utils/helper/api/client/users/createUser';
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export default function FormDetails() {
-  const router = useRouter();
+function SuccessMessage({ open, onClose, message, severity }) {
+  return (
+    <Stack>
+      <Snackbar open={open} onClose={onClose}>
+        <Alert onClose={onClose} severity={severity}>
+          {message}
+        </Alert>
+      </Snackbar>
+    </Stack>
+  );
+}
 
+function ErrorMessage({ message }) {
+  return (
+    <ErrorBox>
+      <Typography variant="body2" color="error">
+        <ErrorIcon />
+        {message}
+      </Typography>
+    </ErrorBox>
+  );
+}
+
+export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const [apiError, setApiError] = useState({
+  const [apiMessage, setApiMessage] = useState({
     show: false,
     message: '',
+    severity: 'success',
   });
 
-  const [open, setOpen] = useState(false);
+  const setMessage = (message, severity) => {
+    setApiMessage({
+      show: true,
+      message,
+      severity,
+    });
+  };
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
   };
+
   const handleShowConfirmPassword = () => {
     setShowConfirmPassword((show) => !show);
+  };
+
+  const handleOnClose = () => {
+    setApiMessage({
+      ...apiMessage,
+      show: false,
+    });
   };
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm({
     resolver: yupResolver(signupSchema),
   });
@@ -56,53 +93,30 @@ export default function FormDetails() {
   const onSubmit = async (values) => {
     try {
       const data = await createUser(values);
-      if (data) {
-        setOpen(true);
-        setApiError({ show: false });
-        // setTimeout(() => {
-        //   router.push('/auth/signin');
-        // }, 2000);
-      }
+
+      setMessage(data.success.message, 'success');
+      reset();
+      setTimeout(() => {
+        window.location.href = '/auth/signin';
+      }, 3000);
     } catch (error) {
-      console.error(error.message);
-
-      setApiError({
-        show: true,
-        message: error.message,
-      });
+      setMessage(error.message, 'error');
     }
-  };
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpen(false);
   };
 
   return (
     <>
-      {!apiError.show && (
-        <Stack>
-          <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
-            {/* <Alert onClose={handleClose} severity="success">
-              Your registration has been successfully completed.
-            </Alert> */}
-            <Alert onClose={handleClose} severity="success">
-              Verify your email first.
-            </Alert>
-          </Snackbar>
-        </Stack>
+      {apiMessage.severity === 'success' && (
+        <SuccessMessage
+          open={apiMessage.show}
+          onClose={handleOnClose}
+          message={apiMessage.message}
+          severity={apiMessage.severity}
+        />
       )}
 
-      {apiError.show && (
-        <ErrorBox>
-          <Typography variant="body2" color="error">
-            <ErrorIcon />
-            {apiError.message}
-          </Typography>
-        </ErrorBox>
+      {apiMessage.severity === 'error' && (
+        <ErrorMessage message={apiMessage.message} />
       )}
 
       <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
@@ -207,7 +221,7 @@ export default function FormDetails() {
         disabled={isSubmitting}
         sx={{ py: 1, my: 2 }}
       >
-        Sign Up
+        {isSubmitting ? <CircularIndeterminate /> : 'Sign Up'}
       </StyledButton>
 
       <Divider sx={{ mb: 2 }} />

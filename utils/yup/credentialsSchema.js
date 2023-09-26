@@ -6,8 +6,16 @@ let EMAIL_REGX =
 let PASSWORD_REGX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]+$/;
 
 export const signupSchema = yup.object().shape({
-  firstName: yup.string().trim().required('First name is required'),
-  lastName: yup.string().trim().required('Last name is required'),
+  firstName: yup
+    .string()
+    .trim()
+    .matches(/^[A-Za-z ]*$/, 'Please enter valid name')
+    .required('First name is required'),
+  lastName: yup
+    .string()
+    .trim()
+    .matches(/^[A-Za-z ]*$/, 'Please enter valid name')
+    .required('Last name is required'),
   email: yup
     .string()
     .trim()

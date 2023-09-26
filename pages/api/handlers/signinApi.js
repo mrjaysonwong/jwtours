@@ -8,7 +8,7 @@ export async function handleCredentialSignIn(credentials, req) {
 
     if (!user) {
       throw new Error('Invalid email or password.');
-    } else if (user.isVerified !== 'yes') {
+    } else if (!user.isVerified) {
       throw new Error('Verify Email First.');
     } else if (user.authProvider !== '') {
       throw new Error(`Please use the ${user.authProvider} sign-in method.`);
@@ -28,8 +28,8 @@ export async function handleCredentialSignIn(credentials, req) {
 
     return userObj;
   } catch (error) {
-    // console.error(error);
-    throw new Error(error.message);
+    console.error(error);
+    throw error;
   }
 }
 
@@ -45,7 +45,7 @@ export async function handleProviderSignIn(user, account) {
       password: '',
       image: user.image,
       authProvider: account.provider,
-      isVerified: 'yes',
+      isVerified: true
     };
 
     // check for existing user
@@ -66,7 +66,7 @@ export async function handleProviderSignIn(user, account) {
         { new: true }
       );
     } else {
-      User.create({
+      await User.create({
         id: newUser.id,
         firstName: newUser.firstName,
         lastName: newUser.lastName,

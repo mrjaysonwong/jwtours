@@ -1,11 +1,11 @@
 import Head from 'next/head';
-import { signIn, signOut } from 'next-auth/react';
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth]';
 import { MainContainer } from '@components/Layout/Styles/globals';
 import Navbar from '@components/Layout/Navbar';
 import Footer from '@components/Layout/Footer';
+import { companyName } from '@utils/helper/common';
 
 export default function Contact({ session }) {
   const user = session?.user;
@@ -13,7 +13,7 @@ export default function Contact({ session }) {
   return (
     <>
       <Head>
-        <title>Contact Us - JWTours</title>
+        <title>{`Contact Us - ${companyName}`}</title>
       </Head>
 
       <Navbar user={user} />

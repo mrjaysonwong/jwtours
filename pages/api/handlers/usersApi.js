@@ -3,7 +3,8 @@ import { authOptions } from '../auth/[...nextauth]';
 import User from '@model/userModel';
 import jwt from 'jsonwebtoken';
 import { hash } from 'bcryptjs';
-import { sendEmail } from '@utils/helper/sendMail';
+import { sendEmail } from '@utils/helper/api/server/sendMail';
+import { htmlContent } from '@src/theme/emailTemplate';
 
 export async function getAllUsers(req, res) {
   try {
@@ -39,56 +40,51 @@ export async function createUser(req, res) {
 
   if (user) {
     return res.status(422).json({
-      success: false,
-      error: 'User Already Exists',
+      error: {
+        message: 'Email Already Exists.',
+      },
     });
   }
 
   try {
+    const hashedPassword = await hash(password, 12);
+
     // create and hash password
     const newUser = await User.create({
       firstName,
       lastName,
       email,
-      password: await hash(password, 12),
+      password: hashedPassword,
     });
 
     const token = jwt.sign({ _id: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: '30d',
+      expiresIn: '5m',
     });
-    // console.log('newUser', newUser._id);
-    // console.log('TOKEN CREATED', token);
 
     newUser.emailToken = token;
     await newUser.save();
 
-    const link = `${process.env.NEXTAUTH_URL}/auth/user/email/${token}`;
+    const link = `${process.env.NEXTAUTH_URL}/confirm?email=${newUser.email}&token=${token}`;
 
-    const message = `<div>Click on the link below to verify your email, if the link is not working then please paste into the browser.</div></br>
-    <div>link:${link}</div>`;
+    const message = htmlContent(link, newUser.email);
 
     await sendEmail({
       to: newUser.email,
-      subject: 'Verify Email',
+      subject: 'JWtours Email Verification',
       text: message,
     });
 
     return res.status(200).json({
-      success: true,
-      message: `Email sent to ${newUser.email}, please check your email`,
+      success: {
+        message: `Verification link sent to ${newUser.email}`,
+      },
     });
-
-    // return res.status(201).json({
-    //   success: true,
-    //   message: 'Your registration has been successfully completed.',
-    //   user: newUser,
-    // });
   } catch (error) {
     console.error('User creation failed:', error);
     return res.status(500).json({
-      success: false,
-      message: 'User creation failed.',
-      error: error,
+      error: {
+        message: 'User creation failed.',
+      },
     });
   }
 }

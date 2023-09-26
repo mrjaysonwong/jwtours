@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Head from 'next/head';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth]';
 import { useSession } from 'next-auth/react';
@@ -7,6 +8,7 @@ import { Button, Typography } from '@mui/material';
 import { MainContainer } from '@components/Layout/Styles/globals';
 import LoadingBar from '@components/Layout/Loaders/LinearProgress';
 import Dashboard from '@components/Protected/Dashboard';
+import { companyName } from '@utils/helper/common';
 
 export default function Protected() {
   const { data: session, status } = useSession();
@@ -15,6 +17,10 @@ export default function Protected() {
 
   return (
     <>
+      <Head>
+        <title>{`Dashboard - ${companyName}`}</title>
+      </Head>
+
       {isAuthenticated ? (
         <MainContainer>
           <Dashboard />

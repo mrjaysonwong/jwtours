@@ -10,14 +10,18 @@ export default async function handler(req, res) {
 
     if (method === 'POST') {
       await createUser(req, res);
-      return;
     } else {
-      res
+      return res
         .status(405)
         .send(`HTTP method ${method} Not Allowed, only POST Accepted`);
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Connection failed.' });
+
+    return res.status(500).json({
+      error: {
+        message: error.message,
+      },
+    });
   }
 }

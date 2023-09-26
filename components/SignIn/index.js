@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Box, Typography, Divider, Tooltip } from '@mui/material';
@@ -12,10 +11,6 @@ import Footer from '@components/Layout/Footer';
 export default function SignIn() {
   return (
     <>
-      <Head>
-        <title>Sign In - JWTours</title>
-      </Head>
-
       <MainContainer sx={{ pt: 2 }}>
         <Tooltip title="App Logo" arrow placement="left">
           <div>

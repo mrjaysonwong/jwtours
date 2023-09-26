@@ -5,13 +5,14 @@ import { Typography } from '@mui/material';
 import { MainContainer } from '@components/Layout/Styles/globals';
 import Navbar from '@components/Layout/Navbar';
 import Footer from '@components/Layout/Footer';
+import { companyName } from '@utils/helper/common';
 
 export default function PrivacyPolicy({ session }) {
   const user = session?.user;
   return (
     <>
       <Head>
-        <title>Privacy Policy - JWTours</title>
+        <title>{`Privacy Policy - ${companyName}`}</title>
       </Head>
 
       <Navbar user={user} />

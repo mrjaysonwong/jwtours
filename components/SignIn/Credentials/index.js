@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { signinSchema } from '@utils/yup/credentialsSchema';
 import { signIn } from 'next-auth/react';
 import {
-  Button,
   Typography,
   TextField,
   Divider,
@@ -18,9 +16,9 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { ErrorBox } from '@components/SignUp/styled';
 import ErrorIcon from '@mui/icons-material/Error';
+import CircularIndeterminate from '@components/Layout/Loaders/CircularProgress';
 
 export default function Credentials() {
-  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
   const [apiError, setApiError] = useState({
@@ -112,7 +110,7 @@ export default function Credentials() {
         sx={{ py: 1, my: 2 }}
         onClick={handleSubmit(onSubmit)}
       >
-        Sign in
+        {isSubmitting ? <CircularIndeterminate /> : 'Sign In'}
       </StyledButton>
       <Divider />
       <Typography variant="body2" sx={{ textAlign: 'right', my: 1 }}>

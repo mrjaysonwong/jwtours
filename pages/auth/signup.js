@@ -1,24 +1,34 @@
 import { useEffect } from 'react';
-import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
+import { useSession } from 'next-auth/react';
 import SignUp from '@components/SignUp';
+import { companyName } from '@utils/helper/common';
 
 export default function SignUpPage() {
+  const router = useRouter();
+
   const { data: session, status } = useSession();
   const authenticated = status === 'authenticated';
 
-  const router = useRouter();
-
   useEffect(() => {
     if (authenticated) {
-      router.push('/');
+      router.replace('/');
     }
   }, [authenticated, router]);
 
-  // to avoid flashing signup form if manually type signup form url
+  // to avoid flashing signup form if manually type signup page url
   if (authenticated || status === 'loading') {
     return null;
   }
 
-  return <SignUp />;
+  return (
+    <>
+      <Head>
+        <title>{`Sign Up - ${companyName}`}</title>
+      </Head>
+
+      <SignUp />
+    </>
+  );
 }

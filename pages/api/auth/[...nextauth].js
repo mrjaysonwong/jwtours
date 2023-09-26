@@ -1,5 +1,4 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
-
 import GoogleProvider from 'next-auth/providers/google';
 import GitHubProvider from 'next-auth/providers/github';
 import FacebookProvider from 'next-auth/providers/facebook';
@@ -12,7 +11,6 @@ import {
 } from '../handlers/signinApi';
 
 export const authOptions = (NextAuthOptions = {
-
   // Configure one or more authentication providers
   providers: [
     GoogleProvider({
@@ -33,12 +31,12 @@ export const authOptions = (NextAuthOptions = {
         try {
           await connectMongo();
 
-          const user = handleCredentialSignIn(credentials, req);
+          const user = await handleCredentialSignIn(credentials, req);
 
           return user;
         } catch (error) {
-          console.error(error);
-          throw new Error(error.message);
+          console.error('Credentials provider error:', error);
+          throw error;
         }
       },
     }),
@@ -49,12 +47,12 @@ export const authOptions = (NextAuthOptions = {
       try {
         await connectMongo();
 
-        handleProviderSignIn(user, account);
+        await handleProviderSignIn(user, account);
 
         return true;
       } catch (error) {
-        console.error(error);
-        throw new Error(error.message);
+        console.error('callback error:', error);
+        throw error;
       }
     },
     // default behavior token undefined after authenticated
@@ -62,8 +60,6 @@ export const authOptions = (NextAuthOptions = {
       if (user) {
         token.user = user;
       }
-
-      // console.log('jwt', token);
 
       return token;
     },
@@ -73,20 +69,21 @@ export const authOptions = (NextAuthOptions = {
         await connectMongo();
 
         // check for existing user
-        const userExists = await User.findOne({ email: session.user.email });
+        const userExists = await User.findOne({ email: token.user.email });
+
+        if (!userExists) {
+          throw new Error('User Not Found.');
+        }
 
         // add prop token user to session user object
         session.user = token.user;
-
-        session.user.id = userExists.id;
         session.user.name = token.user.name;
         session.user.role = userExists.role;
-        // console.log('session', session);
 
         return session;
       } catch (error) {
-        console.error(error);
-        throw new Error(error.message);
+        console.error('session error:', error);
+        throw error;
       }
     },
   },

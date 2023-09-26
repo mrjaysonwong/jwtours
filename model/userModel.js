@@ -36,7 +36,7 @@ const userSchema = new Schema(
       default: '',
     },
     resetToken: { type: String },
-    isVerified: { type: String, default: 'not' },
+    isVerified: { type: Boolean, default: false },
     emailToken: { type: String },
   },
   { timestamps: true }

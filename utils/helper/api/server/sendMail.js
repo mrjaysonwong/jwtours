@@ -2,10 +2,11 @@ import nodemailer from 'nodemailer';
 
 export const sendEmail = (options) => {
   const transporter = nodemailer.createTransport({
-    service: process.env.EMAIL_SERVICE,
+    host: process.env.EMAIL_SERVER,
+    port: process.env.EMAIL_SERVER_PORT,
     auth: {
-      user: process.env.EMAIL_SERVICE_USER,
-      pass: process.env.EMAIL_SERVICE_PASSWORD,
+      user: process.env.EMAIL_SERVER_USER,
+      pass: process.env.EMAIL_SERVER_PASSWORD,
     },
   });
 
@@ -18,8 +19,9 @@ export const sendEmail = (options) => {
 
   transporter.sendMail(mailOptions, function (err, info) {
     if (err) {
-      console.error('transporter error', err);
+      console.error('Transporter error', err);
     } else {
+      console.log('Email sent', info);
       console.log('transporter info', info);
     }
   });

@@ -1,23 +1,33 @@
 import { useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 import SignIn from '@components/SignIn';
+import { companyName } from '@utils/helper/common';
 
 export default function SignInPage() {
+  const router = useRouter();
+  const { callbackUrl } = router.query;
   const { data: session, status } = useSession();
   const authenticated = status === 'authenticated';
 
-  const router = useRouter();
-
   useEffect(() => {
     if (authenticated) {
-      router.push('/');
+      router.replace(callbackUrl ?? '/');
     }
-  }, [authenticated, router]);
+  }, [authenticated, router, callbackUrl]);
 
   if (authenticated || status === 'loading') {
     return null;
   }
 
-  return <SignIn />;
+  return (
+    <>
+      <Head>
+        <title>{`Sign In - ${companyName}`}</title>
+      </Head>
+
+      <SignIn />
+    </>
+  );
 }

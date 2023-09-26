@@ -17,13 +17,13 @@ export default function Footer() {
       }}
     >
       <Typography variant="body2">
-        <Link href="/legal/user-agreement">
+        <Link href="/legal/user-agreement" replace>
           <a>Terms of use</a>
         </Link>
       </Typography>
 
       <Typography variant="body2">
-        <Link href="/legal/privacy-policy">
+        <Link href="/legal/privacy-policy" replace>
           <a>Privacy policy</a>
         </Link>
       </Typography>
