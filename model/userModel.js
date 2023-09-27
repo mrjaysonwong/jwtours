@@ -31,7 +31,7 @@ const userSchema = new Schema(
       type: String,
       default: '',
     },
-    authProvider: {
+    accountType: {
       type: String,
       default: '',
     },

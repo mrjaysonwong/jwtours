@@ -10,8 +10,8 @@ export async function handleCredentialSignIn(credentials, req) {
       throw new Error('Invalid email or password.');
     } else if (!user.isVerified) {
       throw new Error('Verify Email First.');
-    } else if (user.authProvider !== '') {
-      throw new Error(`Please use the ${user.authProvider} sign-in method.`);
+    } else if (user.accountType !== '' && user.password === '') {
+      throw new Error(`Please use the ${user.accountType} sign-in method.`);
     }
 
     // check password with bcrypt compare function
@@ -34,25 +34,37 @@ export async function handleCredentialSignIn(credentials, req) {
 }
 
 export async function handleProviderSignIn(user, account) {
-  if (account.provider !== 'credentials') {
+  try {
+    // check for existing user
+    const userExists = await User.findOne({ email: user.email });
     const [firstName, lastName] = user.name.split(' ');
 
     const newUser = {
       id: user.id,
-      firstName: firstName,
+      firstName,
       lastName: lastName ?? '',
       email: user.email,
       password: '',
       image: user.image,
-      authProvider: account.provider,
-      isVerified: true
+      accountType: account.provider,
+      isVerified: true,
     };
 
-    // check for existing user
-    const userExists = await User.findOne({ email: user.email });
+    if (!userExists) {
+      await User.create({
+        id: newUser.id,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        email: newUser.email,
+        password: newUser.password,
+        image: newUser.image,
+        accountType: newUser.accountType,
+        isVerified: newUser.isVerified,
+      });
+    }
 
-    // if user exists
     if (userExists) {
+      // if existing user and with provider
       await User.findOneAndUpdate(
         {
           email: user.email,
@@ -61,21 +73,13 @@ export async function handleProviderSignIn(user, account) {
           id: user.id,
           email: user.email,
           image: user.image,
-          authProvider: account.provider,
+          accountType: account.provider,
         },
         { new: true }
       );
-    } else {
-      await User.create({
-        id: newUser.id,
-        firstName: newUser.firstName,
-        lastName: newUser.lastName,
-        email: newUser.email,
-        password: newUser.password,
-        image: newUser.image,
-        authProvider: newUser.authProvider,
-        isVerified: newUser.isVerified,
-      });
     }
+  } catch (error) {
+    console.error('Provider error:', error);
+    throw new Error(error.message);
   }
 }
