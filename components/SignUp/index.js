@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { Tooltip, Typography } from '@mui/material';
 import { MainContainer } from '@components/Layout/Styles/globals';
-import { StyledBox } from '@components/Layout/Styles/globals';
+import { StyledForm } from '@components/Layout/Styles/globals';
 import SignUpForm from './SignUpForm';
 import Footer from '@components/Layout/Footer';
 
@@ -28,9 +28,9 @@ export default function SignUp() {
         </Tooltip>
 
         <form autoComplete="off">
-          <StyledBox>
+          <StyledForm>
             <SignUpForm />
-          </StyledBox>
+          </StyledForm>
         </form>
 
         <Typography variant="body1">

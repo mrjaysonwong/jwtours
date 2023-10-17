@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { MainContainer } from '@components/Layout/Styles/globals';
 import { Typography } from '@mui/material';
 import { StyledButton } from '@components/Layout/Styles/globals';
-import { companyName } from '@utils/helper/common';
+import { companyName } from '@utils/helper/navigation';
 
 export default function ErrorPage() {
   const router = useRouter();

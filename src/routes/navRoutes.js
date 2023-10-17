@@ -1,4 +1,7 @@
-export const NavRoutes = [
+import LoginIcon from '@mui/icons-material/Login';
+import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
+
+export const navRoutes = [
   {
     pathName: 'Home',
     path: '/',
@@ -32,83 +35,38 @@ export const NavRoutes = [
     path: '/contact',
   },
   // {
-  //   pathName: 'Contact Us',
-  //   path: '/contact',
+  //   pathName: 'Contact 2',
+  //   path: '/contact2',
   // },
   // {
-  //   pathName: 'Contact Us',
-  //   path: '/contact',
+  //   pathName: 'Contact 3',
+  //   path: '/contact3',
   // },
   // {
-  //   pathName: 'Contact Us',
-  //   path: '/contact',
+  //   pathName: 'Contact 4',
+  //   path: '/contact4',
   // },
   // {
-  //   pathName: 'Contact Us',
-  //   path: '/contact',
+  //   pathName: 'Contact 5',
+  //   path: '/contact5',
   // },
   // {
-  //   pathName: 'Contact Us',
-  //   path: '/contact',
+  //   pathName: 'Contact 6',
+  //   path: '/contact6',
   // },
-  // {
-  //   pathName: 'Contact Us',
-  //   path: '/contact',
-  // },
-  // {
-  //   pathName: 'Contact Us',
-  //   path: '/contact',
-  // },
-  // {
-  //   pathName: 'Contact Us',
-  //   path: '/contact',
-  // },
-  // {
-  //   pathName: 'Contact Us',
-  //   path: '/contact',
-  // },
-  // {
-  //   pathName: 'Contact Us',
-  //   path: '/contact',
-  // },
-  // {
-  //   pathName: 'Contact Us',
-  //   path: '/contact',
-  // },
-  // {
-  //   pathName: 'Contact Us',
-  //   path: '/contact',
-  // },
-  // {
-  //   pathName: 'Contact Us',
-  //   path: '/contact',
-  // },
-  // {
-  //   pathName: 'Contact Us',
-  //   path: '/contact',
-  // },
-  // {
-  //   pathName: 'Contact Us',
-  //   path: '/contact',
-  // },
-  // {
-  //   pathName: 'Contact Us',
-  //   path: '/contact',
-  // },
-  // {
-  //   pathName: 'Contact Us',
-  //   path: '/contact',
-  // },
-  // {
-  //   pathName: 'Contact Us',
-  //   path: '/contact',
-  // },
-  // {
-  //   pathName: 'Contact Us',
-  //   path: '/contact',
-  // },
-  // {
-  //   pathName: 'Contact Us',
-  //   path: '/contact',
-  // },
+];
+
+export const authButtons = [
+  {
+    pathName: 'Sign In',
+    path: '',
+    icon: <LoginIcon />,
+    type: 'drawer',
+  },
+  {
+    pathName: 'Sign Up',
+    path: '/auth/signup',
+    icon: <HowToRegOutlinedIcon />,
+    type: 'drawer',
+  },
 ];

@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import SignIn from '@components/SignIn';
-import { companyName } from '@utils/helper/common';
+import { companyName } from '@utils/helper/navigation';
 
 export default function SignInPage() {
   const router = useRouter();

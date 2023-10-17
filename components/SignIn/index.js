@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Box, Typography, Divider, Tooltip } from '@mui/material';
 import { MainContainer } from '@components/Layout/Styles/globals';
 import { ProviderContainer, CredentialsContainer } from './styled';
-import { StyledBox } from '@components/Layout/Styles/globals';
+import { StyledForm } from '@components/Layout/Styles/globals';
 import Provider from './Provider';
 import Credentials from './Credentials';
 import Footer from '@components/Layout/Footer';
@@ -29,7 +29,7 @@ export default function SignIn() {
         </Tooltip>
 
         <form autoComplete="off">
-          <StyledBox>
+          <StyledForm>
             <ProviderContainer>
               <Provider />
             </ProviderContainer>
@@ -39,7 +39,7 @@ export default function SignIn() {
             <CredentialsContainer>
               <Credentials />
             </CredentialsContainer>
-          </StyledBox>
+          </StyledForm>
         </form>
         <Box sx={{ display: 'flex' }}>
           <Typography variant="body1">Don&apos;t have an account?</Typography>

@@ -5,7 +5,7 @@ import { Typography } from '@mui/material';
 import { MainContainer } from '@components/Layout/Styles/globals';
 import Navbar from '@components/Layout/Navbar';
 import Footer from '@components/Layout/Footer';
-import { companyName } from '@utils/helper/common';
+import { companyName } from '@utils/helper/navigation';
 
 export default function PrivacyPolicy({ session }) {
   const user = session?.user;

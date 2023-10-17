@@ -38,7 +38,7 @@ export default function Provider() {
         onClick={handleGoogleSignIn}
         sx={{
           bgcolor: 'var(--light)',
-          color: '#000',
+          color: 'var(--dark)',
           ':hover': { bgcolor: 'var(--light)' },
         }}
       >
@@ -56,9 +56,9 @@ export default function Provider() {
         variant="contained"
         onClick={handleGithubSignIn}
         sx={{
-          bgcolor: 'var(--pastel-dark)',
-          color: '#fff',
-          ':hover': { bgcolor: 'var(--pastel-dark)' },
+          bgcolor: 'var(--dark-two)',
+          color: 'var(--light-two)',
+          ':hover': { bgcolor: 'var(--dark-two)' },
         }}
       >
         <Image
@@ -76,7 +76,7 @@ export default function Provider() {
         onClick={handleFacebookSignIn}
         sx={{
           bgcolor: 'var(--pastel-blue)',
-          color: '#fff',
+          color: 'var(--light-two)',
           ':hover': { bgcolor: 'var(--pastel-blue)' },
         }}
       >

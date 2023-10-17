@@ -1,34 +1,43 @@
-import { useState, forwardRef } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { signupSchema } from '@utils/yup/credentialsSchema';
 import {
+  Box,
   Typography,
   TextField,
+  FormControl,
+  FormLabel,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
   Divider,
   InputAdornment,
   IconButton,
   Stack,
-  Alert as MuiAlert,
   Snackbar,
 } from '@mui/material';
 import { StyledButton } from '@components/Layout/Styles/globals';
+import { Alert } from '@utils/helper/alertMessage';
 import { ErrorBox } from '../styled';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import ErrorIcon from '@mui/icons-material/Error';
+import InfoIcon from '@mui/icons-material/Info';
 import CircularIndeterminate from '@components/Layout/Loaders/CircularProgress';
-import { createUser } from '@utils/helper/api/client/users/createUser';
-
-const Alert = forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
+import { createUser } from '@utils/api/client/user/authorize/user/createUser';
+import { useMessageStore } from '@stores/messageStore';
+import UseOfEmail from '@components/Layout/Dialog/UseOfEmail';
 
 function SuccessMessage({ open, onClose, message, severity }) {
   return (
     <Stack>
-      <Snackbar open={open} onClose={onClose}>
+      <Snackbar
+        open={open}
+        onClose={onClose}
+        anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
+      >
         <Alert onClose={onClose} severity={severity}>
           {message}
         </Alert>
@@ -49,22 +58,11 @@ function ErrorMessage({ message }) {
 }
 
 export default function SignUpForm() {
+  const { alert, handleAlertMessage, handleOnClose } = useMessageStore();
+
+  const [open, setOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  const [apiMessage, setApiMessage] = useState({
-    show: false,
-    message: '',
-    severity: 'success',
-  });
-
-  const setMessage = (message, severity) => {
-    setApiMessage({
-      show: true,
-      message,
-      severity,
-    });
-  };
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
@@ -74,15 +72,9 @@ export default function SignUpForm() {
     setShowConfirmPassword((show) => !show);
   };
 
-  const handleOnClose = () => {
-    setApiMessage({
-      ...apiMessage,
-      show: false,
-    });
-  };
-
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
@@ -94,30 +86,30 @@ export default function SignUpForm() {
     try {
       const data = await createUser(values);
 
-      setMessage(data.success.message, 'success');
+      handleAlertMessage(data.success.message, 'success');
       reset();
       setTimeout(() => {
         window.location.href = '/auth/signin';
       }, 3000);
     } catch (error) {
-      setMessage(error.message, 'error');
+      handleAlertMessage(error.message, 'error');
     }
   };
 
   return (
     <>
-      {apiMessage.severity === 'success' && (
+      <UseOfEmail open={open} setOpen={setOpen} />
+
+      {alert.severity === 'success' && (
         <SuccessMessage
-          open={apiMessage.show}
-          onClose={handleOnClose}
-          message={apiMessage.message}
-          severity={apiMessage.severity}
+          open={alert.open}
+          onClose={() => handleOnClose()}
+          message={alert.message}
+          severity={handleAlertMessage.severity}
         />
       )}
 
-      {apiMessage.severity === 'error' && (
-        <ErrorMessage message={apiMessage.message} />
-      )}
+      {alert.severity === 'error' && <ErrorMessage message={alert.message} />}
 
       <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
         <Stack direction="column">
@@ -168,6 +160,50 @@ export default function SignUpForm() {
           </Typography>
         )}
 
+        <FormControl>
+          <FormLabel
+            id="row-radio-buttons-gender"
+            error={Boolean(errors.gender)}
+          >
+            Gender
+          </FormLabel>
+          <Controller
+            name="gender"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <RadioGroup
+                {...field}
+                row
+                aria-labelledby="gender"
+                onChange={(e) => field.onChange(e.target.value)}
+              >
+                <FormControlLabel
+                  value="male"
+                  control={<Radio />}
+                  label="Male"
+                />
+                <FormControlLabel
+                  value="female"
+                  control={<Radio />}
+                  label="Female"
+                />
+                <FormControlLabel
+                  value="other"
+                  control={<Radio />}
+                  label="Other"
+                />
+              </RadioGroup>
+            )}
+          />
+
+          {errors.gender && (
+            <Typography variant="body2" color="error" className="error">
+              {errors.gender?.message}
+            </Typography>
+          )}
+        </FormControl>
+
         <TextField
           name="password"
           label="Password"
@@ -217,6 +253,7 @@ export default function SignUpForm() {
         )}
       </Stack>
       <StyledButton
+        type="submit"
         onClick={handleSubmit(onSubmit)}
         disabled={isSubmitting}
         sx={{ py: 1, my: 2 }}
@@ -225,6 +262,14 @@ export default function SignUpForm() {
       </StyledButton>
 
       <Divider sx={{ mb: 2 }} />
+
+      <Box sx={{ display: 'flex' }}>
+        <Typography variant="body2" sx={{ mb: 1 }}>
+          Use of Email Guidelines, Click this Info Icon
+        </Typography>
+
+        <InfoIcon onClick={() => setOpen(true)} />
+      </Box>
 
       <Typography variant="body2">
         By clicking “Sign up”, you agree to our{' '}

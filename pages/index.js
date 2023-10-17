@@ -1,11 +1,11 @@
 import Head from 'next/head';
 import { Typography } from '@mui/material';
 import { getServerSession } from 'next-auth';
-import { authOptions } from './api/auth/[...nextauth]';
+import { authOptions } from '@pages/api/auth/[...nextauth]';
 import { MainContainer } from '@components/Layout/Styles/globals';
 import Navbar from '@components/Layout/Navbar';
 import Footer from '@components/Layout/Footer';
-import { companyName } from '@utils/helper/common';
+import { companyName } from '@utils/helper/navigation';
 
 export default function Home({ session }) {
   const user = session?.user;

@@ -8,7 +8,7 @@ import { Button, Typography } from '@mui/material';
 import { MainContainer } from '@components/Layout/Styles/globals';
 import LoadingBar from '@components/Layout/Loaders/LinearProgress';
 import Dashboard from '@components/Protected/Dashboard';
-import { companyName } from '@utils/helper/common';
+import { companyName } from '@utils/helper/navigation';
 
 export default function Protected() {
   const { data: session, status } = useSession();

@@ -1,5 +1,6 @@
 import { Box, Button, List } from '@mui/material';
 import { styled } from '@mui/system';
+import { drawerWidth } from '@utils/helper/navigation';
 
 export const MainContainer = styled(Box)({
   display: 'flex',
@@ -13,19 +14,29 @@ export const MainContainer = styled(Box)({
   },
 });
 
-export const StyledBox = styled(Box)(({ theme }) => ({
+export const SubContainer = styled(Box)({
+  display: 'flex',
+  flexDirection: 'column',
+  minHeight: '100vh',
+  a: {
+    color: 'var(--link-color)',
+    cursor: 'pointer',
+  },
+});
+
+export const StyledForm = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   padding: '1rem',
   margin: '1rem',
   borderRadius: '0.5rem',
   maxWidth: 450,
-  // borderTop: '3px solid rgba(128, 128, 128, 0.5)',
   boxShadow:
     theme.palette.mode === 'light'
       ? 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px'
       : undefined,
-  backgroundColor: theme.palette.mode === 'dark' ? 'var(--dark3)' : '#fff',
+  backgroundColor:
+    theme.palette.mode === 'dark' ? 'var(--dark)' : 'var(--light-two)',
 
   '.error': {
     padding: 0,
@@ -35,8 +46,7 @@ export const StyledBox = styled(Box)(({ theme }) => ({
 }));
 
 export const StyledButton = styled(Button)({
-  backgroundImage:
-    'linear-gradient(to right, #7474BF 0%, #348AC7  51%, #7474BF  100%)',
+  backgroundImage: 'var(--button-bg-color)',
   textAlign: 'center',
   textTransform: 'uppercase',
   transition: '0.5s',
@@ -53,8 +63,8 @@ export const StyledButton = styled(Button)({
 });
 
 export const StyledDrawerList = styled(List)(({ theme }) => ({
-  width: 250,
+  width: drawerWidth,
   height: '100%',
   backgroundColor:
-    theme.palette.mode === 'light' ? 'var(--light)' : 'var(--dark3)',
+    theme.palette.mode === 'light' ? 'var(--light)' : 'var(--dark)',
 }));

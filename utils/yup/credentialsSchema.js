@@ -1,9 +1,9 @@
 import * as yup from 'yup';
 
-let EMAIL_REGX =
+export const EMAIL_REGX =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-let PASSWORD_REGX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]+$/;
+export const PASSWORD_REGX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]+$/;
 
 export const signupSchema = yup.object().shape({
   firstName: yup
@@ -21,7 +21,7 @@ export const signupSchema = yup.object().shape({
     .trim()
     .required('Email is required')
     .matches(EMAIL_REGX, 'Invalid email address'),
-
+  gender: yup.string().required('Gender is required'),
   password: yup
     .string()
     .trim()

@@ -77,8 +77,11 @@ export const authOptions = (NextAuthOptions = {
 
         // add prop token user to session user object
         session.user = token.user;
-        session.user.name = token.user.name;
+        session.user.name =
+          `${userExists.firstName} ${userExists.lastName}` ?? token.user.name;
         session.user.role = userExists.role;
+        session.user.accountType = userExists.accountType;
+        session.user.gender = userExists.gender ?? '';
 
         return session;
       } catch (error) {
@@ -90,7 +93,7 @@ export const authOptions = (NextAuthOptions = {
 
   pages: {
     signIn: '/auth/signin',
-    error: '/auth/error'
+    error: '/auth/error',
   },
   secret: process.env.NEXTAUTH_SECRET,
 });

@@ -12,8 +12,7 @@ import {
 import { SettingsContext } from '@src/theme/MuiThemeProvider';
 
 export default function CardTwo() {
-  const settingsValue = useContext(SettingsContext);
-  const { font, handleChangeFont } = settingsValue;
+  const { font, handleChangeFont } = useContext(SettingsContext);
 
   return (
     <Box>

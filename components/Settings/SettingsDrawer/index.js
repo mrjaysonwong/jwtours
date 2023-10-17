@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react';
-import { Drawer, Box } from '@mui/material';
+import { Drawer } from '@mui/material';
 import SettingsIcon from '../SettingsIcon';
 import CardOne from './Cards/CardOne';
 import CardTwo from './Cards/CardTwo';
@@ -9,15 +9,16 @@ import {
   StyledCard,
 } from '@components/Settings/SettingsDrawer/styled';
 import { StyledDrawerList } from '@components/Layout/Styles/globals';
-import { useDrawerStore } from 'stores/drawerStore';
+import { useSettingsDrawerStore } from '@stores/drawerStore';
+import { drawerWidth } from '@utils/helper/navigation';
 
 export default function SettingsDrawer() {
   const { data: session, status } = useSession();
   const isLoading = status === 'loading';
 
-  const { state, toggleDrawer } = useDrawerStore();
+  const { state, toggleDrawer } = useSettingsDrawerStore();
 
-  const list = () => (
+  const list = (
     <StyledDrawerList sx={{ p: 2 }}>
       <StyledCard>
         <CardOne />
@@ -43,8 +44,17 @@ export default function SettingsDrawer() {
         anchor="right"
         open={state['right']}
         onClose={() => toggleDrawer('right', false)}
+        ModalProps={{
+          keepMounted: true, // Better open performance on mobile.
+        }}
+        sx={{
+          '& .MuiDrawer-paper': {
+            boxSizing: 'border-box',
+            width: drawerWidth,
+          },
+        }}
       >
-        {list()}
+        {list}
       </Drawer>
     </>
   );

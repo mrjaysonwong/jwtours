@@ -3,7 +3,7 @@ import { authOptions } from '../auth/[...nextauth]';
 import User from '@model/userModel';
 import jwt from 'jsonwebtoken';
 import { hash } from 'bcryptjs';
-import { sendEmail } from '@utils/helper/api/server/sendMail';
+import { sendEmail } from '@utils/api/server/email/sendMail';
 import { htmlContent } from '@src/theme/emailTemplate';
 
 export async function getAllUsers(req, res) {
@@ -31,10 +31,15 @@ export async function getAllUsers(req, res) {
 export async function createUser(req, res) {
   try {
     if (!req.body) {
-      return res.status(400).json({ success: false, error: 'Empty form data' });
+      return res.status(400).json({
+        code: 'NO_DATA',
+        error: {
+          message: 'Empty form data',
+        },
+      });
     }
 
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, gender, password } = req.body;
 
     // check for existing user
     const user = await User.findOne({ email });
@@ -54,18 +59,19 @@ export async function createUser(req, res) {
       firstName,
       lastName,
       email,
+      gender,
       password: hashedPassword,
     });
 
     // Create an email verification token
-    const token = jwt.sign({ _id: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: '5m',
+    const token = jwt.sign({ email: newUser.email }, process.env.JWT_SECRET, {
+      expiresIn: '2m',
     });
 
     newUser.emailToken = token;
     await newUser.save();
 
-    const link = `${process.env.NEXTAUTH_URL}/confirm?email=${newUser.email}&token=${token}`;
+    const link = `${process.env.NEXTAUTH_URL}/verify?email=${newUser.email}&token=${token}`;
 
     const message = htmlContent(link, newUser.email);
 
@@ -82,9 +88,11 @@ export async function createUser(req, res) {
     });
   } catch (error) {
     console.error('User creation failed:', error);
+
     return res.status(500).json({
       error: {
         message: 'User creation failed.',
+        error: error.errors,
       },
     });
   }

@@ -17,14 +17,11 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { ErrorBox } from '@components/SignUp/styled';
 import ErrorIcon from '@mui/icons-material/Error';
 import CircularIndeterminate from '@components/Layout/Loaders/CircularProgress';
+import { useMessageStore } from '@stores/messageStore';
 
 export default function Credentials() {
+  const { error, handleApiMessage } = useMessageStore();
   const [showPassword, setShowPassword] = useState(false);
-
-  const [apiError, setApiError] = useState({
-    show: false,
-    message: '',
-  });
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
@@ -46,23 +43,21 @@ export default function Credentials() {
         password: val.password,
       });
 
-      if (res.ok) {
-        setApiError({ show: false });
+      if (!res.ok) {
+        throw new Error(res.error);
       }
-
-      throw new Error(`${res.error}`);
     } catch (error) {
-      setApiError({ show: true, message: error.message });
+      handleApiMessage(error.message, 'error');
     }
   };
 
   return (
     <>
-      {apiError.show && (
+      {error.open && (
         <ErrorBox>
           <Typography variant="body2" color="error">
             <ErrorIcon />
-            {apiError.message}
+            {error.message}
           </Typography>
         </ErrorBox>
       )}
@@ -106,6 +101,7 @@ export default function Credentials() {
       )}
 
       <StyledButton
+        type="submit"
         disabled={isSubmitting}
         sx={{ py: 1, my: 2 }}
         onClick={handleSubmit(onSubmit)}

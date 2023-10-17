@@ -13,8 +13,7 @@ import {
 import { SettingsContext } from '@src/theme/MuiThemeProvider';
 
 export default function CardOne() {
-  const settingsValue = useContext(SettingsContext);
-  const { mode, handleChangeTheme } = settingsValue;
+  const { mode, handleChangeTheme } = useContext(SettingsContext);
 
   return (
     <Box>

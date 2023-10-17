@@ -7,12 +7,17 @@ export default function Footer() {
       sx={{
         display: 'flex',
         justifyContent: 'center',
-        my: 2,
+        py: 2,
+        mt: 10,
         color: 'gray',
 
         '& p:not(:last-child):after': {
           content: "'|'",
           mx: 1,
+        },
+
+        a: {
+          color: 'var(--link-color)',
         },
       }}
     >

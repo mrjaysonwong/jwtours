@@ -19,7 +19,7 @@ export function htmlContent(link, email) {
                </table>
                <h1 style="color:#1d1c1d;font-size:36px;font-weight:700;margin:30px 0;padding:0;line-height:42px">Verify your email address</h1>
                <p style="margin:0;margin-bottom:30px;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;font-weight:300"><strong><a href="mailto:${email}" target="_blank">${email}</a></strong></p>
-               <p style="font-size:20px;line-height:28px;margin:16px 0;margin-bottom:30px">Your link is active for 48 hours. After that, you will need to resend the verification email.</p>
+               <p style="font-size:20px;line-height:28px;margin:16px 0;margin-bottom:30px">Your link is active for 24 hours. After that, you will need to resend the verification email.</p>
                <div><a href="${link}" style="box-sizing:border-box;border-color:#348eda;font-weight:400;text-decoration:none;display:inline-block;margin:0;color:#ffffff;background-color:#348eda;border:solid 1px #348eda;border-radius:2px;font-size:14px;padding:12px 45px" target="_blank">Verify Email</a></div>
                <p style="font-size:14px;line-height:24px;margin:16px 0;color:#000">If you didn&#x27;t request this email, there&#x27;s nothing to worry about - you can safely ignore it.</p>
                <table align="center" border="0" cellPadding="0" cellSpacing="0" role="presentation" width="100%">
