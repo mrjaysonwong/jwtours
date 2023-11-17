@@ -21,6 +21,11 @@ export async function handleCredentialSignIn(credentials, req) {
     throw new Error('Invalid email or password.');
   }
 
+  await User.findOneAndUpdate(
+    { email: credentials.email },
+    { status: { online: true } }
+  );
+
   const { email, firstName, lastName, role, image, id } = user;
   const name = `${firstName} ${lastName}`;
   const userObj = { email, name, role, image, id };

@@ -17,7 +17,7 @@ export default function CardTwo() {
   return (
     <Box>
       <CardContent>
-        <Typography>Font Family</Typography>
+        <Typography variant='h6'>Font Family</Typography>
       </CardContent>
       <Divider />
       <CardContent>

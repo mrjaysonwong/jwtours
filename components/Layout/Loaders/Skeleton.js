@@ -13,14 +13,7 @@ const StyledSkeleton = styled(MUISkeleton)({
 
 export default function Skeleton() {
   return (
-    <Box
-      sx={{
-        width: { sm: `calc(100% - ${drawerWidth}px)` },
-        ml: { sm: `${drawerWidth}px` },
-        px: 6,
-        mt: 10,
-      }}
-    >
+    <Box>
       {variantOne.map((variant, idx) => (
         <Typography component="div" key={idx} variant={variant}>
           <StyledSkeleton animation="wave" width="60%" />

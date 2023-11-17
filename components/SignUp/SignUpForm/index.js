@@ -16,49 +16,24 @@ import {
   InputAdornment,
   IconButton,
   Stack,
-  Snackbar,
 } from '@mui/material';
 import { StyledButton } from '@components/Layout/Styles/globals';
-import { Alert } from '@utils/helper/alertMessage';
-import { ErrorBox } from '../styled';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import ErrorIcon from '@mui/icons-material/Error';
 import InfoIcon from '@mui/icons-material/Info';
 import CircularIndeterminate from '@components/Layout/Loaders/CircularProgress';
 import { createUser } from '@utils/api/client/user/authorize/user/createUser';
 import { useMessageStore } from '@stores/messageStore';
+import { AlertMessage, ErrorMessage } from '@utils/helper/alertMessage';
 import UseOfEmail from '@components/Layout/Dialog/UseOfEmail';
 
-function SuccessMessage({ open, onClose, message, severity }) {
-  return (
-    <Stack>
-      <Snackbar
-        open={open}
-        onClose={onClose}
-        anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
-      >
-        <Alert onClose={onClose} severity={severity}>
-          {message}
-        </Alert>
-      </Snackbar>
-    </Stack>
-  );
-}
-
-function ErrorMessage({ message }) {
-  return (
-    <ErrorBox>
-      <Typography variant="body2" color="error">
-        <ErrorIcon />
-        {message}
-      </Typography>
-    </ErrorBox>
-  );
-}
-
 export default function SignUpForm() {
-  const { alert, handleAlertMessage, handleOnClose } = useMessageStore();
+  const { error, alert, handleApiMessage, handleAlertMessage, handleOnClose } =
+    useMessageStore();
+
+  const clearError = () => {
+    useMessageStore.setState(() => ({ error: { open: false } }));
+  };
 
   const [open, setOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -86,37 +61,35 @@ export default function SignUpForm() {
     try {
       const data = await createUser(values);
 
-      handleAlertMessage(data.success.message, 'success');
+      handleAlertMessage(data.message, 'success');
+      clearError();
       reset();
+
       setTimeout(() => {
         window.location.href = '/auth/signin';
       }, 3000);
     } catch (error) {
-      handleAlertMessage(error.message, 'error');
+      handleApiMessage(error.message, 'error');
     }
   };
 
   return (
     <>
-      <UseOfEmail open={open} setOpen={setOpen} />
-
-      {alert.severity === 'success' && (
-        <SuccessMessage
-          open={alert.open}
-          onClose={() => handleOnClose()}
+      {alert.open && (
+        <AlertMessage
+          open={true}
           message={alert.message}
-          severity={handleAlertMessage.severity}
+          severity={alert.severity}
         />
       )}
 
-      {alert.severity === 'error' && <ErrorMessage message={alert.message} />}
+      {error.open && <ErrorMessage message={error.message} />}
 
       <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
         <Stack direction="column">
           <TextField
             name="firstName"
             label="First Name"
-            variant="outlined"
             error={Boolean(errors.firstName)}
             {...register('firstName')}
           />
@@ -132,7 +105,6 @@ export default function SignUpForm() {
           <TextField
             name="lastName"
             label="Last Name"
-            variant="outlined"
             error={Boolean(errors.lastName)}
             {...register('lastName')}
           />
@@ -149,7 +121,6 @@ export default function SignUpForm() {
         <TextField
           name="email"
           label="Email"
-          variant="outlined"
           error={Boolean(errors.email)}
           {...register('email')}
         />
@@ -173,10 +144,10 @@ export default function SignUpForm() {
             defaultValue=""
             render={({ field }) => (
               <RadioGroup
-                {...field}
                 row
                 aria-labelledby="gender"
                 onChange={(e) => field.onChange(e.target.value)}
+                {...field}
               >
                 <FormControlLabel
                   value="male"
@@ -252,6 +223,7 @@ export default function SignUpForm() {
           </Typography>
         )}
       </Stack>
+      
       <StyledButton
         type="submit"
         onClick={handleSubmit(onSubmit)}
@@ -265,7 +237,7 @@ export default function SignUpForm() {
 
       <Box sx={{ display: 'flex' }}>
         <Typography variant="body2" sx={{ mb: 1 }}>
-          Use of Email Guidelines, Click this Info Icon
+          Use of Email Guidelines, Click this info icon
         </Typography>
 
         <InfoIcon onClick={() => setOpen(true)} />
@@ -282,6 +254,8 @@ export default function SignUpForm() {
         </Link>
         .
       </Typography>
+
+      <UseOfEmail open={open} setOpen={setOpen} />
     </>
   );
 }

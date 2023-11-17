@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Button, Typography, Divider, Avatar, Box } from '@mui/material';
+import { Button, Typography, Divider, Avatar } from '@mui/material';
 import {
   StyledButton,
   StyledDrawerList,
@@ -13,9 +13,7 @@ import { authButtons } from '@src/routes/navRoutes';
 import { handleClick } from '@utils/helper/navigation';
 
 export default function CustomDrawerList() {
-  const { user, router } = useContext(AppBarContext);
-  const isMale = user?.gender === 'male';
-  const isFemale = user?.gender === 'female';
+  const { user, router, isMale, isFemale } = useContext(AppBarContext);
   const { toggleProfileDrawer } = useProfileDrawerStore();
 
   const menuList = profileMenuRoutes.map((e, idx) => (

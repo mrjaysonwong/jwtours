@@ -5,7 +5,8 @@ export const StyledCard = styled(Card)(({ theme }) => ({
   ' :not(:last-child)': {
     marginBottom: '1rem',
   },
-  backgroundColor: theme.palette.mode === 'light' ? 'var(--light-two)' : 'var(--dark-two)',
+  backgroundColor:
+    theme.palette.mode === 'light' ? 'var(--light-two)' : 'var(--dark-two)',
 }));
 
 export const StyledIconButton = styled(IconButton)({
@@ -14,7 +15,9 @@ export const StyledIconButton = styled(IconButton)({
   backgroundColor: 'rgb(73, 66, 228)',
   bottom: '5rem',
   right: '1rem',
-  ':hover': {
+
+
+  '&:hover': {
     backgroundColor: 'rgb(36, 29, 173)',
   },
 });

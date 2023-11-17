@@ -14,10 +14,9 @@ import {
 import { StyledButton } from '@components/Layout/Styles/globals';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { ErrorBox } from '@components/SignUp/styled';
-import ErrorIcon from '@mui/icons-material/Error';
 import CircularIndeterminate from '@components/Layout/Loaders/CircularProgress';
 import { useMessageStore } from '@stores/messageStore';
+import { ErrorMessage } from '@utils/helper/alertMessage';
 
 export default function Credentials() {
   const { error, handleApiMessage } = useMessageStore();
@@ -53,19 +52,12 @@ export default function Credentials() {
 
   return (
     <>
-      {error.open && (
-        <ErrorBox>
-          <Typography variant="body2" color="error">
-            <ErrorIcon />
-            {error.message}
-          </Typography>
-        </ErrorBox>
-      )}
+      {error.open && <ErrorMessage message={error.message} />}
 
       <TextField
         name="email"
+        id="email"
         label="Email"
-        variant="outlined"
         error={Boolean(errors.email)}
         {...register('email')}
       />
@@ -78,6 +70,7 @@ export default function Credentials() {
 
       <TextField
         name="password"
+        id="password"
         label="Password"
         type={showPassword ? 'text' : 'password'}
         InputProps={{

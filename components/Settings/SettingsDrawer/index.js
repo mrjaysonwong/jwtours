@@ -44,9 +44,6 @@ export default function SettingsDrawer() {
         anchor="right"
         open={state['right']}
         onClose={() => toggleDrawer('right', false)}
-        ModalProps={{
-          keepMounted: true, // Better open performance on mobile.
-        }}
         sx={{
           '& .MuiDrawer-paper': {
             boxSizing: 'border-box',

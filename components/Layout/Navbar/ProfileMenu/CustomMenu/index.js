@@ -18,9 +18,9 @@ import { profileMenuRoutes } from '@src/routes/profileMenuRoutes';
 import { authButtons } from '@src/routes/navRoutes';
 
 export default function CustomMenu() {
-  const { user, router, isLightTheme } = useContext(AppBarContext);
-  const isMale = user?.gender === 'male';
-  const isFemale = user?.gender === 'female';
+  const { user, router, isLightTheme, isMale, isFemale } =
+    useContext(AppBarContext);
+
   const { anchorEl, handleClose } = useMenuStore();
 
   const menuList = profileMenuRoutes.map((e, idx) => (

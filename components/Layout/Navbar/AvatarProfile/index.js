@@ -1,38 +1,51 @@
 import { useContext } from 'react';
-import { Avatar, Box } from '@mui/material';
+import { Avatar, Box, Skeleton } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useMenuStore } from 'stores/menuStore';
 import { useProfileDrawerStore } from '@stores/drawerStore';
 import { AppBarContext } from '..';
 
 export default function AvatarProfile() {
-  const { user, mobile, isMale, isFemale, isLightTheme } =
+  const { user, mobile, isMale, isFemale, isLightTheme, isLoading } =
     useContext(AppBarContext);
-  const { toggleProfileDrawer } = useProfileDrawerStore();
 
+  const { toggleProfileDrawer } = useProfileDrawerStore();
   const { handleMenu } = useMenuStore();
 
   return (
     <Box
       sx={{
+        display: 'flex',
+        alignItems: 'center',
         cursor: 'pointer',
       }}
     >
       {user ? (
-        <Avatar
-          alt="avatar"
-          src={`${
-            !user.image || user.accountType === 'credentials'
-              ? `/assets/avatar/${
-                  isMale ? 'male' : isFemale ? 'female' : 'other'
-                }.png`
-              : user.image
-          }`}
-          referrerPolicy="no-referrer"
-          onClick={
-            !mobile ? handleMenu : () => toggleProfileDrawer('right', true)
-          }
-        />
+        <>
+          {isLoading ? (
+            <Skeleton
+              animation="wave"
+              variant="circular"
+              width={40}
+              height={40}
+            />
+          ) : (
+            <Avatar
+              alt="avatar"
+              src={`${
+                !user.image || user.accountType === 'credentials'
+                  ? `/assets/avatar/${
+                      isMale ? 'male' : isFemale ? 'female' : 'other'
+                    }.png`
+                  : user.image
+              }`}
+              referrerPolicy="no-referrer"
+              onClick={
+                !mobile ? handleMenu : () => toggleProfileDrawer('right', true)
+              }
+            />
+          )}
+        </>
       ) : (
         <AccountCircleIcon
           onClick={

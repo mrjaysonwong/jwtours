@@ -8,7 +8,8 @@ export const createUser = async (values) => {
       body: JSON.stringify(values),
     };
 
-    const res = await fetch(`/api/auth/signup`, options);
+    const url = `/api/auth/signup`;
+    const res = await fetch(url, options);
 
     if (res.status === 404) {
       throw new Error('An error occured. Please try again.');

@@ -1,20 +1,29 @@
 import connectMongo from 'lib/database/connection';
-import { getAllUsers } from '../handlers/usersApi';
+import { getAllUsers, getUser, updateUser } from '../handlers/usersApi';
+import { getToken } from 'next-auth/jwt';
 
 export default async function handler(req, res) {
   try {
     await connectMongo();
 
     // type of request
-    const { method} = req;
+    const { method, query } = req;
 
     switch (method) {
       case 'GET':
-        await getAllUsers(req, res);
+        const token = await getToken({ req });
+
+        if (!query.userId) {
+          await getAllUsers(req, res, token);
+          break;
+        }
+        await getUser(req, res, token);
+        break;
+      case 'PATCH':
+        await updateUser(req, res);
         break;
       default:
         res.setHeader('Allow', ['GET', 'POST', 'PATCH', 'DELETE']);
-      // res.status(405).send(`HTTP method ${method} Not Allowed.`);
     }
   } catch (error) {
     console.error(error);

@@ -3,9 +3,11 @@ import PersonalInformation from './PersonalInformation';
 import LoginInformation from './LoginInformation';
 import { Box } from '@mui/material';
 
+
 export default function MenuContent() {
   const router = useRouter();
   const { query } = router;
+
 
   return (
     <Box sx={{ minHeight: '100vh' }}>

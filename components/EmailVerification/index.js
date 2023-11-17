@@ -2,26 +2,22 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { MainContainer } from '@components/Layout/Styles/globals';
-import { useSession } from 'next-auth/react';
-import { Typography, Box, Stack, Snackbar } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import { StyledButton } from '@components/Layout/Styles/globals';
-import { Alert } from '@utils/helper/alertMessage';
 import Footer from '@components/Layout/Footer';
 import { methodPUT } from '@utils/api/client/email/verify/PUT';
 import { methodPOST } from '@utils/api/client/email/resend-verification/POST';
 import { useMessageStore } from '@stores/messageStore';
+import { AlertMessage } from '@utils/helper/alertMessage';
 
 export default function EmailVerification() {
   const { success, error, handleApiMessage, alert, handleAlertMessage } =
     useMessageStore();
 
-  const { status } = useSession();
-
   const [code, setCode] = useState('');
   const [resendDisabled, setResendDisabled] = useState(false);
 
   const router = useRouter();
-
   const { email, token } = router.query;
 
   useEffect(() => {
@@ -63,7 +59,7 @@ export default function EmailVerification() {
         return;
       }
 
-      handleAlertMessage(data.message);
+      handleAlertMessage(data.message, 'success');
       setResendDisabled(true);
       localStorage.setItem('resendDisabled', 'true');
       localStorage.setItem('token', token);
@@ -72,21 +68,14 @@ export default function EmailVerification() {
     }
   };
 
-  if (status === 'loading') return null;
-  
   return (
     <>
       {alert.open && (
-        <Stack>
-          <Snackbar
-            open={true}
-            anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
-          >
-            <Alert severity="success" sx={{ width: '100%' }}>
-              {alert.message}
-            </Alert>
-          </Snackbar>
-        </Stack>
+        <AlertMessage
+          open={true}
+          message={alert.message}
+          severity={alert.severity}
+        />
       )}
 
       <MainContainer sx={{ mx: 2, textAlign: 'center' }}>
@@ -111,7 +100,7 @@ export default function EmailVerification() {
             <Typography variant="h4" sx={{ fontWeight: 600 }}>
               Authentication Failed
             </Typography>
-            <Typography variant="body1" sx={{ my: 4, mx: 1 }}>
+            <Typography variant="h6" sx={{ my: 4, mx: 1 }}>
               {error.message}
             </Typography>
 
@@ -122,7 +111,7 @@ export default function EmailVerification() {
                 sx={{ p: 1 }}
               >
                 {resendDisabled
-                  ? 'Email Sent Successfully'
+                  ? 'Email sent successfully!'
                   : 'Resend verification email'}
               </StyledButton>
             )}

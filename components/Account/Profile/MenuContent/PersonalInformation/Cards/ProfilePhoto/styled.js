@@ -6,7 +6,8 @@ export const StyledCardContent = styled(CardContent)(({ theme }) => ({
   flexDirection: 'column',
   alignItems: ' center',
   justifyContent: 'center',
-  backgroundColor: theme.palette.mode === 'light' ? 'var(--light-two)' : 'var(--dark)',
+  backgroundColor:
+    theme.palette.mode === 'light' ? 'var(--light-two)' : 'var(--dark)',
 
   p: {
     color: 'gray',
@@ -31,6 +32,9 @@ export const PictureWrapper = styled(Box)({
     justifyContent: 'center',
     cursor: 'pointer',
   },
+
+
+  
 });
 
 export const UploadOverlay = styled(Box)({
@@ -43,10 +47,10 @@ export const UploadOverlay = styled(Box)({
   left: 0,
   zIndex: 1,
   display: 'none',
-  textAlign: 'center',
 
-  p: {
+  '.text': {
     color: '#fff',
+    fontSize: '0.8rem',
     margin: 0,
     padding: 0,
   },
@@ -56,4 +60,17 @@ export const UploadOverlay = styled(Box)({
     width: '40px',
     color: '#fff',
   },
+});
+
+export const StyledInputUpdatePhoto = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+
 });

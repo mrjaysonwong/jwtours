@@ -6,10 +6,13 @@ import createEmotionCache from 'src/theme/createEmotionCache';
 import MuiThemeProvider from '@src/theme/MuiThemeProvider';
 import parseCookies from 'utils/parser/parseCookies';
 import '../styles/globals.css';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export const LayoutContext = createContext();
 
 const clientSideEmotionCache = createEmotionCache();
+const queryClient = new QueryClient();
 
 function MyApp(props) {
   const {
@@ -32,15 +35,18 @@ function MyApp(props) {
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
 
-      <SessionProvider session={session}>
-        <CacheProvider value={emotionCache}>
-          <LayoutContext.Provider value={contextValue}>
-            <MuiThemeProvider>
-              <Component {...pageProps} />
-            </MuiThemeProvider>
-          </LayoutContext.Provider>
-        </CacheProvider>
-      </SessionProvider>
+      <QueryClientProvider client={queryClient}>
+        <SessionProvider session={session}>
+          <CacheProvider value={emotionCache}>
+            <LayoutContext.Provider value={contextValue}>
+              <MuiThemeProvider>
+                <Component {...pageProps} />
+              </MuiThemeProvider>
+            </LayoutContext.Provider>
+          </CacheProvider>
+        </SessionProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
     </>
   );
 }

@@ -1,25 +1,9 @@
 import { signIn } from 'next-auth/react';
-// import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { Button, Typography } from '@mui/material';
-// import { getUrl } from 'utils/helper/common';
 
 export default function Provider() {
-  // const router = useRouter();
-  // const previousUrl = router.query.callbackUrl;
-  // const prevPath = router.pathname;
 
-  /* test
-  const handleGoogleSignIn = () => {
-    signIn('google', { callbackUrl: getUrl(previousUrl, prevPath) });
-  };
-  const handleGithubSignIn = () => {
-    signIn('github', { callbackUrl: getUrl(previousUrl, prevPath) });
-  };
-  const handleFacebookSignIn = () => {
-    signIn('facebook', { callbackUrl: getUrl(previousUrl, prevPath) });
-  };
-  */
 
   const handleGoogleSignIn = () => {
     signIn('google');

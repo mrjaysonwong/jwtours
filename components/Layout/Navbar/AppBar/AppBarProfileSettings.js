@@ -28,7 +28,7 @@ export default function AppBarProfileSettings() {
   const { isLightTheme } = useContext(AppBarContext);
 
   const { state, toggleProfileDrawer } = useProfileDrawerStore();
-  
+
   const [activeTab, setActiveTab] = useState(query.tab || 'personal');
 
   useEffect(() => {

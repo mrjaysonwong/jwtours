@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
-import { Tooltip, Typography } from '@mui/material';
+import { Tooltip, Typography, Box } from '@mui/material';
 import { MainContainer } from '@components/Layout/Styles/globals';
 import { StyledForm } from '@components/Layout/Styles/globals';
 import SignUpForm from './SignUpForm';
@@ -27,11 +27,11 @@ export default function SignUp() {
           </div>
         </Tooltip>
 
-        <form autoComplete="off">
+        <Box component="form">
           <StyledForm>
             <SignUpForm />
           </StyledForm>
-        </form>
+        </Box>
 
         <Typography variant="body1">
           Already have an account? <a onClick={() => signIn()}>Sign In</a>

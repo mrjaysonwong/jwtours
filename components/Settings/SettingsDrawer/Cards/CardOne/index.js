@@ -18,7 +18,7 @@ export default function CardOne() {
   return (
     <Box>
       <CardContent>
-        <Typography>Layout</Typography>
+        <Typography variant="h6">Layout</Typography>
       </CardContent>
       <Divider />
       <CardContent>
@@ -26,8 +26,8 @@ export default function CardOne() {
           <FormLabel>Theme</FormLabel>
           <RadioGroup
             row
-            aria-labelledby="row-radio-buttons-group-label-theme"
-            name="row-radio-buttons-group"
+            aria-labelledby="theme-radio-buttons-label"
+            name="theme-radio-buttons"
             value={mode}
             onChange={handleChangeTheme}
           >

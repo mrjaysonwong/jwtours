@@ -36,7 +36,7 @@ const userSchema = new Schema(
     role: {
       type: String,
       enum: ['user', 'guide', 'admin'],
-      default: 'admin',
+      default: 'user',
     },
     image: {
       type: String,
@@ -47,7 +47,7 @@ const userSchema = new Schema(
       default: '',
     },
     phone: {
-      areaCode: {
+      dialCode: {
         type: String,
         default: '',
       },
@@ -60,7 +60,11 @@ const userSchema = new Schema(
       type: String,
       default: '',
     },
-    homeTown: {
+    address: {
+      type: String,
+      default: '',
+    },
+    city: {
       type: String,
       default: '',
     },
@@ -87,12 +91,6 @@ const userSchema = new Schema(
     currency: {
       type: String,
       default: '$ - USD',
-    },
-    status: {
-      online: {
-        type: Boolean,
-        default: false,
-      },
     },
     banned: {
       type: Boolean,

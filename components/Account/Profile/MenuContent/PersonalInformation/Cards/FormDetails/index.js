@@ -1,70 +1,116 @@
-import { useContext } from 'react';
-import { Card, Grid, Box, Button, TextField } from '@mui/material';
+import { createContext } from 'react';
+import { Card, Grid, Box } from '@mui/material';
 import { StyledCardContent } from './styled';
-import { UserContext } from '@pages/account/profile';
+import Skeleton from '@components/Layout/Loaders/Skeleton';
+import { useUserData } from '@utils/hooks/useUserData';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { personalInfoSchema } from '@utils/yup/personalInfoSchema';
+import { updateUser } from '@utils/api/client/user/authorize/user/updateUser';
+import { useMessageStore } from '@stores/messageStore';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { sleep } from '@utils/helper/sleep';
+import { AlertMessage } from '@utils/helper/alertMessage';
+import Name from './Name';
+import Email from './Email';
+import Gender from './Gender';
+import Phone from './Phone';
+import DateOfBirth from './DateOfBirth';
+import Address from './Address';
+import City from './City';
 
-export default function FormDetails() {
-  const { user } = useContext(UserContext);
-  const [firstName, lastName] = user.name.split(' ');
+export const FormDetailsContext = createContext(null);
 
+export default function FormDetails({ userId }) {
+  const { isLoading, data, refetch } = useUserData(userId);
+  const { handleApiMessage, alert, handleAlertMessage, handleOnClose } =
+    useMessageStore();
+
+  const userData = data?.result;
+
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(personalInfoSchema),
+    shouldUnregister: false,
+    defaultValues: {
+      city: userData?.city,
+    },
+  });
+
+  const onSubmit = async (values) => {
+    const userId = userData._id;
+
+    await sleep(1000);
+
+    try {
+      const data = await updateUser(userId, values);
+
+      if (data.error) {
+        handleApiMessage(data.error.message, 'error');
+        return;
+      }
+
+      refetch();
+      handleAlertMessage(data.message, 'success');
+    } catch (error) {
+      console.error(error.message);
+      handleAlertMessage(error.message, 'error');
+    }
+  };
 
   return (
     <>
-      <Card>
-        <StyledCardContent sx={{ py: 3 }}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                label="First Name"
-                defaultValue={firstName}
-              />
-            </Grid>
+      {isLoading && (
+        <>
+          <Skeleton />
+          <Skeleton />
+        </>
+      )}
 
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                label="Last Name"
-                defaultValue={lastName}
-              />
-            </Grid>
+      {data && (
+        <Box component="form">
+          <Card>
+            <StyledCardContent sx={{ py: 3 }}>
+              <Grid container spacing={3}>
+                <FormDetailsContext.Provider
+                  value={{ register, control, userData, errors }}
+                >
+                  <Name />
+                  <Email />
+                  <Gender />
+                  <DateOfBirth />
+                  <Phone />
+                  <Address />
+                  <City />
+                </FormDetailsContext.Provider>
 
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                label="Email"
-                defaultValue={user.email}
-              />
-            </Grid>
+                <Box sx={{ mt: 4, ml: 'auto' }}>
+                  <LoadingButton
+                    variant="contained"
+                    loading={Boolean(isSubmitting)}
+                    onClick={handleSubmit(onSubmit)}
+                  >
+                    Save Changes
+                  </LoadingButton>
+                </Box>
+              </Grid>
+            </StyledCardContent>
+          </Card>
+        </Box>
+      )}
 
-   
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                label="Date of Birth"
-                defaultValue={'November 29, 1992'}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                variant="outlined"
-                label="Home Town"
-                defaultValue={'General Santos City, PH'}
-              />
-            </Grid>
-            <Box sx={{ mt: 4, ml: 'auto' }}>
-              <Button variant="contained">Save Changes</Button>
-            </Box>
-          </Grid>
-        </StyledCardContent>
-      </Card>
+      {alert.open && (
+        <AlertMessage
+          open={true}
+          onClose={handleOnClose}
+          message={alert.message}
+          severity={alert.severity}
+        />
+      )}
     </>
   );
 }

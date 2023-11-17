@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { Typography } from '@mui/material';
 import { getServerSession } from 'next-auth';
@@ -6,6 +7,7 @@ import { MainContainer } from '@components/Layout/Styles/globals';
 import Navbar from '@components/Layout/Navbar';
 import Footer from '@components/Layout/Footer';
 import { companyName } from '@utils/helper/navigation';
+import { getCities } from '@utils/api/client/cities/getCities';
 
 export default function Home({ session }) {
   const user = session?.user;
@@ -18,7 +20,7 @@ export default function Home({ session }) {
 
       <Navbar user={user} />
       <MainContainer>
-        <Typography>Lorem ipsum</Typography>
+        <Typography variant="body1">Lorem ipsum</Typography>
       </MainContainer>
       <Footer />
     </>

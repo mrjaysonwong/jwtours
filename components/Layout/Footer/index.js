@@ -7,7 +7,7 @@ export default function Footer() {
       sx={{
         display: 'flex',
         justifyContent: 'center',
-        py: 2,
+        py: 4,
         mt: 10,
         color: 'gray',
 

@@ -43,7 +43,7 @@ export const authOptions = (NextAuthOptions = {
   ],
 
   callbacks: {
-    signIn: async ({ user, account, profile, email, credentials }) => {
+    async signIn({ user, account, profile, email, credentials }) {
       try {
         await connectMongo();
 
@@ -56,15 +56,14 @@ export const authOptions = (NextAuthOptions = {
       }
     },
     // default behavior token undefined after authenticated
-    jwt: async ({ token, user, account, profile }) => {
+    async jwt({ token, user, account, profile }) {
       if (user) {
         token.user = user;
       }
 
       return token;
     },
-
-    session: async ({ session, token }) => {
+    async session({ session, token }) {
       try {
         await connectMongo();
 
@@ -77,6 +76,7 @@ export const authOptions = (NextAuthOptions = {
 
         // add prop token user to session user object
         session.user = token.user;
+        session.user._id = `${userExists._id}`;
         session.user.name =
           `${userExists.firstName} ${userExists.lastName}` ?? token.user.name;
         session.user.role = userExists.role;

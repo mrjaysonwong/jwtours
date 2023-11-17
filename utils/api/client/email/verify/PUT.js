@@ -6,7 +6,9 @@ export async function methodPUT(email, token) {
     },
   };
 
-  const res = await fetch(`/api/verify?email=${email}&token=${token}`, options);
+  const url = `/api/verify?email=${email}&token=${token}`;
+
+  const res = await fetch(url, options);
 
   // if resource url incorrect/not found
   if (res.status === 404) {

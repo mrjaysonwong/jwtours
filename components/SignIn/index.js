@@ -28,7 +28,7 @@ export default function SignIn() {
           </div>
         </Tooltip>
 
-        <form autoComplete="off">
+        <Box component="form">
           <StyledForm>
             <ProviderContainer>
               <Provider />
@@ -40,7 +40,8 @@ export default function SignIn() {
               <Credentials />
             </CredentialsContainer>
           </StyledForm>
-        </form>
+        </Box>
+
         <Box sx={{ display: 'flex' }}>
           <Typography variant="body1">Don&apos;t have an account?</Typography>
           <Link href="/auth/signup">
