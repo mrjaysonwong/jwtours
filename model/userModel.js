@@ -39,8 +39,14 @@ const userSchema = new Schema(
       default: 'user',
     },
     image: {
-      type: String,
-      default: '',
+      public_id: {
+        type: String,
+        default: '',
+      },
+      url: {
+        type: String,
+        default: '',
+      },
     },
     accountType: {
       type: String,

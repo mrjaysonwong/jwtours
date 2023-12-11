@@ -21,7 +21,6 @@ export const signupSchema = yup.object().shape({
     .trim()
     .required('Email is required')
     .matches(EMAIL_REGX, 'Invalid email address'),
-  gender: yup.string().required('Gender is required'),
   password: yup
     .string()
     .trim()

@@ -8,7 +8,7 @@ export async function verifyEmail(req, res) {
     return res.status(404).json({
       error: {
         code: 'NO_TOKEN',
-        message: 'no Token',
+        message: 'Invalid or No Token',
       },
     });
   }
@@ -16,9 +16,12 @@ export async function verifyEmail(req, res) {
   const user = await User.findOne({ email });
 
   if (!user) {
-    return res
-      .status(404)
-      .json({ code: 'NOT_FOUND', message: 'User Not Found' });
+    return res.status(404).json({
+      error: {
+        code: 'NOT_FOUND',
+        message: `Not Found: The requested resource was not found`,
+      },
+    });
   }
 
   try {
@@ -54,8 +57,8 @@ export async function verifyEmail(req, res) {
 
       return res.status(500).json({
         error: {
-          code: 'INTERNAL_ERROR',
-          message: 'Internal server error occured.',
+          code: 'SERVER_ERROR',
+          message: 'An error occured. Please try again or Refresh the page.',
         },
       });
     }

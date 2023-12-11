@@ -13,7 +13,9 @@ import { authButtons } from '@src/routes/navRoutes';
 import { handleClick } from '@utils/helper/navigation';
 
 export default function CustomDrawerList() {
-  const { user, router, isMale, isFemale } = useContext(AppBarContext);
+  const { user, uploadedImage, initialFname, router } =
+    useContext(AppBarContext);
+
   const { toggleProfileDrawer } = useProfileDrawerStore();
 
   const menuList = profileMenuRoutes.map((e, idx) => (
@@ -53,18 +55,18 @@ export default function CustomDrawerList() {
       {user && (
         <>
           <UserInfoWrapper>
-            <Avatar
-              alt="avatar"
-              src={`${
-                !user.image || user.accountType === 'credentials'
-                  ? `/assets/avatar/${
-                      isMale ? 'male' : isFemale ? 'female' : 'other'
-                    }.png`
-                  : user.image
-              }`}
-              referrerPolicy="no-referrer"
-              sx={{ width: 42, height: 42, mb: 1 }}
-            />
+            {uploadedImage ? (
+              <Avatar
+                alt="avatar"
+                src={uploadedImage}
+                referrerPolicy="no-referrer"
+                sx={{ width: 42, height: 42, mb: 1 }}
+              />
+            ) : (
+              <Avatar alt="avatar" sx={{ width: 42, height: 42, mb: 1 }}>
+                {initialFname}
+              </Avatar>
+            )}
             <Typography variant="body1">{user.name}</Typography>
             <Typography variant="body2">{user.email}</Typography>
           </UserInfoWrapper>

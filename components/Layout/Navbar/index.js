@@ -13,27 +13,28 @@ export default function Navbar(props) {
   const { user } = props;
   const userId = user?._id;
 
-  const isMale = user?.gender === 'male';
-  const isFemale = user?.gender === 'female';
-
   const router = useRouter();
 
   const theme = useTheme();
   const isLightTheme = theme.palette.mode === 'light';
   const mobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  const { isLoading } = useUserData(userId);
+  const { isLoading, data } = useUserData(userId);
+  const userData = data?.result;
+  const uploadedImage = userData?.image.url;
+  const initialFname = userData?.firstName.substring(0, 1);
 
   return (
     <>
       <AppBarContext.Provider
         value={{
           user,
+          uploadedImage,
+          initialFname,
+          userId,
           router,
           isLightTheme,
           mobile,
-          isMale,
-          isFemale,
           isLoading,
         }}
       >

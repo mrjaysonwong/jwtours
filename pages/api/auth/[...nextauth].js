@@ -5,10 +5,8 @@ import FacebookProvider from 'next-auth/providers/facebook';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import connectMongo from 'lib/database/connection';
 import User from '@model/userModel';
-import {
-  handleCredentialSignIn,
-  handleProviderSignIn,
-} from '../handlers/signinApi';
+import { handleCredentialSignIn } from '../handlers/signinAPI/handleCredentialSignIn';
+import { handleProviderSignIn } from '../handlers/signinAPI/handleProviderSignIn';
 
 export const authOptions = (NextAuthOptions = {
   // Configure one or more authentication providers
@@ -75,13 +73,13 @@ export const authOptions = (NextAuthOptions = {
         }
 
         // add prop token user to session user object
+
         session.user = token.user;
         session.user._id = `${userExists._id}`;
         session.user.name =
           `${userExists.firstName} ${userExists.lastName}` ?? token.user.name;
         session.user.role = userExists.role;
         session.user.accountType = userExists.accountType;
-        session.user.gender = userExists.gender ?? '';
 
         return session;
       } catch (error) {
@@ -90,7 +88,6 @@ export const authOptions = (NextAuthOptions = {
       }
     },
   },
-
   pages: {
     signIn: '/auth/signin',
     error: '/auth/error',

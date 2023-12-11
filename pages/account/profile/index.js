@@ -11,9 +11,6 @@ export const UserContext = createContext();
 export default function AccountProfilePage({ session }) {
   const user = session.user;
   const userId = user._id;
-  const isMale = user.gender === 'male';
-  const isFemale = user.gender === 'female';
-
 
   return (
     <>
@@ -23,9 +20,7 @@ export default function AccountProfilePage({ session }) {
 
       <Navbar user={user} />
 
-      <UserContext.Provider
-        value={{ user, userId, isMale, isFemale }}
-      >
+      <UserContext.Provider value={{ user, userId }}>
         <AccountProfile />
       </UserContext.Provider>
     </>

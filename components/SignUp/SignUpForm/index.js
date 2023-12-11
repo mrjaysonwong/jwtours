@@ -1,17 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { signupSchema } from '@utils/yup/credentialsSchema';
 import {
   Box,
   Typography,
   TextField,
-  FormControl,
-  FormLabel,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
   Divider,
   InputAdornment,
   IconButton,
@@ -22,13 +17,14 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import InfoIcon from '@mui/icons-material/Info';
 import CircularIndeterminate from '@components/Layout/Loaders/CircularProgress';
-import { createUser } from '@utils/api/client/user/authorize/user/createUser';
+import axios from 'axios';
+import { errorHandler } from '@utils/helper/errorHandler';
 import { useMessageStore } from '@stores/messageStore';
 import { AlertMessage, ErrorMessage } from '@utils/helper/alertMessage';
-import UseOfEmail from '@components/Layout/Dialog/UseOfEmail';
+import UseOfEmail from '@components/SignUp/Dialog/UseOfEmail';
 
 export default function SignUpForm() {
-  const { error, alert, handleApiMessage, handleAlertMessage, handleOnClose } =
+  const { error, alert, handleApiMessage, handleAlertMessage } =
     useMessageStore();
 
   const clearError = () => {
@@ -38,6 +34,10 @@ export default function SignUpForm() {
   const [open, setOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  useEffect(() => {
+    clearError();
+  }, []);
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
@@ -49,7 +49,6 @@ export default function SignUpForm() {
 
   const {
     register,
-    control,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
@@ -58,18 +57,24 @@ export default function SignUpForm() {
   });
 
   const onSubmit = async (values) => {
+    const url = `/api/auth/signup`;
+
     try {
-      const data = await createUser(values);
+   
+      const { data } = await axios.post(url, values);
 
       handleAlertMessage(data.message, 'success');
       clearError();
       reset();
 
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         window.location.href = '/auth/signin';
       }, 3000);
+
+      return () => clearTimeout(timeout);
     } catch (error) {
-      handleApiMessage(error.message, 'error');
+      const { message } = errorHandler(error);
+      handleApiMessage(message, 'error');
     }
   };
 
@@ -131,50 +136,6 @@ export default function SignUpForm() {
           </Typography>
         )}
 
-        <FormControl>
-          <FormLabel
-            id="row-radio-buttons-gender"
-            error={Boolean(errors.gender)}
-          >
-            Gender
-          </FormLabel>
-          <Controller
-            name="gender"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <RadioGroup
-                row
-                aria-labelledby="gender"
-                onChange={(e) => field.onChange(e.target.value)}
-                {...field}
-              >
-                <FormControlLabel
-                  value="male"
-                  control={<Radio />}
-                  label="Male"
-                />
-                <FormControlLabel
-                  value="female"
-                  control={<Radio />}
-                  label="Female"
-                />
-                <FormControlLabel
-                  value="other"
-                  control={<Radio />}
-                  label="Other"
-                />
-              </RadioGroup>
-            )}
-          />
-
-          {errors.gender && (
-            <Typography variant="body2" color="error" className="error">
-              {errors.gender?.message}
-            </Typography>
-          )}
-        </FormControl>
-
         <TextField
           name="password"
           label="Password"
@@ -223,7 +184,7 @@ export default function SignUpForm() {
           </Typography>
         )}
       </Stack>
-      
+
       <StyledButton
         type="submit"
         onClick={handleSubmit(onSubmit)}

@@ -18,7 +18,7 @@ import { profileMenuRoutes } from '@src/routes/profileMenuRoutes';
 import { authButtons } from '@src/routes/navRoutes';
 
 export default function CustomMenu() {
-  const { user, router, isLightTheme, isMale, isFemale } =
+  const { user, uploadedImage, initialFname, router, isLightTheme } =
     useContext(AppBarContext);
 
   const { anchorEl, handleClose } = useMenuStore();
@@ -60,18 +60,18 @@ export default function CustomMenu() {
         {user ? (
           <div>
             <UserInfoWrapper>
-              <Avatar
-                alt="avatar"
-                src={`${
-                  !user.image || user.accountType === 'credentials'
-                    ? `/assets/avatar/${
-                        isMale ? 'male' : isFemale ? 'female' : 'other'
-                      }.png`
-                    : user.image
-                }`}
-                referrerPolicy="no-referrer"
-                sx={{ width: 42, height: 42, mb: 1 }}
-              />
+              {uploadedImage ? (
+                <Avatar
+                  alt="avatar"
+                  src={uploadedImage}
+                  referrerPolicy="no-referrer"
+                  sx={{ width: 42, height: 42, mb: 1 }}
+                />
+              ) : (
+                <Avatar alt="avatar" sx={{ width: 42, height: 42, mb: 1 }}>
+                  {initialFname}
+                </Avatar>
+              )}
               <Typography variant="body1">{user.name}</Typography>
               <Typography variant="body2">{user.email}</Typography>
             </UserInfoWrapper>

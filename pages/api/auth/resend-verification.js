@@ -1,5 +1,5 @@
 import connectMongo from 'lib/database/connection';
-import { resendVerification } from '../handlers/resendVerificationApi';
+import { resendVerification } from '../handlers/emailVerifyAPI/resendVerification';
 
 export default async function handler(req, res) {
   try {

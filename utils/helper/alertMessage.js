@@ -8,6 +8,12 @@ export const Alert = forwardRef(function Alert(props, ref) {
 });
 
 export const AlertMessage = ({ open, onClose, message, severity }) => {
+  const ariaAttributes = {
+    'aria-live': 'assertive',
+    'aria-atomic': 'true',
+    role: 'alert',
+  };
+
   return (
     <>
       <Snackbar
@@ -16,7 +22,7 @@ export const AlertMessage = ({ open, onClose, message, severity }) => {
         autoHideDuration={5000}
         onClose={onClose}
       >
-        <Alert onClose={onClose} severity={severity}>
+        <Alert onClose={onClose} severity={severity} {...ariaAttributes}>
           {message}
         </Alert>
       </Snackbar>

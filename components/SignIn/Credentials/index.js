@@ -34,18 +34,20 @@ export default function Credentials() {
     resolver: yupResolver(signinSchema),
   });
 
-  const onSubmit = async (val) => {
+  const onSubmit = async (value) => {
     try {
       const res = await signIn('credentials', {
         redirect: false,
-        email: val.email,
-        password: val.password,
+        email: value.email,
+        password: value.password,
       });
 
+      // signIn callback error response
       if (!res.ok) {
         throw new Error(res.error);
       }
     } catch (error) {
+      console.error(error)
       handleApiMessage(error.message, 'error');
     }
   };

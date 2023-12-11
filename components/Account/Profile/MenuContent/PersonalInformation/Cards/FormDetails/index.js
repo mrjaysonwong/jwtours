@@ -6,7 +6,7 @@ import { useUserData } from '@utils/hooks/useUserData';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { personalInfoSchema } from '@utils/yup/personalInfoSchema';
-import { updateUser } from '@utils/api/client/user/authorize/user/updateUser';
+import axios from 'axios';
 import { useMessageStore } from '@stores/messageStore';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { sleep } from '@utils/helper/sleep';
@@ -23,8 +23,7 @@ export const FormDetailsContext = createContext(null);
 
 export default function FormDetails({ userId }) {
   const { isLoading, data, refetch } = useUserData(userId);
-  const { handleApiMessage, alert, handleAlertMessage, handleOnClose } =
-    useMessageStore();
+  const { alert, handleAlertMessage, handleOnClose } = useMessageStore();
 
   const userData = data?.result;
 
@@ -47,18 +46,14 @@ export default function FormDetails({ userId }) {
     await sleep(1000);
 
     try {
-      const data = await updateUser(userId, values);
-
-      if (data.error) {
-        handleApiMessage(data.error.message, 'error');
-        return;
-      }
+      const url = `/api/users?userId=${userId}`;
+      const { data } = await axios.patch(url, values);
 
       refetch();
       handleAlertMessage(data.message, 'success');
     } catch (error) {
-      console.error(error.message);
-      handleAlertMessage(error.message, 'error');
+      console.error(error);
+      handleAlertMessage('An error occurred. Please try again.', 'error');
     }
   };
 

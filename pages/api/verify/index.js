@@ -1,5 +1,5 @@
 import connectMongo from 'lib/database/connection';
-import { verifyEmail } from '../handlers/verifyApi';
+import { verifyEmail } from '../handlers/emailVerifyAPI/verifyEmail';
 
 export default async function handler(req, res) {
   try {

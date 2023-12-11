@@ -1,5 +1,5 @@
 import connectMongo from 'lib/database/connection';
-import { createUser } from '../handlers/usersApi';
+import { createUser } from '../handlers/usersAPI/createUser';
 
 // POST: /api/auth/signup
 export default async function handler(req, res) {
@@ -20,6 +20,7 @@ export default async function handler(req, res) {
 
     return res.status(500).json({
       error: {
+        code: 'DB_ERROR',
         message: error.message,
       },
     });

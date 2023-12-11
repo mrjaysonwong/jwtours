@@ -6,7 +6,7 @@ import { useProfileDrawerStore } from '@stores/drawerStore';
 import { AppBarContext } from '..';
 
 export default function AvatarProfile() {
-  const { user, mobile, isMale, isFemale, isLightTheme, isLoading } =
+  const { user, uploadedImage, initialFname, mobile, isLightTheme, isLoading } =
     useContext(AppBarContext);
 
   const { toggleProfileDrawer } = useProfileDrawerStore();
@@ -29,21 +29,24 @@ export default function AvatarProfile() {
               width={40}
               height={40}
             />
-          ) : (
+          ) : uploadedImage ? (
             <Avatar
               alt="avatar"
-              src={`${
-                !user.image || user.accountType === 'credentials'
-                  ? `/assets/avatar/${
-                      isMale ? 'male' : isFemale ? 'female' : 'other'
-                    }.png`
-                  : user.image
-              }`}
+              src={uploadedImage}
               referrerPolicy="no-referrer"
               onClick={
                 !mobile ? handleMenu : () => toggleProfileDrawer('right', true)
               }
             />
+          ) : (
+            <Avatar
+              alt="avatar"
+              onClick={
+                !mobile ? handleMenu : () => toggleProfileDrawer('right', true)
+              }
+            >
+              {initialFname}
+            </Avatar>
           )}
         </>
       ) : (

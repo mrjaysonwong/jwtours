@@ -2,11 +2,10 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { MainContainer } from '@components/Layout/Styles/globals';
-import { Typography, Box } from '@mui/material';
-import { StyledButton } from '@components/Layout/Styles/globals';
+import { Typography, Box, Button } from '@mui/material';
 import Footer from '@components/Layout/Footer';
-import { methodPUT } from '@utils/api/client/email/verify/PUT';
-import { methodPOST } from '@utils/api/client/email/resend-verification/POST';
+import axios from 'axios';
+import { errorHandler } from '@utils/helper/errorHandler';
 import { useMessageStore } from '@stores/messageStore';
 import { AlertMessage } from '@utils/helper/alertMessage';
 
@@ -36,35 +35,32 @@ export default function EmailVerification() {
 
   const sendToken = async (email, token) => {
     try {
-      const data = await methodPUT(email, token);
-
-      if (data.error) {
-        setCode(data.error.code);
-        handleApiMessage(data.error.message, 'error');
-        return;
-      }
+      const url = `/api/verify?email=${email}&token=${token}`;
+      const { data } = await axios.put(url);
 
       handleApiMessage(data.message, 'success');
+      localStorage.removeItem('resendDisabled');
+      localStorage.removeItem('token');
     } catch (error) {
-      handleApiMessage(error.message, 'error');
+      const { code, message } = errorHandler(error);
+      setCode(code);
+
+      handleApiMessage(message, 'error');
     }
   };
 
   const handleResendVerificationEmail = async (email) => {
     try {
-      const data = await methodPOST(email);
-
-      if (data.error) {
-        handleApiMessage(data.error.message, 'error');
-        return;
-      }
+      const url = `/api/auth/resend-verification?email=${email}`;
+      const { data } = await axios.post(url);
 
       handleAlertMessage(data.message, 'success');
       setResendDisabled(true);
       localStorage.setItem('resendDisabled', 'true');
       localStorage.setItem('token', token);
     } catch (error) {
-      handleApiMessage(error.message, 'error');
+      const { message } = errorHandler(error);
+      handleApiMessage(message, 'error');
     }
   };
 
@@ -86,9 +82,9 @@ export default function EmailVerification() {
             <Box sx={{ my: 2 }}>
               <Link href="/auth/signin" replace>
                 <a>
-                  <StyledButton variant="contained" sx={{ p: 1 }}>
+                  <Button variant="contained" sx={{ p: 1 }}>
                     Click here to Sign In
-                  </StyledButton>
+                  </Button>
                 </a>
               </Link>
             </Box>
@@ -105,7 +101,8 @@ export default function EmailVerification() {
             </Typography>
 
             {code === 'TOKEN_EXPIRED' && (
-              <StyledButton
+              <Button
+                variant="contained"
                 disabled={resendDisabled}
                 onClick={() => handleResendVerificationEmail(email)}
                 sx={{ p: 1 }}
@@ -113,7 +110,7 @@ export default function EmailVerification() {
                 {resendDisabled
                   ? 'Email sent successfully!'
                   : 'Resend verification email'}
-              </StyledButton>
+              </Button>
             )}
           </>
         )}

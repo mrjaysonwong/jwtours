@@ -19,7 +19,7 @@ export const StyledCardContent = styled(CardContent)(({ theme }) => ({
 }));
 
 export const PictureWrapper = styled(Box)({
-  display: 'inline-block',
+  display: 'flex',
   position: 'relative',
   border: '1px dashed gray',
   borderRadius: '50%',
@@ -32,9 +32,6 @@ export const PictureWrapper = styled(Box)({
     justifyContent: 'center',
     cursor: 'pointer',
   },
-
-
-  
 });
 
 export const UploadOverlay = styled(Box)({
@@ -72,5 +69,23 @@ export const StyledInputUpdatePhoto = styled('input')({
   left: 0,
   whiteSpace: 'nowrap',
   width: 1,
+});
 
+export const CropContainer = styled(Box)({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: '80px',
+});
+
+export const Controls = styled(Box)({
+  position: 'absolute',
+  bottom: 0,
+  left: '50%',
+  width: '50%',
+  transform: 'translateX(-50%)',
+  height: 80,
+  display: 'flex',
+  alignItems: 'center',
 });

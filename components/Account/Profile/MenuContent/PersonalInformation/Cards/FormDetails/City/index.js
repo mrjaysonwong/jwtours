@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 import { Grid, TextField, InputLabel, Autocomplete } from '@mui/material';
 import { FormDetailsContext } from '..';
 import { useDebounce } from 'use-debounce';
-import { getCities } from '@utils/api/client/cities/getCities';
+import axios from 'axios';
 import { useMessageStore } from '@stores/messageStore';
 
 export default function City() {
@@ -16,12 +16,22 @@ export default function City() {
 
   const { error, handleApiMessage } = useMessageStore();
 
-  const uniqueCities = suggestions.filter(
-    (option, index) =>
-      suggestions.findIndex(
-        (i) => i.name === option.name && i.country === option.country
-      ) === index
-  );
+  // const uniqueCities = suggestions.filter(
+  //   (option, index) =>
+  //     suggestions.findIndex(
+  //       (i) => i.name === option.name && i.country === option.country
+  //     ) === index
+  // );
+
+  const uniqueNames = new Set();
+  const uniqueCities = suggestions.filter((city) => {
+    if (!uniqueNames.has(city.name)) {
+      uniqueNames.add(city.name);
+
+      return true;
+    }
+    return false;
+  });
 
   const getData = async () => {
     try {
@@ -30,13 +40,23 @@ export default function City() {
         return;
       }
 
-      const data = await getCities(value);
+      const url = `https://api.api-ninjas.com/v1/city?name=${value}&limit=5`;
 
+      const options = {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+          // NEXT_PUBLIC_ expose to the browser
+          'X-Api-Key': process.env.NEXT_PUBLIC_NINJA_KEY,
+        },
+      };
+
+      const { data } = await axios.get(url, options);
       setSuggestions(data);
       useMessageStore.setState({ error: { open: false } });
     } catch (error) {
-      console.error(error.message);
-      handleApiMessage(error.message, 'error');
+      console.error(error);
+      handleApiMessage('An error occurred. Please try again.', 'error');
     }
   };
 

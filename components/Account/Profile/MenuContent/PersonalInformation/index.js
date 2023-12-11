@@ -48,10 +48,8 @@ export default function PersonalInformation() {
             priority
           />
           <Typography variant="h6">{error.message}</Typography>
-          <Typography>Try refreshing your browser</Typography>
-          <Typography>
-            If the issue persists, contact JWTours support
-          </Typography>
+          <Typography variant="body1">Please try again or Refresh the page.</Typography>
+
           <Button
             onClick={() => router.reload()}
             variant="contained"
@@ -59,6 +57,10 @@ export default function PersonalInformation() {
           >
             Refresh
           </Button>
+
+          <Typography variant="body1" sx={{mt: 5}}>
+            If the issue persists, contact JWtours support
+          </Typography>
         </Box>
       )}
     </>
