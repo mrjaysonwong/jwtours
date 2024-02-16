@@ -11,15 +11,15 @@ import {
   Divider,
   Chip,
 } from '@mui/material';
-import Logo from '../Logo';
+import Logo from '../Logo/Logo';
 import MenuIcon from '@mui/icons-material/Menu';
 import { StyledList } from '../styled';
-import AvatarProfile from '../AvatarProfile';
+import AvatarProfile from '../AvatarProfile/AvatarProfile';
 import { useProfileDrawerStore } from '@stores/drawerStore';
 import { profileSettingsRoutes } from '@src/routes/profileSettingsRoutes';
-import SidebarProfileMenu from '@components/Account/Profile/SidebarMenu';
-import { AppBarContext } from '..';
-import { appBarHeight } from '@utils/helper/navigation';
+import SidebarProfileMenu from '@components/Account/Profile/SidebarMenu/SidebarMenu';
+import { AppBarContext } from '../Navbar';
+import { appBarHeight } from '@utils/helper/functions/navigation';
 
 export default function AppBarProfileSettings() {
   const router = useRouter();
@@ -31,15 +31,15 @@ export default function AppBarProfileSettings() {
 
   const [activeTab, setActiveTab] = useState(query.tab || 'personal');
 
-  useEffect(() => {
-    setActiveTab(query.tab || 'personal');
-  }, [query.tab]);
-
   const handleClick = (tab) => {
     setActiveTab(tab);
     toggleProfileDrawer('left', false);
     router.replace({ query: { tab } });
   };
+
+  useEffect(() => {
+    setActiveTab(query.tab || 'personal');
+  }, [query.tab]);
 
   const drawer = (
     <div>

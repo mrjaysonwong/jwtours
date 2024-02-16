@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { useSession } from 'next-auth/react';
-import SignUp from '@components/SignUp';
-import { companyName } from '@utils/helper/navigation';
+import SignUp from '@components/SignUp/SignUp';
+import { companyName } from '@utils/helper/functions/navigation';
 
 export default function SignUpPage() {
   const router = useRouter();

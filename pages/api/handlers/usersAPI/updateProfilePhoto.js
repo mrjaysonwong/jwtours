@@ -7,6 +7,16 @@ export async function updateProfilePhoto(req, res) {
 
   try {
     const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        error: {
+          code: 404, // NOT_FOUND
+          message: 'User not found.',
+        },
+      });
+    }
+
     const imageId = user.image?.public_id;
 
     const result = await cloudinary.uploader.upload(croppedImage, {
@@ -16,29 +26,35 @@ export async function updateProfilePhoto(req, res) {
       format: 'jpg',
     });
 
-    if (userId) {
-      const displayImage = await User.findByIdAndUpdate(
-        userId,
-        {
-          $set: {
-            'image.public_id': result.public_id,
-            'image.url': result.secure_url,
-          },
-        },
-        { new: true }
-      );
+    // -- Use findByIdAndUpdate for parallelism  or multiple queries to the same object.
 
-      return res.status(200).json({
-        code: 'SUCCESS',
-        message: 'Successfully Updated!',
-        displayImage,
-      });
-    }
+    // const displayImage = await User.findByIdAndUpdate(
+    //   userId,
+    //   {
+    //     'image.public_id': result.public_id,
+    //     'image.url': result.secure_url,
+    //   },
+    //   { new: true }
+    // );
+
+    user.image = {
+      public_id: result.public_id,
+      url: result.secure_url,
+    };
+
+    await user.save();
+
+    return res.status(200).json({
+      code: 200, // SUCCESS,
+      message: 'Successfully Updated!',
+      user: user,
+    });
   } catch (error) {
-    console.error(error);
+    console.error('Server-side Error:', error.message);
+
     return res.status(500).json({
       error: {
-        code: 'SERVER_ERROR',
+        code: 500, // SERVER_ERROR,
         message: 'Internal Server Error',
       },
     });

@@ -1,4 +1,6 @@
-const GetDesignTokens = (mode, font) => ({
+import { createTheme } from '@mui/material';
+
+export const GetDesignTokens = (mode, font) => ({
   palette: {
     mode,
     ...(mode === 'light'
@@ -15,4 +17,14 @@ const GetDesignTokens = (mode, font) => ({
   },
 });
 
-export default GetDesignTokens;
+export const customBreakpoints = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 540,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
+});

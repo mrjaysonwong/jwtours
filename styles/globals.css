@@ -29,6 +29,8 @@
     #348ac7 51%,
     #7474bf 100%
   );
+  --palette-red: #f44336;
+  --palette-green: #66bb6a;
   --test: rgba(111, 111, 111, 0.5);
 }
 

@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
-import SignIn from '@components/SignIn';
-import { companyName } from '@utils/helper/navigation';
+import SignIn from '@components/SignIn/SignIn';
+import { companyName } from '@utils/helper/functions/navigation';
 
 export default function SignInPage() {
   const router = useRouter();

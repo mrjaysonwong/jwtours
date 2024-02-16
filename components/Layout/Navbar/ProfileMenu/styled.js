@@ -16,8 +16,7 @@ export const ButtonWrapper = styled(Box)({
 
 export const UserInfoWrapper = styled(Box)({
   display: 'flex',
-  flexDirection: 'column',
   alignItems: 'center',
-  padding: '0 1rem',
-
+  justifyContent: 'center',
+  padding: '0 0.5rem',
 });

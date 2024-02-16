@@ -1,6 +1,6 @@
 import Head from 'next/head';
-import { companyName } from '@utils/helper/navigation';
-import EmailVerification from '@components/EmailVerification';
+import { companyName } from '@utils/helper/functions/navigation';
+import EmailVerification from '@components/EmailVerification/EmailVerification';
 
 export default function EmailVerificationPage() {
   return (

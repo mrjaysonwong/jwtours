@@ -1,20 +1,21 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { AppBar, Toolbar, IconButton, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import { NavWrapper } from '../styled';
-import Logo from '../Logo';
-import AvatarProfile from '../AvatarProfile';
+import Logo from '../Logo/Logo';
+import AvatarProfile from '../AvatarProfile/AvatarProfile';
 import { navRoutes } from '@src/routes/navRoutes';
 import { useNavDrawerStore } from 'stores/drawerStore';
-import SidebarNavMenu from '../SidebarMenu';
-import { AppBarContext } from '..';
-import { appBarHeight } from '@utils/helper/navigation';
+import SidebarNavMenu from '../SidebarMenu/SidebarMenu';
+import { AppBarContext } from '../Navbar';
+import { appBarHeight } from '@utils/helper/functions/navigation';
 
 export default function AppBarNav() {
   const { isLightTheme, router } = useContext(AppBarContext);
   const { state, toggleNavDrawer } = useNavDrawerStore();
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   const navLinks = navRoutes.map((e, idx) => {
     return (
@@ -28,16 +29,35 @@ export default function AppBarNav() {
     );
   });
 
+  const handleScroll = () => {
+    setScrollPosition(window.scrollY);
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <>
       <AppBar
         position="fixed"
-        elevation={1}
+        elevation={scrollPosition > 90 ? 1 : 0}
         sx={{
-          background: isLightTheme ? 'var(--light)' : '',
+          // background: isLightTheme ? 'var(--light)' : '',
+          background:
+            state.left || scrollPosition > 90
+              ? isLightTheme
+                ? 'var(--light)'
+                : ''
+              : 'transparent',
           minHeight: appBarHeight,
           display: 'flex',
           justifyContent: 'center',
+          backdropFilter: state.left ? '' : 'blur(0px)',
+          transition: 'background 0.3s ease',
         }}
       >
         <Toolbar

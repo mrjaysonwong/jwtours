@@ -1,6 +1,6 @@
 import { Drawer, List } from '@mui/material';
 import { styled } from '@mui/system';
-import { appBarHeight } from '@utils/helper/navigation';
+import { appBarHeight } from '@utils/helper/functions/navigation';
 
 export const StyledDrawer = styled(Drawer)(({ theme }) => ({
   '& .MuiDrawer-paper': {

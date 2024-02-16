@@ -1,6 +1,6 @@
 import { styled } from '@mui/system';
 import { Box, Typography, Skeleton as MUISkeleton } from '@mui/material';
-import { drawerWidth } from '@utils/helper/navigation';
+import { drawerWidth } from '@utils/helper/functions/navigation';
 
 const variantOne = ['1'];
 const variantTwo = ['1', '1'];

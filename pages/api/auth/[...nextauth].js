@@ -5,8 +5,8 @@ import FacebookProvider from 'next-auth/providers/facebook';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import connectMongo from 'lib/database/connection';
 import User from '@model/userModel';
-import { handleCredentialSignIn } from '../handlers/signinAPI/handleCredentialSignIn';
-import { handleProviderSignIn } from '../handlers/signinAPI/handleProviderSignIn';
+import { CredentialSignIn } from './signin/credentials-signin';
+import { ProviderSignIn } from './signin/providers-signin';
 
 export const authOptions = (NextAuthOptions = {
   // Configure one or more authentication providers
@@ -29,11 +29,11 @@ export const authOptions = (NextAuthOptions = {
         try {
           await connectMongo();
 
-          const user = await handleCredentialSignIn(credentials, req);
+          const user = await CredentialSignIn(credentials, req);
 
           return user;
         } catch (error) {
-          console.error('Credentials provider error:', error);
+          console.error('CredentialsProvider Error:', error.message);
           throw error;
         }
       },
@@ -41,19 +41,20 @@ export const authOptions = (NextAuthOptions = {
   ],
 
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
+    async signIn({ user, account, profile }) {
       try {
         await connectMongo();
 
-        await handleProviderSignIn(user, account);
+        await ProviderSignIn(user, account);
 
         return true;
       } catch (error) {
-        console.error('callback error:', error);
+        console.error('callbacks signIn error:', error.message);
         throw error;
       }
     },
     // default behavior token undefined after authenticated
+    // that is why it should pass/persist in session
     async jwt({ token, user, account, profile }) {
       if (user) {
         token.user = user;
@@ -66,7 +67,9 @@ export const authOptions = (NextAuthOptions = {
         await connectMongo();
 
         // check for existing user
-        const userExists = await User.findOne({ email: token.user.email });
+        const userExists = await User.findOne({
+          'email.email': token.user.email,
+        });
 
         if (!userExists) {
           throw new Error('User Not Found.');
@@ -83,7 +86,7 @@ export const authOptions = (NextAuthOptions = {
 
         return session;
       } catch (error) {
-        console.error('session error:', error);
+        console.error('session error:', error.message);
         throw error;
       }
     },

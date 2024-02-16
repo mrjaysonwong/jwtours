@@ -1,7 +1,7 @@
 import connectMongo from 'lib/database/connection';
 import { createUser } from '../handlers/usersAPI/createUser';
 
-// POST: /api/auth/signup
+// baseUrl/api/auth/signup
 export default async function handler(req, res) {
   try {
     await connectMongo();
@@ -16,11 +16,9 @@ export default async function handler(req, res) {
         .send(`HTTP method ${method} Not Allowed, only POST Accepted`);
     }
   } catch (error) {
-    console.error(error);
-
     return res.status(500).json({
       error: {
-        code: 'DB_ERROR',
+        code: 500, // SERVER_ERROR
         message: error.message,
       },
     });

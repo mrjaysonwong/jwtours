@@ -2,9 +2,9 @@ import { createContext } from 'react';
 import Head from 'next/head';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@pages/api/auth/[...nextauth]';
-import { companyName } from '@utils/helper/navigation';
-import AccountProfile from '@components/Account/Profile';
-import Navbar from '@components/Layout/Navbar';
+import { companyName } from '@utils/helper/functions/navigation';
+import AccountProfile from '@components/Account/Profile/Profile';
+import Navbar from '@components/Layout/Navbar/Navbar';
 
 export const UserContext = createContext();
 

@@ -1,11 +1,11 @@
 import Head from 'next/head';
-import { Typography } from '@mui/material';
+import { Box, Typography, Card, CardMedia } from '@mui/material';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@pages/api/auth/[...nextauth]';
 import { MainContainer } from '@components/Layout/Styles/globals';
-import Navbar from '@components/Layout/Navbar';
-import Footer from '@components/Layout/Footer';
-import { companyName } from '@utils/helper/navigation';
+import Navbar from '@components/Layout/Navbar/Navbar';
+import Footer from '@components/Layout/Footer/Footer';
+import { companyName } from '@utils/helper/functions/navigation';
 
 export default function Home({ session }) {
   const user = session?.user;
@@ -17,8 +17,20 @@ export default function Home({ session }) {
       </Head>
 
       <Navbar user={user} />
+      <Box>
+        <CardMedia
+          sx={{
+            height: '100vh',
+            backgroundSize: 'clip',
+            backgroundPosition: '100% 100%',
+            backgroundRepeat: 'no-repeat',
+          }}
+          image="https://res.cloudinary.com/dpyxciwcu/image/upload/v1706794804/jwtours/background/beach_fcshw2.jpg"
+          alt="Landing background-image"
+        />
+      </Box>
       <MainContainer>
-        <Typography variant="body1">Lorem ipsum</Typography>
+        <Typography variant="body1">Lorem Ipsum</Typography>
       </MainContainer>
       <Footer />
     </>

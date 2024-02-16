@@ -16,6 +16,7 @@ export const useMessageStore = create((set) => ({
     message: '',
     severity: '',
   },
+
   handleApiMessage: (apiMessage, type = 'successs') => {
     set((state) => ({
       [type]: {

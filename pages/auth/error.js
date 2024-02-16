@@ -2,10 +2,10 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { MainContainer } from '@components/Layout/Styles/globals';
-import { Typography } from '@mui/material';
-import { StyledButton } from '@components/Layout/Styles/globals';
-import { companyName } from '@utils/helper/navigation';
+import { Typography, Box, Button } from '@mui/material';
+import { companyName } from '@utils/helper/functions/navigation';
 
+// landing page for Error in Auth Provider
 export default function ErrorPage() {
   const router = useRouter();
   const { error } = router.query;
@@ -16,12 +16,31 @@ export default function ErrorPage() {
       </Head>
 
       <MainContainer>
-        <Typography variant="h6">{error}</Typography>
-        <Link href="/" replace>
-          <a>
-            <StyledButton sx={{ p: 2, mt: 2 }}>Return to Home</StyledButton>
-          </a>
-        </Link>
+        <Typography variant="h6" textAlign="center" sx={{ mx: 4 }}>
+          {error}
+        </Typography>
+
+        <Box
+          sx={{
+            my: 2,
+          }}
+        >
+          <Link href="/auth/signin" replace>
+            <a>
+              <Button variant="contained" sx={{ p: 1, mr: 2 }}>
+                Refresh
+              </Button>
+            </a>
+          </Link>
+
+          <Link href="/" replace>
+            <a>
+              <Button variant="outlined" sx={{ p: 1 }}>
+                Return to Home
+              </Button>
+            </a>
+          </Link>
+        </Box>
       </MainContainer>
     </>
   );

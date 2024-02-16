@@ -18,12 +18,30 @@ const userSchema = new Schema(
       required: true,
       match: [/^[A-Za-z ]*$/, 'Please enter valid name'],
     },
-    email: {
-      type: String,
-      trim: true,
-      required: [true, 'Email address is required'],
-      match: [EMAIL_REGX, 'Invalid email address'],
-    },
+
+    email: [
+      {
+        email: {
+          type: String,
+          trim: true,
+          required: [true, 'Email address is required'],
+          match: [EMAIL_REGX, 'Invalid email address'],
+        },
+        isPrimary: {
+          type: Boolean,
+          default: null,
+        },
+        isVerified: {
+          type: Boolean,
+          default: null,
+        },
+        emailToken: {
+          type: String,
+          default: undefined,
+        },
+        _id: false,
+      },
+    ],
     gender: {
       type: String,
       enum: ['', 'male', 'female', 'other'],
@@ -32,6 +50,7 @@ const userSchema = new Schema(
     password: {
       type: String,
       // only type: String for providers login passwordless default to empty string & not required
+      default: '',
     },
     role: {
       type: String,
@@ -67,12 +86,18 @@ const userSchema = new Schema(
       default: '',
     },
     address: {
-      type: String,
-      default: '',
-    },
-    city: {
-      type: String,
-      default: '',
+      street: {
+        type: String,
+        default: '',
+      },
+      homeTown: {
+        type: String,
+        default: '',
+      },
+      postalCode: {
+        type: String,
+        default: '',
+      },
     },
     paymentCards: {
       type: String,
@@ -106,9 +131,6 @@ const userSchema = new Schema(
       type: Boolean,
       default: true,
     },
-    resetToken: { type: String },
-    isVerified: { type: Boolean, default: false },
-    emailToken: { type: String },
   },
   { timestamps: true }
 );

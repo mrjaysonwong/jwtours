@@ -22,5 +22,6 @@ export const sendEmail = async (options) => {
     console.log('Transporter info', info);
   } catch (error) {
     console.error('Transporter error', error);
+    throw new Error('An error occured. Please try again')
   }
 };

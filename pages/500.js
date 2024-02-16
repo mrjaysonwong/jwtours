@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { Typography, Button } from '@mui/material';
 import { MainContainer } from '@components/Layout/Styles/globals';
-import { companyName } from '@utils/helper/navigation';
+import { companyName } from '@utils/helper/functions/navigation';
 
 export default function Custom500() {
   return (

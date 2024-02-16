@@ -2,75 +2,88 @@ import User from '@model/userModel';
 import jwt from 'jsonwebtoken';
 import { hash } from 'bcryptjs';
 import { sendEmail } from '@utils/config/email/sendMail';
-import { htmlContent } from '@src/theme/emailTemplate';
+import { htmlContent } from '@src/theme/emailTemplateLink';
+import { formattedDate } from '@utils/helper/functions/formattedDate';
+import { generateToken } from '@utils/helper/functions/generateToken';
 
 export async function createUser(req, res) {
-    try {
-      if (!req.body) {
-        return res.status(400).json({
-          error: {
-            code: 'BAD_REQUEST',
-            message: 'Empty form data',
-          },
-        });
-      }
-  
-      const { firstName, lastName, email, gender, password } = req.body;
-  
-      // check for existing user
-      const user = await User.findOne({ email });
-  
-      if (user) {
-        return res.status(422).json({
-          error: {
-            code: 'UNPROCESSABLE',
-            message: 'Email Already Exists.',
-          },
-        });
-      }
-  
-      const hashedPassword = await hash(password, 12);
-  
-      // create and hash password
-      const newUser = await User.create({
-        firstName,
-        lastName,
-        email,
-        gender,
-        password: hashedPassword,
-      });
-  
-      // Create an email verification token
-      const token = jwt.sign({ email: newUser.email }, process.env.JWT_SECRET, {
-        expiresIn: '2m',
-      });
-  
-      newUser.emailToken = token;
-      await newUser.save();
-  
-      const link = `${process.env.NEXTAUTH_URL}/verify?email=${newUser.email}&token=${token}`;
-  
-      const message = htmlContent(link, newUser.email);
-  
-      await sendEmail({
-        to: newUser.email,
-        subject: 'JWtours Email Verification',
-        text: message,
-      });
-  
-      return res.status(201).json({
-        code: 'SUCCESS',
-        message: `Verification link sent to ${newUser.email}`,
-      });
-    } catch (error) {
-      console.error('User creation failed:', error);
-  
-      return res.status(500).json({
+  const { firstName, lastName, email, password } = req.body;
+
+  try {
+    if (!req.body) {
+      return res.status(400).json({
         error: {
-          code: 'SERVER_ERROR',
-          message: 'User creation failed.',
-          error: error.errors,
+          code: 400, // BAD_REQUEST
+          message: 'Empty form data',
         },
       });
     }
+
+    // check for existing user
+    const user = await User.findOne({
+      email: {
+        $elemMatch: {
+          email: email,
+        },
+      },
+    });
+
+    if (user) {
+      return res.status(409).json({
+        error: {
+          code: 409, // CONFLICT
+          message: 'Email Already Exists.',
+        },
+      });
+    }
+
+    const hashedPassword = await hash(password, 12);
+
+    // Create an email verification token
+    const token = generateToken(email);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    req.user = decoded;
+
+    const { exp: expires } = req.user;
+
+    const epochTime = expires * 1000; // convert to milliseconds
+    const formattedDateString = await formattedDate(epochTime);
+
+    // create and hash password
+    const pendingUser = await User.create({
+      firstName,
+      lastName,
+      email: [
+        { email: email, isPrimary: true, isVerified: false, emailToken: token },
+      ],
+      password: hashedPassword,
+    });
+
+    const link = `${process.env.NEXTAUTH_URL}/verify?email=${email}&token=${token}`;
+
+    const message = htmlContent(link, email, formattedDateString);
+
+    await sendEmail({
+      to: email,
+      subject: 'JWtours Email Verification',
+      text: message,
+    });
+
+    return res.status(201).json({
+      code: 201, // RESOURCE_CREATED
+      message: `Verification link sent to ${email}`,
+      user: pendingUser,
+    });
+  } catch (error) {
+    console.error('Server-side Error:', error.message);
+
+    return res.status(500).json({
+      error: {
+        code: 500, // SERVER_ERROR
+        message: 'An error occured. Please try again or Refresh the page.',
+        error: error.errors,
+      },
+    });
   }
+}

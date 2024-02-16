@@ -1,6 +1,6 @@
 import { Box, Button, List } from '@mui/material';
 import { styled } from '@mui/system';
-import { drawerWidth } from '@utils/helper/navigation';
+import { drawerWidth } from '@utils/helper/functions/navigation';
 
 export const MainContainer = styled(Box)({
   display: 'flex',
