@@ -42,8 +42,8 @@ export default function Address() {
         mode: 'cors',
         headers: {
           // NEXT_PUBLIC_ expose to the browser
-          'X-RapidAPI-Key': '0d39bcbeb2msh230f01154c67b95p1f9b54jsn1d5971d293e1',
-          'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com',
+          'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPID_API_KEY,
+          'X-RapidAPI-Host': process.env.NEXT_PUBLIC_RAPID_API_HOST,
         },
       };
 
