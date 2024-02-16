@@ -30,32 +30,22 @@ export default function Address() {
         return;
       }
 
-      const url = `https://wft-geo-db.p.rapidapi.com/v1/geo/places`;
+      const url = '/api/places';
 
       const options = {
         method: 'GET',
         params: {
           namePrefix: `${debouncedValue}`,
-          limit: 10,
-          sort: '-population',
-        },
-        mode: 'cors',
-        headers: {
-          // NEXT_PUBLIC_ expose to the browser
-          'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPID_API_KEY,
-          'X-RapidAPI-Host': process.env.NEXT_PUBLIC_RAPID_API_HOST,
         },
       };
 
       const { data } = await axios.get(url, options);
 
-      const result = data.data;
+      const result = data;
 
       setSuggestions(result);
-
       useMessageStore.setState({ error: { open: false } });
     } catch (error) {
-      console.error(error);
       handleApiMessage('An error occurred. Please try again.', 'error');
     }
   };
