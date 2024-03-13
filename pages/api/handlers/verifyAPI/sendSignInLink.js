@@ -1,6 +1,6 @@
 import User from '@model/userModel';
 import Token from '@model/tokenModel';
-import { RateLimiterMemory } from 'rate-limiter-flexible';
+// import { RateLimiterMemory } from 'rate-limiter-flexible';
 import jwt from 'jsonwebtoken';
 import { generateToken } from '@utils/helper/functions/generateToken';
 import { sendEmail } from '@utils/config/email/sendMail';
