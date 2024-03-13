@@ -10,7 +10,7 @@ export const CustomTextField = (props) => {
       label={label}
       name={name}
       value={value}
-      error={Boolean(error)}
+      error={!!error}
       autoComplete="on"
       inputProps={{ maxLength: 100 }}
     />

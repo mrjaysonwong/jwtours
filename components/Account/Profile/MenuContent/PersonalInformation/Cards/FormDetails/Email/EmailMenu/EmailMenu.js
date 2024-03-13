@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Menu, MenuItem, IconButton, Box } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import SetPrimary from './SetPrimary/SetPrimary';
+import SetPrimary from './SetPrimary';
 import { EmailContext } from '../Email';
 
 const options = [

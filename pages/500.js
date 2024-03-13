@@ -1,23 +1,53 @@
 import Head from 'next/head';
-import Link from 'next/link';
-import { Typography, Button } from '@mui/material';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { Typography, Button, Box, AppBar, Toolbar } from '@mui/material';
+import Logo from '@components/Layout/Navbar/Logo/Logo';
 import { MainContainer } from '@components/Layout/Styles/globals';
 import { companyName } from '@utils/helper/functions/navigation';
-
+import Footer from '@components/Layout/Footer/Footer';
 export default function Custom500() {
+  const router = useRouter();
   return (
     <>
       <Head>
         <title>{`500 Server Error - ${companyName}`}</title>
       </Head>
 
-      <MainContainer>
-        <Typography variant="h4">500 Internal Server Error</Typography>
-        <br />
-        <Link href="/">
-          <Button variant="outlined">Back to Home page</Button>
-        </Link>
+      <MainContainer sx={{ m: 2, textAlign: 'center' }}>
+        <AppBar elevation={0} color="inherit">
+          <Toolbar>
+            <Logo />
+          </Toolbar>
+        </AppBar>
+
+        <Box sx={{ position: 'relative', mb: 10 }}>
+          <Typography variant="h1">
+            <b>500</b>
+          </Typography>
+        </Box>
+        <Box sx={{ ml: 4, position: 'absolute' }}>
+          <Image
+            src={'/assets/error_vector.png'}
+            width={200}
+            height={180}
+            priority
+            alt="error_vector"
+          />
+        </Box>
+
+        <Box sx={{ mt: 7 }}>
+          <Typography variant="h6" sx={{ my: 2 }}>
+            <b>Internal Server Error</b>
+          </Typography>
+
+          <Button variant="outlined" onClick={() => router.back()}>
+            Go Back
+          </Button>
+        </Box>
       </MainContainer>
+
+      <Footer />
     </>
   );
 }

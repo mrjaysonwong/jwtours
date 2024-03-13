@@ -17,12 +17,12 @@ export const useMessageStore = create((set) => ({
     severity: '',
   },
 
-  handleApiMessage: (apiMessage, type = 'successs') => {
+  handleMessage: (message, type = 'successs') => {
     set((state) => ({
       [type]: {
         ...state[type],
         open: true,
-        message: apiMessage,
+        message: message,
       },
     }));
   },

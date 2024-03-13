@@ -1,7 +1,9 @@
 import * as yup from 'yup';
 
-export const EMAIL_REGX =
-  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+// export const EMAIL_REGX =
+//   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+export const EMAIL_REGX = /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
 
 export const PASSWORD_REGX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]+$/;
 
@@ -20,7 +22,7 @@ export const signupSchema = yup.object().shape({
     .string()
     .trim()
     .required('Email is required')
-    .matches(EMAIL_REGX, 'Invalid email address'),
+    .matches(EMAIL_REGX, 'Invalid email'),
   password: yup
     .string()
     .trim()

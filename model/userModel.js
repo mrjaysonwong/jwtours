@@ -25,7 +25,7 @@ const userSchema = new Schema(
           type: String,
           trim: true,
           required: [true, 'Email address is required'],
-          match: [EMAIL_REGX, 'Invalid email address'],
+          match: [EMAIL_REGX, 'Invalid email'],
         },
         isPrimary: {
           type: Boolean,
@@ -35,10 +35,14 @@ const userSchema = new Schema(
           type: Boolean,
           default: null,
         },
-        emailToken: {
-          type: String,
-          default: undefined,
-        },
+        // token: {
+        //   type: String,
+        //   default: undefined,
+        // },
+        // expireTimestamp: {
+        //   type: Number,
+        //   required: true,
+        // },
         _id: false,
       },
     ],

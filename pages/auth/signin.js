@@ -9,15 +9,16 @@ export default function SignInPage() {
   const router = useRouter();
   const { callbackUrl } = router.query;
   const { data: session, status } = useSession();
-  const authenticated = status === 'authenticated';
+  const isAuthenticated = status === 'authenticated';
+  const isLoading = status === 'loading';
 
   useEffect(() => {
-    if (authenticated) {
-      router.replace(callbackUrl ?? '/');
+    if (isAuthenticated) {
+      router.push(callbackUrl ?? '/');
     }
-  }, [authenticated, router, callbackUrl]);
+  }, [isAuthenticated]);
 
-  if (authenticated || status === 'loading') {
+  if (isAuthenticated || isLoading) {
     return null;
   }
 

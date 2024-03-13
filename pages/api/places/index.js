@@ -1,16 +1,17 @@
 import axios from 'axios';
+import { handleResponseError } from '@utils/helper/functions/errorHandler';
 
 export default async function handler(req, res) {
   try {
     const { namePrefix } = req.query;
 
     if (!namePrefix) {
-      return res.status(404).json({
-        error: {
-          code: 404, // NOT_FOUND
-          message: 'Resource Not Found. Please provide a valid namePrefix.',
-        },
-      });
+      return handleResponseError(
+        res,
+        404,
+        'An error occurred. Please try again later.',
+        'Invalid or missing parameters.'
+      );
     }
 
     const url = `https://wft-geo-db.p.rapidapi.com/v1/geo/places`;
@@ -36,13 +37,13 @@ export default async function handler(req, res) {
 
     return res.status(200).json(result);
   } catch (error) {
-    console.error(error.message);
+    console.error(error);
 
-    return res.status(500).json({
-      error: {
-        code: 500,
-        message: 'An error occurred. Please try again.',
-      },
-    });
+    return handleResponseError(
+      res,
+      500,
+      'Internal Server Error. Please try again later.',
+      error.message
+    );
   }
 }

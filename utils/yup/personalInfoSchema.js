@@ -13,7 +13,7 @@ export const personalInfoSchema = yup.object().shape({
   }),
 });
 
-export const addEmailSchema = yup.object().shape({
+export const emailSchema = yup.object().shape({
   email: yup
     .string()
     .trim()

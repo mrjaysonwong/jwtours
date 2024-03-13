@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
@@ -8,9 +9,20 @@ import SignUpForm from './SignUpForm/SignUpForm';
 import Footer from '@components/Layout/Footer/Footer';
 
 export default function SignUp() {
+  useEffect(() => {
+    const storedMode = sessionStorage.getItem('mode');
+
+    if (
+      storedMode === 'signin-with-email' ||
+      storedMode === 'signin-with-credentials'
+    ) {
+      sessionStorage.clear();
+    }
+  }, []);
+
   return (
     <>
-      <MainContainer sx={{ pt: 2 }}>
+      <MainContainer sx={{ py: 4 }}>
         <Tooltip title="App Logo" arrow placement="left">
           <div>
             <Link href="/">
@@ -33,7 +45,7 @@ export default function SignUp() {
           </StyledForm>
         </Box>
 
-        <Typography variant="body1">
+        <Typography>
           Already have an account? <a onClick={() => signIn()}>Sign In</a>
         </Typography>
       </MainContainer>

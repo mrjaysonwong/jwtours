@@ -35,4 +35,8 @@ export const StyledDialog = styled(Dialog)({
   '#dialog-description': {
     paddingTop: '20px',
   },
+
+  '#dialog-button': {
+    marginTop: '8px',
+  },
 });

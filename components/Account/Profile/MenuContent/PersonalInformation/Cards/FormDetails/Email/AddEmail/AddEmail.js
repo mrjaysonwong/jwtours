@@ -3,7 +3,7 @@ import { Box, Grid, TextField, Typography } from '@mui/material';
 import { FieldErrorMessage } from '@utils/helper/custom-components/CustomMessages';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { addEmailSchema } from '@utils/yup/personalInfoSchema';
+import { emailSchema } from '@utils/yup/personalInfoSchema';
 import axios from 'axios';
 import { FormDetailsContext } from '../../FormDetails';
 import { useMessageStore } from '@stores/messageStore';
@@ -11,7 +11,7 @@ import { AlertMessage } from '@utils/helper/custom-components/CustomMessages';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { errorHandler } from '@utils/helper/functions/errorHandler';
 import InfoIcon from '@mui/icons-material/Info';
-import VerifyEmail from './VerifyEmail';
+import VerifyEmailOTP from './VerifyEmailOTP';
 
 export default function AddEmail(props) {
   const { showEdit, setShowEdit } = props;
@@ -19,9 +19,12 @@ export default function AddEmail(props) {
 
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState('');
-  const [code, setCode] = useState('');
 
   const { alert, handleAlertMessage, handleOnClose } = useMessageStore();
+
+  const handleCancel = () => {
+    setShowEdit(false);
+  };
 
   const {
     register,
@@ -29,32 +32,27 @@ export default function AddEmail(props) {
     reset,
     formState: { errors, isSubmitting },
   } = useForm({
-    resolver: yupResolver(addEmailSchema),
+    resolver: yupResolver(emailSchema),
   });
 
   const onSubmit = async (values) => {
     try {
-      const action = 'addEmailAddress';
-      const url = `/api/auth/email/verify?userId=${userId}&action=${action}`;
+      const mode = 'add-email-address';
+      const type = 'email';
+      const url = `/api/auth/verify?email=${values.email}&userId=${userId}&mode=${mode}&type=${type}`;
 
       const { data } = await axios.patch(url, values);
 
       setOpen(true);
       setEmail(values.email);
-      setCode('');
       reset();
 
       handleAlertMessage(data.message, 'success');
     } catch (error) {
-      const { code, message } = errorHandler(error);
+      const { errorMessage } = errorHandler(error);
 
-      setCode(code);
-      handleAlertMessage(message, 'error');
+      handleAlertMessage(errorMessage, 'error');
     }
-  };
-
-  const handleCancel = () => {
-    setShowEdit(false);
   };
 
   return (
@@ -68,7 +66,7 @@ export default function AddEmail(props) {
 
       {showEdit && (
         <>
-          <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+          <Box component="form">
             <Grid container spacing={3}>
               <Grid item xs={12} sm={12}>
                 <Box
@@ -90,9 +88,7 @@ export default function AddEmail(props) {
                   fullWidth
                   name="email"
                   label="Email"
-                  error={
-                    Boolean(errors.email) || (code >= '400' && code < '500')
-                  }
+                  error={!!errors.email}
                   autoComplete="on"
                 />
 
@@ -103,9 +99,10 @@ export default function AddEmail(props) {
                 <>
                   <Grid item xs={6} sm={6}>
                     <LoadingButton
+                      type="submit"
                       fullWidth
                       variant="contained"
-                      loading={Boolean(isSubmitting)}
+                      loading={!!isSubmitting}
                       onClick={handleSubmit(onSubmit)}
                       sx={{ my: 1 }}
                     >
@@ -128,7 +125,7 @@ export default function AddEmail(props) {
             </Grid>
           </Box>
 
-          <VerifyEmail
+          <VerifyEmailOTP
             open={open}
             setOpen={setOpen}
             email={email}

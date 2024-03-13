@@ -5,7 +5,7 @@ export const useUserData = (userId) => {
   const { isLoading, data, isError, error, refetch } = useQuery({
     queryKey: ['user', userId],
     queryFn: () => fetchUser(userId),
-    enabled: !!userId
+    enabled: !!userId,
   });
 
   const fetchUser = async (userId) => {
@@ -17,7 +17,7 @@ export const useUserData = (userId) => {
     } catch (error) {
       console.error(error);
       throw new Error(
-        `An error occured. Please try again or Refresh the page.`
+        'An error occured. Please try again or Refresh the page.'
       );
     }
   };

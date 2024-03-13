@@ -6,9 +6,21 @@ import { MainContainer } from '@components/Layout/Styles/globals';
 import Navbar from '@components/Layout/Navbar/Navbar';
 import Footer from '@components/Layout/Footer/Footer';
 import { companyName } from '@utils/helper/functions/navigation';
+import Error from 'next/error';
 
-export default function Contact({ session }) {
+export default function Contact({ session, errorCode, statusText }) {
   const user = session?.user;
+
+  if (errorCode) {
+    return (
+      <>
+        <MainContainer>
+          <Error statusCode={errorCode} />
+        </MainContainer>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
@@ -28,9 +40,10 @@ export default function Contact({ session }) {
 export async function getServerSideProps({ req, res }) {
   const session = await getServerSession(req, res, authOptions);
 
+  const response = await fetch('http://localhost:3000/api/users');
+  const errorCode = response.ok ? false : response.status;
+
   return {
-    props: {
-      session,
-    },
+    props: { session, errorCode, statusText: response.statusText },
   };
 }

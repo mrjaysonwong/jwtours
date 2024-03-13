@@ -1,14 +1,31 @@
+import React, { useState, createContext } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Box, Typography, Divider, Tooltip } from '@mui/material';
 import { MainContainer } from '@components/Layout/Styles/globals';
-import { ProviderContainer, CredentialsContainer } from './styled';
+import { SignInWithContainer, CredentialsContainer } from './styled';
 import { StyledForm } from '@components/Layout/Styles/globals';
-import Provider from './Provider/Provider';
+import OAuth from './OAuth/OAuth';
+import Email from './Email/Email';
 import Credentials from './Credentials/Credentials';
 import Footer from '@components/Layout/Footer/Footer';
 
+export const ShowFormContext = createContext(null);
+
 export default function SignIn() {
+  const [showOAuth, setShowOAuth] = useState(true);
+  const [showSendLink, setShowSendLink] = useState(false);
+  const [showCredentials, setShowCredentials] = useState(true);
+
+  const values = {
+    showOAuth,
+    setShowOAuth,
+    showSendLink,
+    setShowSendLink,
+    showCredentials,
+    setShowCredentials,
+  };
+
   return (
     <>
       <MainContainer sx={{ pt: 2 }}>
@@ -30,15 +47,23 @@ export default function SignIn() {
 
         <Box component="form">
           <StyledForm>
-            <ProviderContainer>
-              <Provider />
-            </ProviderContainer>
+            <ShowFormContext.Provider value={values}>
+              <SignInWithContainer>
+                {showOAuth && <OAuth />}
 
-            <Divider sx={{ m: 1 }}>OR</Divider>
+                <Email />
+              </SignInWithContainer>
 
-            <CredentialsContainer>
-              <Credentials />
-            </CredentialsContainer>
+              {showCredentials && (
+                <>
+                  <Divider sx={{ my: 2 }}>OR</Divider>
+
+                  <CredentialsContainer>
+                    <Credentials />
+                  </CredentialsContainer>
+                </>
+              )}
+            </ShowFormContext.Provider>
           </StyledForm>
         </Box>
 

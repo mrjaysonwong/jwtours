@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { styled } from '@mui/system';
 
-export const ProviderContainer = styled(Box)({
+export const SignInWithContainer = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
   'button:not(:last-child)': {
@@ -17,3 +17,5 @@ export const CredentialsContainer = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
 });
+
+

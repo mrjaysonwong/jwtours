@@ -11,12 +11,12 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { sleep } from '@utils/helper/functions/sleep';
 import { errorHandler } from '@utils/helper/functions/errorHandler';
 import { FormDetailsContext } from '../FormDetails';
-import Name from './Name/Name';
-import Gender from './Gender/Gender';
-import DateOfBirth from './DateOfBirth/DateOfBirth';
-import Phone from './Phone/Phone';
-import Address from './Address/Address';
-import Language from './Language/Language';
+import Name from './Name';
+import Gender from './Gender';
+import DateOfBirth from './DateOfBirth';
+import Phone from './Phone';
+import Address from './Address';
+import Language from './Language';
 
 export const PersonalDetailsContext = createContext(null);
 
@@ -36,26 +36,6 @@ export default function PersonalDetails() {
     resolver: yupResolver(personalInfoSchema),
   });
 
-  const onSubmit = async (values) => {
-    await sleep(1000);
-
-    try {
-      const url = `/api/users?userId=${userId}`;
-
-      const { data } = await axios.patch(url, values);
-
-      refetch();
-      setShowEdit(false);
-      handleAlertMessage(data.message, 'success');
-    } catch (error) {
-      console.error(error);
-
-      const { message } = errorHandler(error);
-
-      handleAlertMessage(message, 'error');
-    }
-  };
-
   const handleEdit = () => {
     setShowEdit(true);
   };
@@ -70,6 +50,24 @@ export default function PersonalDetails() {
     userData,
     errors,
     showEdit,
+  };
+
+  const onSubmit = async (values) => {
+    await sleep(1000);
+
+    try {
+      const mode = 'update-personaldetails';
+      const url = `/api/users?userId=${userId}&mode=${mode}`;
+
+      const { data } = await axios.patch(url, values);
+
+      refetch();
+      setShowEdit(false);
+      handleAlertMessage(data.message, 'success');
+    } catch (error) {
+      const { errorMessage } = errorHandler(error);
+      handleAlertMessage(errorMessage, 'error');
+    }
   };
 
   return (
@@ -112,6 +110,7 @@ export default function PersonalDetails() {
                 <>
                   <Grid item xs={6} sm={6}>
                     <LoadingButton
+                      type="submit"
                       fullWidth
                       variant="contained"
                       loading={Boolean(isSubmitting)}

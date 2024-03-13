@@ -16,12 +16,11 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import CircularIndeterminate from '@components/Layout/Loaders/CircularProgress';
 import { useMessageStore } from '@stores/messageStore';
-import { ErrorMessage } from '@utils/helper/custom-components/CustomMessages';
+import { AlertMessage } from '@utils/helper/custom-components/CustomMessages';
 import { FieldErrorMessage } from '@utils/helper/custom-components/CustomMessages';
 
 export default function Credentials() {
-  const { error, handleApiMessage } = useMessageStore();
-  const [hasError, setHasError] = useState(false);
+  const { alert, handleAlertMessage, handleOnClose } = useMessageStore();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleShowPassword = () => {
@@ -37,42 +36,44 @@ export default function Credentials() {
   });
 
   const onSubmit = async (values) => {
-    try {
-      const res = await signIn('credentials', {
-        redirect: false,
-        email: values.email,
-        password: values.password,
-      });
+    const res = await signIn('credentials', {
+      redirect: false,
+      email: values.email,
+      password: values.password,
+    });
 
-      // signIn callback error response
-      if (!res.ok) {
-        throw new Error(res.error);
-      }
-    } catch (error) {
-      setHasError(true);
-      handleApiMessage(error.message, 'error');
+    if (!res.ok) {
+      handleAlertMessage(res.error, 'error');
     }
   };
 
   return (
     <>
-      {hasError && error.open && <ErrorMessage message={error.message} />}
+      <AlertMessage
+        open={alert.open}
+        message={alert.message}
+        severity={alert.severity}
+        onClose={handleOnClose}
+      />
 
       <TextField
+        {...register('email')}
+        fullWidth
         name="email"
         id="email"
         label="Email"
-        error={Boolean(errors.email)}
+        error={!!errors.email}
         autoComplete="on"
-        {...register('email')}
       />
 
       <FieldErrorMessage error={errors.email} />
 
       <TextField
+        fullWidth
         name="password"
         id="password"
         label="Password"
+        error={!!errors.password}
         type={showPassword ? 'text' : 'password'}
         InputProps={{
           endAdornment: (
@@ -83,7 +84,6 @@ export default function Credentials() {
             </InputAdornment>
           ),
         }}
-        error={Boolean(errors.password)}
         {...register('password')}
         sx={{ mt: 2 }}
       />
@@ -98,6 +98,7 @@ export default function Credentials() {
       >
         {isSubmitting ? <CircularIndeterminate /> : 'Sign In'}
       </StyledButton>
+
       <Divider />
       <Typography variant="body2" sx={{ textAlign: 'right', my: 1 }}>
         <Link href="/">

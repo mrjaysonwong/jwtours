@@ -1,13 +1,16 @@
 import Head from 'next/head';
 import { Box, Typography, Card, CardMedia } from '@mui/material';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@pages/api/auth/[...nextauth]';
+// import { getServerSession } from 'next-auth';
+// import { authOptions } from '@pages/api/auth/[...nextauth]';
 import { MainContainer } from '@components/Layout/Styles/globals';
 import Navbar from '@components/Layout/Navbar/Navbar';
 import Footer from '@components/Layout/Footer/Footer';
 import { companyName } from '@utils/helper/functions/navigation';
+import { useSession } from 'next-auth/react';
 
-export default function Home({ session }) {
+export default function Home() {
+  const { data: session } = useSession();
+
   const user = session?.user;
 
   return (
@@ -37,12 +40,12 @@ export default function Home({ session }) {
   );
 }
 
-export async function getServerSideProps({ req, res }) {
-  const session = await getServerSession(req, res, authOptions);
+// export async function getServerSideProps({ req, res }) {
+//   const session = await getServerSession(req, res, authOptions);
 
-  return {
-    props: {
-      session,
-    },
-  };
-}
+//   return {
+//     props: {
+//       session,
+//     },
+//   };
+// }

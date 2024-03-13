@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { signupSchema } from '@utils/yup/credentialsSchema';
@@ -20,17 +21,14 @@ import CircularIndeterminate from '@components/Layout/Loaders/CircularProgress';
 import axios from 'axios';
 import { errorHandler } from '@utils/helper/functions/errorHandler';
 import { useMessageStore } from '@stores/messageStore';
-import {
-  AlertMessage,
-  ErrorMessage,
-} from '@utils/helper/custom-components/CustomMessages';
-import UseOfEmail from '@components/SignUp/Dialog/UseOfEmail';
+import { AlertMessage } from '@utils/helper/custom-components/CustomMessages';
+import UseOfEmail from '@components/SignUp/UseOfEmail/UseOfEmail';
 import { FieldErrorMessage } from '@utils/helper/custom-components/CustomMessages';
 
 export default function SignUpForm() {
-  const { error, alert, handleApiMessage, handleAlertMessage } =
-    useMessageStore();
-  const [hasError, setHasError] = useState(false);
+  const router = useRouter();
+
+  const { alert, handleAlertMessage, handleOnClose } = useMessageStore();
 
   const [open, setOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -47,7 +45,7 @@ export default function SignUpForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
     reset,
   } = useForm({
     resolver: yupResolver(signupSchema),
@@ -55,25 +53,22 @@ export default function SignUpForm() {
 
   const onSubmit = async (values) => {
     try {
-      const url = `/api/auth/signup`;
-      const { data } = await axios.post(url, values);
+      const url = `/api/auth/users/signup`;
+      await axios.post(url, values);
 
-      handleAlertMessage(data.message, 'success');
       reset();
-      setHasError(false);
 
-      const timeout = setTimeout(() => {
-        window.location.href = '/auth/signin';
-      }, 3000);
-
-      return () => clearTimeout(timeout);
+      router.replace(
+        {
+          pathname: '/auth/signup/confirmation',
+          query: { email: values.email },
+        },
+        '/auth/signup/confirmation'
+      );
     } catch (error) {
-      console.error('error', error);
+      const { errorMessage } = errorHandler(error);
 
-      const { message } = errorHandler(error);
-
-      setHasError(true);
-      handleApiMessage(message, 'error');
+      handleAlertMessage(errorMessage, 'error');
     }
   };
 
@@ -83,16 +78,16 @@ export default function SignUpForm() {
         open={alert.open}
         message={alert.message}
         severity={alert.severity}
+        onClose={handleOnClose}
       />
-      {hasError && error.open && <ErrorMessage message={error.message} />}
 
       <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
         <Stack direction="column">
           <TextField
+            {...register('firstName')}
             name="firstName"
             label="First Name"
-            error={Boolean(errors.firstName)}
-            {...register('firstName')}
+            error={!!errors.firstName}
           />
 
           <FieldErrorMessage error={errors.firstName} />
@@ -100,10 +95,10 @@ export default function SignUpForm() {
 
         <Stack direction="column">
           <TextField
+            {...register('lastName')}
             name="lastName"
             label="Last Name"
-            error={Boolean(errors.lastName)}
-            {...register('lastName')}
+            error={!!errors.lastName}
           />
 
           <FieldErrorMessage error={errors.lastName} />
@@ -112,22 +107,23 @@ export default function SignUpForm() {
 
       <Stack spacing={2}>
         <TextField
+          {...register('email')}
           name="email"
           label="Email"
-          error={Boolean(errors.email)}
+          error={!!errors.email}
           autoComplete="on"
-          {...register('email')}
+          helperText={isDirty && 'Email must use only : a-z 0-9 . _ -'}
         />
 
         <FieldErrorMessage error={errors.email} />
 
         <TextField
+          {...register('password')}
           name="password"
           label="Password"
           variant="outlined"
           type={showPassword ? 'text' : 'password'}
-          error={Boolean(errors.password)}
-          {...register('password')}
+          error={!!errors.password}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -142,12 +138,12 @@ export default function SignUpForm() {
         <FieldErrorMessage error={errors.password} />
 
         <TextField
+          {...register('confirmPassword')}
           name="confirmPassword"
           label="Confirm Password"
           variant="outlined"
           type={showConfirmPassword ? 'text' : 'password'}
-          error={Boolean(errors.confirmPassword)}
-          {...register('confirmPassword')}
+          error={!!errors.confirmPassword}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -173,15 +169,15 @@ export default function SignUpForm() {
 
       <Divider sx={{ mb: 2 }} />
 
-      <Box sx={{ display: 'flex' }}>
-        <Typography variant="body2" sx={{ mb: 1 }}>
-          Use of Email Guidelines, Click this info icon
+      <Box sx={{ textAlign: 'center', py: 1 }}>
+        <Typography>Use of Email Guidelines</Typography>
+        <Typography sx={{ display: 'flex', justifyContent: 'center' }}>
+          Click this info icon{' '}
+          <InfoIcon onClick={() => setOpen(true)} sx={{ ml: 1 }} />
         </Typography>
-
-        <InfoIcon onClick={() => setOpen(true)} />
       </Box>
 
-      <Typography variant="body2">
+      <Typography sx={{ mt: 2 }}>
         By clicking “Sign up”, you agree to our{' '}
         <Link href="/legal/user-agreement">
           <a>terms of use </a>

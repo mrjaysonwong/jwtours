@@ -75,7 +75,7 @@ export default function CustomDrawerList() {
               </Avatar>
             )}
             <Box sx={{ m: 1 }}>
-              <Typography variant="body1">{user.name}</Typography>
+              <Typography>{user.name}</Typography>
               <Typography variant="body2">{foundPrimary?.email}</Typography>
             </Box>
           </UserInfoWrapper>

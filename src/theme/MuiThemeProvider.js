@@ -10,7 +10,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { CssBaseline, useMediaQuery } from '@mui/material';
 import SettingsDrawer from '@components/Settings/SettingsDrawer/SettingsDrawer';
 import { LayoutContext } from '@pages/_app';
-import ColorModeContext from '@src/context/ColorModeContext';
+import ColorModeContext from '@src/context/colorModeContext';
 import { useCookies, Cookies, CookiesProvider } from 'react-cookie';
 import { GetDesignTokens } from '@components/Layout/Styles/theme';
 

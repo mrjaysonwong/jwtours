@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { Dialog, DialogTitle, DialogActions, Button, Box } from '@mui/material';
 import axios from 'axios';
+import { errorHandler } from '@utils/helper/functions/errorHandler';
 import { useMessageStore } from '@stores/messageStore';
 import { AlertMessage } from '@utils/helper/custom-components/CustomMessages';
 import { UserContext } from '@pages/account/profile';
@@ -12,12 +13,16 @@ export default function DeleteProfilePhoto(props) {
 
   const { alert, handleAlertMessage } = useMessageStore();
 
-  const handleDeletePhoto = async () => {
+  const handleCancel = () => {
+    setOpenConfirm(false);
+  };
+
+  const handleOnClick = async () => {
     setLoading(true);
 
     try {
-      const action = 'deleteProfilePhoto';
-      const url = `/api/users?userId=${userId}&action=${action}`;
+      const mode = 'delete-profilephoto';
+      const url = `/api/users?userId=${userId}&mode=${mode}`;
 
       const { data } = await axios.patch(url);
 
@@ -26,13 +31,10 @@ export default function DeleteProfilePhoto(props) {
       setLoading(false);
       handleAlertMessage(data.message, 'success');
     } catch (error) {
-      console.error(error);
-      handleAlertMessage('An error occured, Please try again.', 'error');
-    }
-  };
+      const { errorMessage } = errorHandler(error);
 
-  const handleCancel = () => {
-    setOpenConfirm(false);
+      handleAlertMessage(errorMessage, 'error');
+    }
   };
 
   return (
@@ -59,7 +61,7 @@ export default function DeleteProfilePhoto(props) {
               <Button
                 variant="contained"
                 disabled={loading}
-                onClick={handleDeletePhoto}
+                onClick={handleOnClick}
                 sx={{ mr: 1 }}
               >
                 Confirm

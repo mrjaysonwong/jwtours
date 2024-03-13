@@ -16,6 +16,7 @@ import { emptyFileInput } from '@utils/helper/functions/image-handler/emptyFileI
 import { useMessageStore } from '@stores/messageStore';
 import { AlertMessage } from '@utils/helper/custom-components/CustomMessages';
 import { UserContext } from '@pages/account/profile';
+import { errorHandler } from '@utils/helper/functions/errorHandler';
 
 export default function EditProfilePhoto(props) {
   const { openEdit, setOpenEdit, selectedImage, loading, setLoading, refetch } =
@@ -34,6 +35,15 @@ export default function EditProfilePhoto(props) {
     setCrop(crop);
   };
 
+  const onZoomChange = (zoom) => {
+    setZoom(zoom);
+  };
+
+  const handleCancel = () => {
+    emptyFileInput();
+    setOpenEdit(false);
+  };
+
   const onCropComplete = async (croppedArea, croppedAreaPixels) => {
     try {
       const croppedImage = await getCroppedImg(
@@ -43,18 +53,9 @@ export default function EditProfilePhoto(props) {
 
       setCroppedImage(croppedImage);
     } catch (error) {
-      console.error('Error cropping image:', error);
-      handleAlertMessage('An error occured, Please try again.', 'error');
+      handleAlertMessage('An error occured. Please try again later.', 'error');
     }
   };
-
-  const onZoomChange = (zoom) => {
-    setZoom(zoom);
-  };
-
-  useEffect(() => {
-    // update once crop change
-  }, [croppedImage]);
 
   const submitForm = async (e) => {
     e.preventDefault();
@@ -62,8 +63,8 @@ export default function EditProfilePhoto(props) {
     setLoading(true);
 
     try {
-      const action = 'updateProfilePhoto';
-      const url = `/api/users?userId=${userId}&action=${action}`;
+      const mode = 'update-profilephoto';
+      const url = `/api/users?userId=${userId}&mode=${mode}`;
       const { data } = await axios.patch(url, {
         croppedImage,
       });
@@ -74,16 +75,17 @@ export default function EditProfilePhoto(props) {
       setOpenEdit(false);
       handleAlertMessage(data.message, 'success');
     } catch (error) {
-      console.error(error);
-      handleAlertMessage('An error occured, Please try again.', 'error');
+      const { errorMessage } = errorHandler(error);
+
       setLoading(false);
+      handleAlertMessage(errorMessage, 'error');
     }
   };
 
-  const handleCancel = () => {
-    emptyFileInput();
-    setOpenEdit(false);
-  };
+  useEffect(() => {
+    // update once crop change
+  }, [croppedImage]);
+
   return (
     <>
       <AlertMessage

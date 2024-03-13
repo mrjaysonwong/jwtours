@@ -1,9 +1,11 @@
 import User from '@model/userModel';
 import Token from '@model/tokenModel';
 import { sendEmail } from '@utils/config/email/sendMail';
-import { htmlContent } from '@src/theme/emailTemplateOTP';
 import { generateOTP } from '@utils/helper/functions/generateOTP';
 import { formattedDate } from '@utils/helper/functions/formattedDate';
+import { handleResponseError } from '@utils/helper/functions/errorHandler';
+import ReactDOMServer from 'react-dom/server';
+import EmailTemplateTheme from '@src/theme/EmailTemplateTheme';
 
 async function createToken(userId, email) {
   const { otp: genOTP, expires: genExpires } = generateOTP();
@@ -73,13 +75,13 @@ export async function addEmailAddress(req, res) {
   const { email } = req.body;
 
   try {
-    if (!userId) {
-      return res.status(404).json({
-        error: {
-          code: 404, // NOT_FOUND
-          message: 'User Not Found.',
-        },
-      });
+    if (!req.body || !email) {
+      return handleResponseError(
+        res,
+        400,
+        'Invalid or missing request body email.',
+        undefined
+      );
     }
 
     const emailTaken = await User.findOne({
@@ -87,27 +89,17 @@ export async function addEmailAddress(req, res) {
     });
 
     if (emailTaken) {
-      return res.status(409).json({
-        error: {
-          code: 409, // CONFLICT
-          message: 'Email Already Exists.',
-        },
-      });
+      return handleResponseError(res, 409, 'Email Already Exists.', undefined);
     }
 
-    const user = await User.findById(userId);
+    const foundUser = await User.findById(userId);
 
-    if (!user) {
-      return res.status(404).json({
-        error: {
-          code: 404, // NOT_FOUND
-          message: 'User Not Found.',
-        },
-      });
+    if (!foundUser) {
+      return handleResponseError(res, 404, 'User Not Found.', undefined);
     }
 
     let otp;
-    let expires;
+    let epochTimeExpires;
 
     const foundUserToken = await Token.findOne({ userId });
 
@@ -115,7 +107,7 @@ export async function addEmailAddress(req, res) {
       const { genOTP, genExpires } = await createToken(userId, email);
 
       otp = genOTP;
-      expires = genExpires;
+      epochTimeExpires = genExpires;
     } else {
       const { genOTP, genExpires } = await updateToken(
         foundUserToken,
@@ -124,7 +116,7 @@ export async function addEmailAddress(req, res) {
       );
 
       otp = genOTP;
-      expires = genExpires;
+      epochTimeExpires = genExpires;
 
       const foundEmail = foundUserToken.email.find((e) => e.email === email);
 
@@ -143,20 +135,30 @@ export async function addEmailAddress(req, res) {
             { new: true }
           );
 
-          return res.status(429).json({
-            error: {
-              code: 429, // TOO_MANY_REQUESTS
-              message: 'Rate limit exceeded. Try again later.',
-            },
-          });
+          return handleResponseError(
+            res,
+            429,
+            'Rate limit exceeded. Please try again later.',
+            'Too many requests >=5'
+          );
         }
       }
     }
 
-    const epochTime = expires;
-    const formattedDateString = await formattedDate(epochTime);
+    const formattedDateString = await formattedDate(epochTimeExpires);
+    const firstName = foundUser.firstName;
+    const mode = 'email-otp';
 
-    const message = htmlContent(otp, user.firstName, formattedDateString);
+    const emailTemplate = (
+      <EmailTemplateTheme
+        otp={otp}
+        firstName={firstName}
+        formattedDateString={formattedDateString}
+        mode={mode}
+      />
+    );
+
+    const message = ReactDOMServer.renderToStaticMarkup(emailTemplate);
 
     await sendEmail({
       to: email,
@@ -165,17 +167,17 @@ export async function addEmailAddress(req, res) {
     });
 
     return res.status(200).json({
-      code: 200, // SUCCESS
+      status_code: 200,
       message: 'OTP sent',
     });
   } catch (error) {
-    console.error('Server-side Error', error.message);
+    console.error(error);
 
-    return res.status(500).json({
-      error: {
-        code: 500, // SERVER_ERROR
-        message: 'An error occured while updating the data.',
-      },
-    });
+    return handleResponseError(
+      res,
+      500,
+      'Internal Server Error. Please try again later.',
+      error.message
+    );
   }
 }

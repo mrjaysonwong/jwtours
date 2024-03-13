@@ -18,8 +18,8 @@ import EmailMenu from './EmailMenu/EmailMenu';
 
 export const EmailContext = createContext(null);
 
-
 // what if signedin via provider/passwordless
+// consider email signin
 
 export default function Email() {
   const { userData } = useContext(FormDetailsContext);

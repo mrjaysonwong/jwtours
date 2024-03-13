@@ -3,10 +3,11 @@ import GoogleProvider from 'next-auth/providers/google';
 import GitHubProvider from 'next-auth/providers/github';
 import FacebookProvider from 'next-auth/providers/facebook';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { credentialsSignIn } from './providers/credentialsSignIn';
+import { openAuthSignIn } from './providers/openAuthSignIn';
+import { sessionProperties } from './session/sessionProperties';
 import connectMongo from 'lib/database/connection';
 import User from '@model/userModel';
-import { CredentialSignIn } from './signin/credentials-signin';
-import { ProviderSignIn } from './signin/providers-signin';
 
 export const authOptions = (NextAuthOptions = {
   // Configure one or more authentication providers
@@ -24,37 +25,85 @@ export const authOptions = (NextAuthOptions = {
       clientSecret: process.env.FACEBOOK_SECRET,
     }),
     CredentialsProvider({
-      name: 'Credentials',
+      id: 'credentials',
+      name: 'Credentials SignIn',
       async authorize(credentials, req) {
         try {
-          await connectMongo();
+          const user = await credentialsSignIn(credentials, req);
 
-          const user = await CredentialSignIn(credentials, req);
+          if (user) {
+            return user;
+          }
 
-          return user;
+          return null;
         } catch (error) {
-          console.error('CredentialsProvider Error:', error.message);
-          throw error;
+          console.error(error);
+          const isReferenceError = error.name === 'ReferenceError';
+
+          throw new Error(
+            isReferenceError ? 'Internal Server Error' : error.message
+          );
+        }
+      },
+    }),
+    CredentialsProvider({
+      id: 'email',
+      name: 'email',
+      async authorize(credentials, req) {
+        try {
+          const url = `${process.env.NEXTAUTH_URL}/api/auth/users/signin`;
+
+          const options = {
+            method: 'POST',
+            body: JSON.stringify(credentials, req),
+            headers: { 'Content-Type': 'application/json' },
+          };
+
+          const res = await fetch(url, options);
+
+          const user = await res.json();
+
+          if (res.ok && user) {
+            return user;
+          }
+
+          if (!res.ok) {
+            throw new Error(`${user.error.message}, ${res.status}`);
+          }
+
+          return null;
+        } catch (error) {
+          console.error(error);
+
+          const isReferenceError = error.name === 'ReferenceError';
+
+          throw new Error(
+            isReferenceError ? 'Internal Server Error, 500' : error.message
+          );
         }
       },
     }),
   ],
 
   callbacks: {
-    async signIn({ user, account, profile }) {
-      try {
+    async signIn({ user, account, email, profile, credentials }) {
+      if (profile) {
+        await openAuthSignIn(user, account);
+        return true;
+      }
+
+      if (user) {
         await connectMongo();
 
-        await ProviderSignIn(user, account);
+        const userExists = await User.findOne({ 'email.email': user.email });
 
-        return true;
-      } catch (error) {
-        console.error('callbacks signIn error:', error.message);
-        throw error;
+        if (userExists) {
+          return true;
+        }
       }
     },
-    // default behavior token undefined after authenticated
-    // that is why it should pass/persist in session
+    // user will be undefined after authenticated
+    // that is why it should pass in token
     async jwt({ token, user, account, profile }) {
       if (user) {
         token.user = user;
@@ -63,37 +112,14 @@ export const authOptions = (NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      try {
-        await connectMongo();
+      await sessionProperties(session, token);
 
-        // check for existing user
-        const userExists = await User.findOne({
-          'email.email': token.user.email,
-        });
-
-        if (!userExists) {
-          throw new Error('User Not Found.');
-        }
-
-        // add prop token user to session user object
-
-        session.user = token.user;
-        session.user._id = `${userExists._id}`;
-        session.user.name =
-          `${userExists.firstName} ${userExists.lastName}` ?? token.user.name;
-        session.user.role = userExists.role;
-        session.user.accountType = userExists.accountType;
-
-        return session;
-      } catch (error) {
-        console.error('session error:', error.message);
-        throw error;
-      }
+      return session;
     },
   },
   pages: {
     signIn: '/auth/signin',
-    error: '/auth/error',
+    error: '/notifications/error',
   },
   secret: process.env.NEXTAUTH_SECRET,
 });

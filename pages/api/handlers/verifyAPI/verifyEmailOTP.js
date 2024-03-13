@@ -1,27 +1,25 @@
 import User from '@model/userModel';
 import Token from '@model/tokenModel';
+import { handleResponseError } from '@utils/helper/functions/errorHandler';
 
 export async function verifyEmailOTP(req, res) {
   const { email, userId } = req.query;
   const { otp } = req.body;
 
   try {
-    if (!userId) {
-      return res.status(404).json({
-        error: {
-          code: 404, // NOT_FOUND
-          message: 'User Not Found.',
-        },
-      });
+    if (!req.body || !otp) {
+      return handleResponseError(
+        res,
+        400,
+        'Please input the OTP.',
+        'Invalid or missing request body OTP.'
+      );
     }
 
-    if (!otp) {
-      return res.status(400).json({
-        error: {
-          code: 400, // BAD_REQUEST
-          message: 'Please enter the OTP',
-        },
-      });
+    const existingUser = await User.findById(userId);
+
+    if (!existingUser) {
+      return handleResponseError(res, 404, 'User Not Found', undefined);
     }
 
     const foundToken = await Token.findOne({
@@ -33,30 +31,19 @@ export async function verifyEmailOTP(req, res) {
       },
     });
 
-    const currentTimestamp = Date.now();
+    const currentTimestamp = Date.now(); // epochTime
     const expireTimestamp = foundToken?.email[0].expireTimestamp;
 
     if (!foundToken || expireTimestamp <= currentTimestamp) {
-      return res.status(400).json({
-        error: {
-          code: 400, // BAD_REQUEST
-          message: 'Invalid OTP',
-        },
-      });
+      return handleResponseError(
+        res,
+        400,
+        'Invalid OTP',
+        'Invalid or expired OTP.'
+      );
     }
 
-    const existingUser = await User.findOne({ _id: userId });
-
-    if (!existingUser) {
-      return res.status(404).json({
-        error: {
-          code: 404, // NOT_FOUND
-          message: 'User Not Found.',
-        },
-      });
-    }
-
-    await User.findOneAndUpdate(
+    const updatedEmail = await User.findOneAndUpdate(
       { _id: userId },
       {
         $addToSet: {
@@ -71,17 +58,18 @@ export async function verifyEmailOTP(req, res) {
     );
 
     return res.status(200).json({
-      code: 200, // SUCCESS
+      status_code: 200,
       message: 'Email has been verified.',
+      user: updatedEmail,
     });
   } catch (error) {
-    console.error('Server-side Error', error.message);
+    console.error(error);
 
-    return res.status(500).json({
-      error: {
-        code: 500, // SERVER_ERROR
-        message: 'An error occured while updating the data.',
-      },
-    });
+    return handleResponseError(
+      res,
+      500,
+      'Internal Server Error. Please try again later.',
+      error.message
+    );
   }
 }

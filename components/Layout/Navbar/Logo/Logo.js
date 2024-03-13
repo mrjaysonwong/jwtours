@@ -5,7 +5,7 @@ import { LogoWrapper } from './styled';
 export default function Logo() {
   return (
     <LogoWrapper>
-      <Link href="/" rel="preload">
+      <Link href="/" rel="preload" replace>
         <a>
           <Image
             src={'/assets/logo.png'}

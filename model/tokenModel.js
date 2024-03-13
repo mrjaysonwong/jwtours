@@ -16,11 +16,11 @@ const tokenSchema = new Schema({
       },
       token: {
         type: String,
-        required: true,
+        default: undefined,
       },
       expireTimestamp: {
         type: Number,
-        required: true,
+        default: undefined,
       },
       requestCount: {
         type: Number,
@@ -29,6 +29,10 @@ const tokenSchema = new Schema({
       rateLimit: {
         type: Boolean,
         default: undefined,
+      },
+      isVerified: {
+        type: Boolean,
+        defualt: false,
       },
       _id: false,
     },
