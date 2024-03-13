@@ -14,7 +14,7 @@ import {
 } from '@react-email/components';
 import React from 'react';
 
-const EmailTemplateTheme = (props) => {
+export function EmailTemplateTheme(props) {
   const { url, email, otp, firstName, formattedDateString, mode } = props;
 
   const baseUrl = process.env.NEXTAUTH_URL;
@@ -136,9 +136,7 @@ const EmailTemplateTheme = (props) => {
       </Html>
     </>
   );
-};
-
-export default EmailTemplateTheme;
+}
 
 const logo = {
   width: 'auto',

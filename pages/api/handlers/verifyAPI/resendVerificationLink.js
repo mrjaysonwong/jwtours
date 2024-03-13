@@ -7,7 +7,7 @@ import { generateToken } from '@utils/helper/functions/generateToken';
 import { formattedDate } from '@utils/helper/functions/formattedDate';
 import { handleResponseError } from '@utils/helper/functions/errorHandler';
 // import ReactDOMServer from 'react-dom/server';
-import EmailTemplateTheme from '@src/theme/EmailTemplateTheme';
+import { EmailTemplateTheme } from '@src/theme/EmailTemplateTheme';
 
 export async function resendVerificationLink(req, res) {
   const { email } = req.query;

@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import { generateToken } from '@utils/helper/functions/generateToken';
 import { sendEmail } from '@utils/config/email/sendMail';
 import { formattedDate } from '@utils/helper/functions/formattedDate';
-import EmailTemplateTheme from '@src/theme/EmailTemplateTheme';
+import { EmailTemplateTheme } from '@src/theme/EmailTemplateTheme';
 import { handleResponseError } from '@utils/helper/functions/errorHandler';
 // import ReactDOMServer from 'react-dom/server';
 

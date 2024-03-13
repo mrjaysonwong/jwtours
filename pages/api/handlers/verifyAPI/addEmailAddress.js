@@ -6,7 +6,7 @@ import { generateOTP } from '@utils/helper/functions/generateOTP';
 import { formattedDate } from '@utils/helper/functions/formattedDate';
 import { handleResponseError } from '@utils/helper/functions/errorHandler';
 // import ReactDOMServer from 'react-dom/server';
-import EmailTemplateTheme from '@src/theme/EmailTemplateTheme';
+import { EmailTemplateTheme } from '@src/theme/EmailTemplateTheme';
 
 async function createToken(userId, email) {
   const { otp: genOTP, expires: genExpires } = generateOTP();
