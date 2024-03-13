@@ -9,12 +9,10 @@ import EmailTemplateTheme from '@src/theme/EmailTemplateTheme';
 import { handleResponseError } from '@utils/helper/functions/errorHandler';
 import ReactDOMServer from 'react-dom/server';
 
-const sendLinkLimiter = new RateLimiterMemory({
-  points: 4, // 4 points
-  duration: 60, // per 60 seconds
-});
-
-// check Brevo to allow sending emails for production
+// const sendLinkLimiter = new RateLimiterMemory({
+//   points: 4, // 4 points
+//   duration: 60, // per 60 seconds
+// });
 
 export async function sendSignInLink(req, res) {
   const { callbackUrl } = req.query;
@@ -47,10 +45,10 @@ export async function sendSignInLink(req, res) {
       return handleResponseError(res, 401, 'Verify Email First', undefined);
     }
 
-    const realIP = req.headers['x-forwarded-for'];
-    const remoteAddress = req.socket.remoteAddress;
+    // const realIP = req.headers['x-forwarded-for'];
+    // const remoteAddress = req.socket.remoteAddress;
 
-    await sendLinkLimiter.consume(realIP || remoteAddress, 1);
+    // await sendLinkLimiter.consume(realIP || remoteAddress, 1);
 
     const token = generateToken(email);
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -122,15 +120,21 @@ export async function sendSignInLink(req, res) {
   } catch (error) {
     console.error('catch', error);
 
-    const sendLinkLimiterResponse = error;
-    const isRateLimit = sendLinkLimiterResponse.remainingPoints === 0;
+    // const sendLinkLimiterResponse = error;
+    // const isRateLimit = sendLinkLimiterResponse.remainingPoints === 0;
 
+    // return handleResponseError(
+    //   res,
+    //   isRateLimit ? 429 : 500,
+    //   isRateLimit
+    //     ? 'Too many requests. Please try again later.'
+    //     : 'Internal Server Error. Please try again later.',
+    //   error.message
+    // );
     return handleResponseError(
       res,
-      isRateLimit ? 429 : 500,
-      isRateLimit
-        ? 'Too many requests. Please try again later.'
-        : 'Internal Server Error. Please try again later.',
+      500,
+      'Internal Server Error. Please try again later.',
       error.message
     );
   }
