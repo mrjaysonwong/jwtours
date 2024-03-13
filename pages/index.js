@@ -1,7 +1,5 @@
 import Head from 'next/head';
-import { Box, Typography, Card, CardMedia } from '@mui/material';
-// import { getServerSession } from 'next-auth';
-// import { authOptions } from '@pages/api/auth/[...nextauth]';
+import { Box, Typography, CardMedia } from '@mui/material';
 import { MainContainer } from '@components/Layout/Styles/globals';
 import Navbar from '@components/Layout/Navbar/Navbar';
 import Footer from '@components/Layout/Footer/Footer';
@@ -39,13 +37,3 @@ export default function Home() {
     </>
   );
 }
-
-// export async function getServerSideProps({ req, res }) {
-//   const session = await getServerSession(req, res, authOptions);
-
-//   return {
-//     props: {
-//       session,
-//     },
-//   };
-// }
