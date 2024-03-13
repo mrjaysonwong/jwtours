@@ -14,7 +14,7 @@ export const sendEmail = async (options) => {
     from: process.env.EMAIL_FROM,
     to: options.to,
     subject: options.subject,
-    html: options.text,
+    html: options.html,
   };
 
   try {

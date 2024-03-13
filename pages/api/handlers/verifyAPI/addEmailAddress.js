@@ -1,10 +1,11 @@
 import User from '@model/userModel';
 import Token from '@model/tokenModel';
+import { render } from '@react-email/render';
 import { sendEmail } from '@utils/config/email/sendMail';
 import { generateOTP } from '@utils/helper/functions/generateOTP';
 import { formattedDate } from '@utils/helper/functions/formattedDate';
 import { handleResponseError } from '@utils/helper/functions/errorHandler';
-import ReactDOMServer from 'react-dom/server';
+// import ReactDOMServer from 'react-dom/server';
 import EmailTemplateTheme from '@src/theme/EmailTemplateTheme';
 
 async function createToken(userId, email) {
@@ -149,7 +150,16 @@ export async function addEmailAddress(req, res) {
     const firstName = foundUser.firstName;
     const mode = 'email-otp';
 
-    const emailTemplate = (
+    // const emailTemplate = (
+    //   <EmailTemplateTheme
+    //     otp={otp}
+    //     firstName={firstName}
+    //     formattedDateString={formattedDateString}
+    //     mode={mode}
+    //   />
+    // );
+
+    const emailHtml = render(
       <EmailTemplateTheme
         otp={otp}
         firstName={firstName}
@@ -158,12 +168,12 @@ export async function addEmailAddress(req, res) {
       />
     );
 
-    const message = ReactDOMServer.renderToStaticMarkup(emailTemplate);
+    // const message = ReactDOMServer.renderToStaticMarkup(emailTemplate);
 
     await sendEmail({
       to: email,
       subject: 'JWtours Email Verification',
-      text: message,
+      html: emailHtml,
     });
 
     return res.status(200).json({

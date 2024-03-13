@@ -1,13 +1,13 @@
 import User from '@model/userModel';
 import Token from '@model/tokenModel';
-
+import { render } from '@react-email/render';
 import jwt from 'jsonwebtoken';
 import { generateToken } from '@utils/helper/functions/generateToken';
 import { sendEmail } from '@utils/config/email/sendMail';
 import { formattedDate } from '@utils/helper/functions/formattedDate';
 import EmailTemplateTheme from '@src/theme/EmailTemplateTheme';
 import { handleResponseError } from '@utils/helper/functions/errorHandler';
-import ReactDOMServer from 'react-dom/server';
+// import ReactDOMServer from 'react-dom/server';
 
 export async function sendSignInLink(req, res) {
   const { callbackUrl } = req.query;
@@ -54,7 +54,15 @@ export async function sendSignInLink(req, res) {
     const type = 'email';
     const url = `${process.env.NEXTAUTH_URL}/verify?token=${token}&email=${encodedEmail}&mode=${mode}&type=${type}&callbackUrl=${callbackUrl}`;
 
-    const emailTemplate = (
+    // const emailTemplate = (
+    //   <EmailTemplateTheme
+    //     url={url}
+    //     formattedDateString={formattedDateString}
+    //     mode={mode}
+    //   />
+    // );
+
+    const emailHtml = render(
       <EmailTemplateTheme
         url={url}
         formattedDateString={formattedDateString}
@@ -63,7 +71,7 @@ export async function sendSignInLink(req, res) {
     );
 
     // use this API to render the React Component Template to static markup
-    const message = ReactDOMServer.renderToStaticMarkup(emailTemplate);
+    // const message = ReactDOMServer.renderToStaticMarkup(emailTemplate);
 
     const userId = userExists._id;
 
@@ -100,7 +108,7 @@ export async function sendSignInLink(req, res) {
     await sendEmail({
       to: email,
       subject: 'JWtours Sign In Link',
-      text: message,
+      html: emailHtml,
     });
 
     return res.status(200).json({

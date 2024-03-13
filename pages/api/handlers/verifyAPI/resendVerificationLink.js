@@ -1,11 +1,12 @@
 import User from '@model/userModel';
 import Token from '@model/tokenModel';
+import { render } from '@react-email/render';
 import { sendEmail } from '@utils/config/email/sendMail';
 import jwt from 'jsonwebtoken';
 import { generateToken } from '@utils/helper/functions/generateToken';
 import { formattedDate } from '@utils/helper/functions/formattedDate';
 import { handleResponseError } from '@utils/helper/functions/errorHandler';
-import ReactDOMServer from 'react-dom/server';
+// import ReactDOMServer from 'react-dom/server';
 import EmailTemplateTheme from '@src/theme/EmailTemplateTheme';
 
 export async function resendVerificationLink(req, res) {
@@ -85,7 +86,16 @@ export async function resendVerificationLink(req, res) {
     const type = 'email';
     const url = `${process.env.NEXTAUTH_URL}/verify?token=${newToken}&email=${encodedEmail}&mode=${mode}&type=${type}`;
 
-    const emailTemplate = (
+    // const emailTemplate = (
+    //   <EmailTemplateTheme
+    //     url={url}
+    //     email={email}
+    //     formattedDateString={formattedDateString}
+    //     mode={mode}
+    //   />
+    // );
+
+    const emailHtml = render(
       <EmailTemplateTheme
         url={url}
         email={email}
@@ -93,13 +103,14 @@ export async function resendVerificationLink(req, res) {
         mode={mode}
       />
     );
+
     // use this API to render the React Component Template to static markup
-    const message = ReactDOMServer.renderToStaticMarkup(emailTemplate);
+    // const message = ReactDOMServer.renderToStaticMarkup(emailTemplate);
 
     await sendEmail({
       to: email,
       subject: 'JWtours Account Verification',
-      text: message,
+      html: emailHtml,
     });
 
     return res.status(200).json({
